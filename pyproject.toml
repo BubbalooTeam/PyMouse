@@ -1,0 +1,47 @@
+[project]
+name = "PyMouse"
+version = "1.0.0"
+authors = [{ name = "DaviisDev", email = "kannaxuserbot@gmail.com" }]
+requires-python = ">=3.9"
+dependencies = [
+    "bs4>=0.0.2",
+    "babel>=2.14.0",
+    "heroku3>=5.2.1",
+    "httpx[http2,socks]>=0.19.0",
+    "hydrogram @ git+https://github.com/hydrogram/hydrogram@dev",
+    "hydrokeyboard @ git+https://github.com/fnixdev/HydroKeyboard.git",
+    "tgcrypto>=1.2.5",
+]
+
+
+[project.urls]
+Repository = "https://github.com/DaviisDev/PyMouse"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.ruff]
+line-length = 99
+show-fixes = true
+target-version = "py39"
+select = [
+  "I", # isort
+  "E", # pycodestyle
+  "F", # pyflakes
+  "UP",  # pyupgrade
+  "PTH",  # flake8-use-pathlib
+  "C4",  # flake8-comprehensions
+  "SIM", # flake8-simplify
+  "RET", # flake8-return
+  "RUF",  # ruff
+]
+
+[tool.ruff.isort]
+known-first-party = ["pymouse"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["pymouse"]
