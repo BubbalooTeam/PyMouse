@@ -10,23 +10,15 @@ START_TIME = time.time()
 
 class PyMouse(Client):
     def __init__(self):
-        self.name: str = self.__class__.__name__.lower()
-        self.version: str = Config.VERSION
-        self.api_id: str = Config.API_ID
-        self.api_hash: str = Config.API_HASH
-        self.bot_token: str = Config.BOT_TOKEN
-        self.logger: str = Config.LOG_CHANNEL
-        self.workers: str = Config.WORKERS
-        self.ipv6: bool = Config.IPV6
         super().__init__(
-            name=self.name,
-            app_version=self.version,
-            api_id=self.api_id,
-            api_hash=self.api_hash,
-            bot_token=self.bot_token,
+            name="PyMouseBOT",
+            app_version=Config.VERSION,
+            api_id=Config.API_ID,
+            api_hash=Config.API_HASH,
+            bot_token=Config.BOT_TOKEN,
             parse_mode=ParseMode.HTML,
-            workers=self.workers,
-            ipv6=self.ipv6,
+            workers=Config.WORKERS,
+            ipv6=Config.IPV6,
             in_memory=True,
         )
 
@@ -39,9 +31,9 @@ class PyMouse(Client):
         text += "<b>Hydrogram:</b> <code>{hydrogram}</code> (Layer {layer})"
         # //
         await self.send_message(
-            chat_id=self.logger,
+            chat_id=Config.LOG_CHANNEL,
             text=text.format(
-                version=self.version,
+                version=Config.VERSION,
                 sys=self.system_version,
                 hydrogram=__version__,
                 layer=layer
@@ -55,14 +47,14 @@ class PyMouse(Client):
         )
     # //
     async def stop(self):
-        text_ = "<b>PyMouse stopped with {version}!</b>\n\n"
+        text_ = "<b>PyMouse stopped with v{version}!</b>\n\n"
         text_ += "<b>System</b>: <code>{sys}</code>"
         await self.send_message(
-            chat_id=Config.GP_LOGS,
+            chat_id=Config.LOG_CHANNEL,
             text=text_.format(
-                version=self.version,
+                version=Config.VERSION,
                 sys=self.system_version
             )
         )
         await super().stop()
-        log.info("WhiterRobot is stopped!")
+        log.info("PyMouse is stopped!")

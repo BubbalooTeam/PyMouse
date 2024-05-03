@@ -26,11 +26,11 @@ else:
     MakeConfig().make_config()
 
 class Config:
-    API_ID: str = os.getenv("API_ID")
-    API_HASH: str = os.getenv("API_HASH")
-    BOT_TOKEN: str = os.getenv("BOT_TOKEN")
-    WORKERS: str = os.getenv("WORKERS", 24)
-    LOG_CHANNEL: str = os.getenv("LOG_CHANNEL")
-    TRIGGER: str = os.getenv("TRIGGER", "/ !".split())
-    IPV6: bool = os.getenv("IPV6", False)
-    VERSION: str = "1.0.0"
+    API_ID = int(os.getenv("API_ID"))
+    API_HASH = os.getenv("API_HASH")
+    BOT_TOKEN = os.getenv("BOT_TOKEN")
+    WORKERS = int(os.getenv("WORKERS", 24))
+    LOG_CHANNEL = int(os.getenv("LOG_CHANNEL"))
+    TRIGGER = os.getenv("TRIGGER", "/ !".split())
+    IPV6 = bool(os.getenv("IPV6", False))
+    VERSION = "1.0.0"
