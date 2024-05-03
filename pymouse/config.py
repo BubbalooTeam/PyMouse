@@ -17,7 +17,7 @@ class MakeConfig:
                 "IPV6"
             ]:
                 inp = input("Enter {variable}\n: ".format(variable=var))
-                file.write("{variable}='{inputed}'\n".format(variable=var, inputed=inp))
+                file.write('{variable}="{inputed}"\n'.format(variable=var, inputed=inp))
         log.info("Sucessfully created config.env file...")
 # === #
 if os.path.exists("config.env"):
