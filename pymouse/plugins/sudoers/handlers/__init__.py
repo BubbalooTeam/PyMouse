@@ -13,14 +13,14 @@ class Sudoers_Plugins:
     @Decorators().require_dev()
     async def rr(c: PyMouse, m: Message):
         sent = await m.reply("<i>Restarting...</i>") 
-        args = [sys.executable, "-m", "whiterkang"]
-        await sent.edit("<b>WhiterKang is now Restarted!</b>")
+        args = [sys.executable, "-m", "pymouse"]
+        await sent.edit("<b>PyMouse is now Restarted!</b>")
         os.execl(sys.executable, *args)
 
     @staticmethod
     @Decorators().require_dev(only_owner=True)
     async def shutdown(c: PyMouse, m: Message):
-        await m.reply("<b>WhiterKang is now Offline!</b>")
+        await m.reply("<b>PyMouse is now Offline!</b>")
         os.kill(os.getpid(), signal.SIGINT)
 
     @staticmethod
