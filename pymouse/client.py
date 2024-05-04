@@ -58,3 +58,5 @@ class PyMouse(Client):
         )
         await super().stop()
         log.info("PyMouse is stopped!")
+
+PyMouse = PyMouse()

@@ -9,9 +9,9 @@ from .services.load_handler.run import RunModules
 
 async def run_mouse():
     RunModules()
-    await PyMouse().start()
+    await PyMouse.start()
     await idle()
-    await PyMouse().stop()
+    await PyMouse.stop()
 
 if __name__ == "__main__" :
     loop = asyncio.get_event_loop()

@@ -70,7 +70,7 @@ class ModulesLoader:
     def cmds_loader(self):
         dispatcher = self.cmds
         for handler in dispatcher:
-            PyMouse().add_handler(handler=handler)
+            PyMouse.add_handler(handler=handler)
             self.cmds_count += 1
         logging.info("%s Loaded Command Handler(s)!", self.cmds_count)
 
@@ -86,7 +86,7 @@ class ModulesLoader:
     def regex_loader(self):
         dispatcher = self.regex
         for handler in dispatcher:
-            PyMouse().add_handler(handler=handler)
+            PyMouse.add_handler(handler=handler)
             self.regex_count += 1
         logging.info("%s Loaded Regex Filters Handler(s)!", self.regex_count)
 
@@ -102,7 +102,7 @@ class ModulesLoader:
     def callbacks_loader(self):
         dispatcher = self.callbacks
         for handler in dispatcher:
-            PyMouse().add_handler(handler=handler)
+            PyMouse.add_handler(handler=handler)
             self.callbacks_count += 1
         logging.info("%s Loaded CallBack Buttons Handler(s)!", self.callbacks_count)
     
