@@ -1,5 +1,4 @@
 import json
-import os
 from typing import Optional
 from ..exceptions import LocalDatabaseJsonError, LocalDatabaseNotFound
 
@@ -23,14 +22,13 @@ class DataBase:
         def __init__(self, collection: str):
             self.parent_db = DataBase()
             self.collection = collection
-            if not collection in self.parent_db.db:
+            if collection not in self.parent_db.db:
                 self.parent_db.db[collection] = []
 
         def find(self):
             return self.parent_db.db[self.collection]
         
         def find_one(self, filter: Optional[dict] = None):
-            find_parameter = False
             # find global collection info
             collection_data = self.find()
             if not filter:

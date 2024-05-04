@@ -19,7 +19,7 @@ class Decorators:
                 if user_id == self.owner:
                     return await func(c, m, *args, **kwargs)
                 get_dev_by_id = self.dev_db.find_one({"dev_users": user_id})
-                if get_dev_by_id and not only_owner is True:
+                if get_dev_by_id and only_owner is False:
                     return await func(c, m, *args, **kwargs)
                 else:
                     return None

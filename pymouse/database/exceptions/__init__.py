@@ -1,4 +1,3 @@
-from pymouse.utils.logger import log
 from json import JSONDecodeError
 
 class LocalDatabaseJsonError(JSONDecodeError):
@@ -6,4 +5,3 @@ class LocalDatabaseJsonError(JSONDecodeError):
 
 class LocalDatabaseNotFound(FileNotFoundError, FileExistsError):
     """Raise if database file doesn't exists"""
-        
