@@ -24,7 +24,6 @@ class Sudoers_Plugins:
         os.kill(os.getpid(), signal.SIGINT)
 
     @staticmethod
-    @Decorators().require_dev()
     async def ping(c: PyMouse, m: Message):
         first = datetime.now()
         sent = await m.reply_text("<b>Pong!</b>")
