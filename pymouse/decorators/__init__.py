@@ -2,7 +2,7 @@ from typing import Optional
 from functools import wraps
 from hydrogram.types import Message
 
-from pymouse import Config, db, PyMouse
+from pymouse import PyMouse, Config, db
 
 class Decorators:
     def __init__(self):

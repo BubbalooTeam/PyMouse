@@ -6,8 +6,7 @@ from hydrogram.types import Message
 
 from datetime import datetime
 
-from pymouse import PyMouse, db
-from pymouse.utils import Decorators
+from pymouse import PyMouse, db, Decorators
 
 class Sudoers_Plugins:
     @staticmethod

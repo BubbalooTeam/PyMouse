@@ -1,6 +1,6 @@
 import os
 
-from pymouse.utils.logger import log
+from pymouse import log
 from dotenv import load_dotenv
 
 # === #
