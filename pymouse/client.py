@@ -8,7 +8,7 @@ from pymouse import Config, log
 
 START_TIME = time.time()
 
-class PyMouse(Client):
+class PyMouseBOT(Client):
     def __init__(self):
         super().__init__(
             name="PyMouseBOT",
@@ -59,4 +59,5 @@ class PyMouse(Client):
         await super().stop()
         log.info("PyMouse is stopped!")
 
-PyMouse = PyMouse()
+
+PyMouse = PyMouseBOT()

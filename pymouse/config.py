@@ -21,11 +21,14 @@ class MakeConfig:
                 file.write('{variable}="{inputed}"\n'.format(variable=var, inputed=inp))
         log.info("Sucessfully created config.env file...")
 # === #
+
+
 if os.path.exists("config.env"):
     load_dotenv("config.env")
 else:
     MakeConfig().make_config()
     load_dotenv("config.env")
+
 
 class Config:
     API_ID = int(os.getenv("API_ID", 6))

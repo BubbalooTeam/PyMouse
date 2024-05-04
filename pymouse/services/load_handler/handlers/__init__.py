@@ -9,8 +9,7 @@ from hydrogram.filters import (
 
 from hydrogram.handlers import MessageHandler, CallbackQueryHandler
 
-from ....client import PyMouse
-from ....config import Config
+from pymouse import PyMouse, Config
 
 class ModulesLoader:
     def __init__(self):

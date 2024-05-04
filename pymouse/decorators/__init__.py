@@ -12,7 +12,7 @@ class Decorators:
     def require_dev(self, only_owner: Optional[bool] = False):
         def decorator(func):
             @wraps(func)
-            async def wrapper(c: PyMouse, m: Message, *args, **kwargs):
+            async def wrapper(c: PyMouse, m: Message, *args, **kwargs): # type: ignore
                 if not m.from_user:
                     return None
                 user_id = m.from_user.id
