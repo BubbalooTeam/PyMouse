@@ -8,7 +8,7 @@ class Decorators:
     def __init__(self):
         self.dev_db = db.GetCollection("SUDOERS")
         self.owner = Config.OWNER_ID
-    
+
     def require_dev(self, only_owner: Optional[bool] = False):
         def decorator(func):
             @wraps(func)
