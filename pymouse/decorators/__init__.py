@@ -35,7 +35,7 @@ class Decorators:
                     return await func(c, m, *args, **kwargs)
                 user_id = m.from_user.id
                 actual_username = m.from_user.username
-                actual_uname = m.from_user.first_name + " " + m.from_user.last_name if not m.from_user.last_name is None else ""
+                actual_uname = m.from_user.first_name + " " + m.from_user.last_name if not m.from_user.last_name is None else m.from_user.first_name
                 actual_languagebytg = m.from_user.language_code
                 # Check if user in this db, if not in DB try to updates
                 get_users = users_db.find_one({"user_id": user_id})
