@@ -64,7 +64,7 @@ class Decorators:
                         "tglang": actual_languagebytg,
                     }
                 )
-                log.info("[{user_id} | {uname}]: Added user to LocalDatabase with sucessfully!")
+                log.info("[%s | %s]: Added user to LocalDatabase with sucessfully!", user_id, uname)
                 return await func(c, m, *args, **kwargs)
             return wrapper
         return decorator
