@@ -2,7 +2,7 @@ from typing import Optional
 from functools import wraps
 from hydrogram.types import Message
 
-from pymouse import PyMouse, Config, db, log
+from pymouse import PyMouse, Config, db, usersmodel_db
 
 class Decorators:
     def __init__(self):
@@ -30,41 +30,13 @@ class Decorators:
         def decorator(func):
             @wraps(func)
             async def wrapper(c: PyMouse, m: Message, *args, **kwargs): # type: ignore
-                users_db = db.GetCollection("users")
                 if not m.from_user:
                     return await func(c, m, *args, **kwargs)
                 user_id = m.from_user.id
                 actual_username = m.from_user.username
                 actual_uname = m.from_user.first_name + " " + m.from_user.last_name if not m.from_user.last_name is None else m.from_user.first_name
                 actual_languagebytg = m.from_user.language_code
-                # Check if user in this db, if not in DB try to updates
-                get_users = users_db.find_one({"user_id": user_id})
-                if get_users:
-                    # Check Information's of this user
-                    username = get_users.get("username", "")
-                    uname = get_users.get("full_name", "")
-                    tglang = get_users.get("tglang", "N/A")
-                    if username == actual_username and uname == actual_uname and tglang == actual_languagebytg:
-                        return None
-                    users_db.insert_or_update(
-                        filter={"user_id": user_id},
-                        info={
-                            "full_name": actual_uname,
-                            "username": actual_username,
-                            "tglang": actual_languagebytg,
-                        }
-                    )
-                    return await func(c, m, *args, *kwargs)
-                users_db.insert_or_update(
-                    filter={"user_id": user_id},
-                    info={
-                        "full_name": actual_uname,
-                        "username": actual_username,
-                        "user_id": user_id,
-                        "tglang": actual_languagebytg,
-                    }
-                )
-                log.info("[%s | %s]: Added user to LocalDatabase with sucessfully!", user_id, uname)
+                usersmodel_db.users_db.update_user(user_id, actual_uname, actual_username, actual_languagebytg)
                 return await func(c, m, *args, **kwargs)
             return wrapper
         return decorator

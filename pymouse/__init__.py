@@ -14,4 +14,7 @@ log.info("DataBase compiled with sucessfully...")
 
 
 # if use database input here
+from pymouse.database.plugins.utilities import (
+    usersmodel_db, # Use in decorator with others...
+)
 from pymouse.decorators import Decorators
