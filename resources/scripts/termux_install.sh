@@ -3,7 +3,7 @@ pkg update -y
 apt update
 apt update -y
 
-python_not_installed="$(python3 -c 'exit()')"
+python_not_installed="$(python -c 'exit()')"
 # Check if python is installed
 if [ python_not_installed ]
 then
@@ -12,4 +12,4 @@ then
 fi
 
 printf "Ok!! Instalation is terminated! Go to installation. . .\n\n\n"
-python3 resources/termux/__init__.py
+python resources/termux/__init__.py
