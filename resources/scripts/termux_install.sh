@@ -12,4 +12,4 @@ then
 fi
 
 printf "Ok!! Instalation is terminated! Go to installation. . .\n\n\n"
-python3 resources/scripts/termux/__init__.py
+python3 -m resources/termux
