@@ -1,6 +1,6 @@
 .. raw:: html
 
-  <img src="https://telegra.ph/file/80c139778c565cfce7f3e.png" width="90" align="right">
+  <img src="https://telegra.ph/file/80c139778c565cfce7f3e.png" width="70" align="right">
 
 PyMouse
 =======
