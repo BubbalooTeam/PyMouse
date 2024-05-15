@@ -1,4 +1,4 @@
-printf "Updating system to install BOT, Please wait. . .\n\n"
+printf "[...] - Updating system to install BOT, Please wait. . .\n\n"
 pkg update -y
 apt update
 apt update -y
@@ -6,9 +6,10 @@ apt update -y
 # Check if python is installed
 if ! command -v python &> /dev/null
 then
-    printf "Python not Found, Installing Python. . .\n"
+    printf "[...] - Python not Found, Installing Python. . .\n"
     pkg install python python-pip -y
+    printf "[✔] - Python and tools installed with successfully!\n"
 fi
 
-printf "Ok!! Updates of Termux is terminated! Proceed to the installation of PyMouse. . .\n\n\n"
+printf "[✔] Updates of Termux is terminated! Initializing Install PyMouse Tool. . .\n\n\n"
 python resources/termux/__init__.py
