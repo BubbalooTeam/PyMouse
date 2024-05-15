@@ -1,5 +1,6 @@
 .. raw:: html
-    <img src="https://telegra.ph/file/80c139778c565cfce7f3e.jpg" width="150" align="right">
+
+  <img src="https://telegra.ph/file/80c139778c565cfce7f3e.png" width="150" align="right">
 
 PyMouse
 =======
@@ -12,7 +13,7 @@ Requirements
 
 Features
 --------
-- A simplified LocalDatabase...
+- A simplified `Local Database <https://github.com/BubbalooTeam/PyMouse/blob/main/pymouse/database/modules/__init__.py>`__
 
 Setup
 -----
