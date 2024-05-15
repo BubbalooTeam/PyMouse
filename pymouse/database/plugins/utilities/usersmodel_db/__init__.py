@@ -1,4 +1,4 @@
-from pymouse import PyMouse, db, log
+from pymouse import db, log
 
 class UsersDB:
     def find_user(self, user_id: int, actual_uname: str, actual_username: str, actual_tglang: str) -> bool:
