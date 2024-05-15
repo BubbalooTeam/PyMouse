@@ -1,5 +1,5 @@
 .. raw:: html
-    <img src="https://telegra.ph/file/80c139778c565cfce7f3e.png" width="150" align="right">
+    <img src="https://telegra.ph/file/80c139778c565cfce7f3e.jpg" width="150" align="right">
 
 PyMouse
 =======
@@ -9,6 +9,10 @@ A helpfull and funny bot developed with Python.
 Requirements
 ------------
 - Python 3.8 or later...
+
+Features
+--------
+- A simplified LocalDatabase...
 
 Setup
 -----
