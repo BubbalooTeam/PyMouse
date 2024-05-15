@@ -4,7 +4,7 @@ apt update
 apt update -y
 
 # Check if python is installed
-if ! command -v python &> /dev/nul
+if ! command -v python &> /dev/null
 then
     printf "Python not Found, Installing Python. . .\n"
     pkg install python python-pip -y
