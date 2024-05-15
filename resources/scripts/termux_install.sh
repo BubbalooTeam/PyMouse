@@ -11,5 +11,5 @@ then
     pkg install python3 python3-pip -y
 fi
 
-printf "Ok!! Instalation is terminated! Go to installation. . .\n\n\n"
+printf "Ok!! Updates of Termux is terminated! Go to installation of PyMouse. . .\n\n\n"
 python resources/termux/__init__.py
