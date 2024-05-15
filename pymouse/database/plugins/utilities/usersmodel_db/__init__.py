@@ -31,4 +31,8 @@ class UsersDB:
         else:
             return None
         
+    def getuser_dict(self, user_id: int):
+        users_db = db.GetCollection("users")
+        return users_db.find_one({"user_id": user_id})
+
 users_db = UsersDB()

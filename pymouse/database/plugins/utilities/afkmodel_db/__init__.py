@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pymouse import db
+from pymouse import db, usersmodel_db
 
 class AFKDB:
     def updateAFK(
@@ -48,3 +48,9 @@ class AFKDB:
             user_id=user_id,
             is_afk=False,
         )
+
+    def getAFK(
+        self,
+        user_id: int,
+    ):
+        idict = usersmodel_db.users_db.getuser_dict(user_id).get("afk", {})
