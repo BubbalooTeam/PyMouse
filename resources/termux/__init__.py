@@ -49,7 +49,7 @@ class Termux:
     def run_bot(self):
         self.print_empty()
         print("[✔] - Done! Dependencies of bot is now installed, Starting PyMouse...\n")
-        os.system("python3 -m pymouse")
+        os.system("python -m pymouse")
 
     def installer_bot(self):
         print(TermuxUtils.PyMouseLogo)
