@@ -31,12 +31,12 @@ else:
 
 
 class Config:
-    API_ID = int(os.environ.get("API_ID", 6))
-    API_HASH = os.environ.get("API_HASH")
-    BOT_TOKEN = os.environ.get("BOT_TOKEN")
-    WORKERS = int(os.environ.get("WORKERS", 24))
-    LOG_CHANNEL = int(os.environ.get("LOG_CHANNEL"))
-    TRIGGER = os.environ.get("TRIGGER", "/ !".split())
-    IPV6 = bool(os.environ.get("IPV6", False))
-    OWNER_ID = int(os.environ.get("OWNER_ID", 1715384854))
+    API_ID = int(os.getenv("API_ID", 6))
+    API_HASH = os.getenv("API_HASH")
+    BOT_TOKEN = os.getenv("BOT_TOKEN")
+    WORKERS = int(os.getenv("WORKERS", 24))
+    LOG_CHANNEL = int(os.getenv("LOG_CHANNEL"))
+    TRIGGER = os.getenv("TRIGGER", "/ !".split())
+    IPV6 = bool(os.getenv("IPV6", False))
+    OWNER_ID = int(os.getenv("OWNER_ID", 1715384854))
     VERSION = "1.0.0"
