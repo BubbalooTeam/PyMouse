@@ -6,7 +6,7 @@ from hydrogram.types import Message, InputMediaPhoto
 
 from datetime import datetime
 
-from pymouse import PyMouse, db, Decorators, log
+from pymouse import PyMouse, Decorators, log
 from pymouse.utils import NetworkUtils, NetworkEvents
 
 class Sudoers_Plugins:
