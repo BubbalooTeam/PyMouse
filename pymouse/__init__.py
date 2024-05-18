@@ -13,8 +13,8 @@ except Exception:
 log.info("DataBase compiled with sucessfully...")
 
 
-# if use database input here
-from pymouse.database.plugins.utilities import (
-    usersmodel_db, # Use in decorator with others...
-)
+# Bot utils
+from pymouse.database.plugins.utilities.users import usersmodel_db
+from pymouse.database.plugins.utilities.afk import afkmodel_db
+
 from pymouse.decorators import Decorators
