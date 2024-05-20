@@ -3,9 +3,11 @@ from ..handlers import load_modules
 class RunModules:
     def __init__(self):
         from pymouse.plugins import (
-            sudoers
+            afk,
+            sudoers,
         )
         # Sudoers
+        load_modules.add_cmd(afk.AFK_Plugins().setupAFK, "afk", "AFK", "Mark yourself away (away from the keyboard).")
         load_modules.add_cmd(sudoers.Sudoers_Plugins().ping, "ping")
         load_modules.add_cmd(sudoers.Sudoers_Plugins().rr, ["rr", "restart"])
         load_modules.add_cmd(sudoers.Sudoers_Plugins().shutdown, "shutdown")

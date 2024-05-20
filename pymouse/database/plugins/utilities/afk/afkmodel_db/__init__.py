@@ -52,5 +52,9 @@ class AFKDB:
     def getAFK(
         self,
         user_id: int,
-    ):
-        idict = usersmodel_db.users_db.getuser_dict(user_id).get("afk", {})
+    ) -> dict:
+        afkmap = usersmodel_db.users_db.getuser_dict(user_id).get("afk", {})
+        return afkmap
+
+   
+afk_db = AFKDB()
