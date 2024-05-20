@@ -8,6 +8,7 @@ from pymouse import PyMouse, afkmodel_db
 from pymouse.utils import UtilsTimer
 
 class AFKUtils:
+    @staticmethod
     async def get_user(entities: MessageEntity, c: PyMouse, m: Message) -> User | None: # type: ignore
         entoffset: int = entities.offset
         entlength: entities.length
@@ -18,6 +19,7 @@ class AFKUtils:
             return None
         return ent
     
+
     async def getMentioned(self, c: PyMouse, m: Message) -> User | None: # type: ignore
         u: User | None = None
         if m.entities:
@@ -28,6 +30,7 @@ class AFKUtils:
                     u = y.user
         return u
     
+    @staticmethod
     def getReplied(m: Message) -> User | None:
         replied = m.reply_to_message
         if replied and replied.from_user:
