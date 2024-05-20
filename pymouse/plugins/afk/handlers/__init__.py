@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from hydrogram import filters
 from hydrogram.types import Message
 
 from pymouse import PyMouse, afkmodel_db
@@ -31,3 +32,24 @@ class AFK_Plugins:
         if avreason:
             afktext += "\n<b>Reason:</b> <code>{reason}</code>".format(reason=reason)
         await m.reply(afktext)
+
+    @staticmethod
+    @PyMouse.on_message(~filters.private & ~filters.bot & filters.all, group=2)
+    async def handleAFK(c: PyMouse, m: Message): # type: ignore
+        user = m.from_user
+        if not user:
+            return
+        # check if text is AFK command
+        try:
+            if m.text:
+                if m.text.startswith(("brb", "/afk")):
+                    return
+        except AttributeError:
+            return
+        
+        is_afk = afkmodel_db.afk_db.getAFK(user.id).get("is_afk", False)
+        if is_afk:
+            await afk_utils.stop_afk(m)
+            return
+        
+        await afk_utils.check_afk(c, m)
