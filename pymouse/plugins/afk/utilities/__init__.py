@@ -45,13 +45,13 @@ class AFKUtils:
         gt: str | None = None
         afk = afkmodel_db.afk_db.getAFK(user.id)
         if afk.get("is_afk", False) != False:
-            afktxt = "<b>{user} is unavalaible!</b>".format(user=user.mention)
+            afktxt += "<b>{user} is unavalaible!</b>".format(user=user.mention)
             gr = afk.get("reason", None)
             gt = afk.get("time", None)
             if gr != None:
-                afktxt = "\n<b>Reason:</b>: <code>{reason}</code>".format(reason=gr)
+                afktxt += "\n<b>Reason:</b>: <code>{reason}</code>".format(reason=gr)
             if afk.get("time", None) != None:
-                afktxt = "\n<b>Last seen there are:</b> <code>{formattedtime}".format(formattedtime=UtilsTimer().time_formatter(datetime.now().timestamp() - gt))
+                afktxt += "\n<b>Last seen there are:</b> <code>{formattedtime}</code>".format(formattedtime=UtilsTimer().time_formatter(datetime.now().timestamp() - gt))
             await m.reply(afktxt)
         else:
             return None
