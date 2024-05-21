@@ -42,7 +42,7 @@ class AFK_Plugins:
         # check if text is AFK command
         try:
             if m.text:
-                if m.text.startswith(("brb", "/afk")):
+                if m.text.startswith(("brb", "/afk", "!afk")):
                     return
         except AttributeError:
             return
