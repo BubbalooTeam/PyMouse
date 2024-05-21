@@ -51,7 +51,7 @@ class AFKUtils:
             if gr != None:
                 afktxt = "\n<b>Reason:</b>: <code>{reason}</code>".format(reason=gr)
             if afk.get("time", None) != None:
-                afktxt = "\n<b>Last seen there are:</b> <code>{formattedtime}".format(formattedtime=UtilsTimer.time_formatter(datetime.now() - datetime.fromtimestamp(gt)))
+                afktxt = "\n<b>Last seen there are:</b> <code>{formattedtime}".format(formattedtime=UtilsTimer().time_formatter(datetime.now() - datetime.fromtimestamp(gt)))
             await m.reply(afktxt)
         else:
             return None
