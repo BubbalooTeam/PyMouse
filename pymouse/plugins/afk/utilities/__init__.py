@@ -11,7 +11,7 @@ class AFKUtils:
     @staticmethod
     async def get_user(entities: MessageEntity, c: PyMouse, m: Message) -> User | None: # type: ignore
         entoffset: int = entities.offset
-        entlength: entities.length
+        entlength: int = entities.length
         user = m.text[entoffset : entoffset + entlength]
         try:
             ent = await c.get_users(user)
