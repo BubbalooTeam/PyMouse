@@ -1,0 +1,16 @@
+{
+    "language": {
+        "name": "Português (BRA)",
+        "flag": "🇧🇷"
+    },
+    "pm-menu": {
+        "start-private": "Olá <b>{user}</b>, Eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para o seu chat.",
+        "start-group": "<b>Olá! Meu nome é {bot}!</b>"
+    },
+    "buttons": {
+        "about": "ℹ️ Sobre",
+        "back": "Voltar",
+        "help": "👮 Ajuda",
+        "language": "🌐 Idioma"
+    }
+}
