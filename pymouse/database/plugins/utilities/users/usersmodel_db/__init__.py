@@ -3,7 +3,7 @@ from pymouse import db, log
 class UsersDB:
     async def find_user(self, user_id: int, actual_uname: str, actual_username: str, actual_tglang: str) -> bool:
         users_db = db.GetCollection("users")
-        userinfo = await users_db.find_one({"user_id": user_id})
+        userinfo = (await users_db.find_one({"user_id": user_id}))
         if userinfo:
             username = userinfo.get("username", None)
             uname = userinfo.get("full_name", "")

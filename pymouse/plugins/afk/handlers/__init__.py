@@ -15,7 +15,7 @@ class AFK_Plugins:
         if not user:
             return
 
-        is_afk = await afkmodel_db.afk_db.getAFK(user.id).get("is_afk", False)
+        is_afk = (await afkmodel_db.afk_db.getAFK(user.id)).get("is_afk", False)
         if is_afk:
             await afk_utils.stop_afk(m)
             return
@@ -47,7 +47,7 @@ class AFK_Plugins:
         except AttributeError:
             return
         
-        is_afk = await afkmodel_db.afk_db.getAFK(user.id).get("is_afk", False)
+        is_afk = (await afkmodel_db.afk_db.getAFK(user.id)).get("is_afk", False)
         if is_afk:
             await afk_utils.stop_afk(m)
             return

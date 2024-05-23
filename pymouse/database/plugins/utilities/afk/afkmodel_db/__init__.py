@@ -53,7 +53,7 @@ class AFKDB:
         self,
         user_id: int,
     ) -> dict:
-        afkmap = await usersmodel_db.users_db.getuser_dict(user_id).get("afk", {})
+        afkmap = (await usersmodel_db.users_db.getuser_dict(user_id)).get("afk", {})
         return afkmap
 
    
