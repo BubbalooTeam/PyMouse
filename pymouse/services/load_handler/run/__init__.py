@@ -20,4 +20,4 @@ class RunModules:
             # Final loader => Leave "load_modules.regex_loader()" last, if you put it before the regex will not be added correctly, causing failures!
             load_modules.regex_loader()
         except LoadModulesError as e:
-            raise LoadModulesError("[services/load_handler/run/RunModules]: Modules are not loaded correctly!.")
+            raise LoadModulesError("[services/load_handler/run/RunModules]: Modules are not loaded correctly for reason: {error}".format(error=e))
