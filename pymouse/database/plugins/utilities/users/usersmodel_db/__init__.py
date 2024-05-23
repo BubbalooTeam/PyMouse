@@ -1,9 +1,9 @@
 from pymouse import db, log
 
 class UsersDB:
-    def find_user(self, user_id: int, actual_uname: str, actual_username: str, actual_tglang: str) -> bool:
+    async def find_user(self, user_id: int, actual_uname: str, actual_username: str, actual_tglang: str) -> bool:
         users_db = db.GetCollection("users")
-        userinfo = users_db.find_one({"user_id": user_id})
+        userinfo = await users_db.find_one({"user_id": user_id})
         if userinfo:
             username = userinfo.get("username", None)
             uname = userinfo.get("full_name", "")
@@ -13,11 +13,11 @@ class UsersDB:
             return False
         return False
     
-    def update_user(self, user_id: int, actual_uname: str, actual_username: str, actual_tglang: str):
+    async def update_user(self, user_id: int, actual_uname: str, actual_username: str, actual_tglang: str):
         users_db = db.GetCollection("users")
-        finders = self.find_user(user_id, actual_uname, actual_username, actual_tglang)
+        finders = await self.find_user(user_id, actual_uname, actual_username, actual_tglang)
         if not finders:
-             users_db.insert_or_update(
+             await users_db.insert_or_update(
                  filter={"user_id": user_id},
                  info={
                      "full_name": actual_uname,
@@ -31,8 +31,8 @@ class UsersDB:
         else:
             return None
         
-    def getuser_dict(self, user_id: int):
+    async def getuser_dict(self, user_id: int):
         users_db = db.GetCollection("users")
-        return users_db.find_one({"user_id": user_id})
+        return await users_db.find_one({"user_id": user_id})
 
 users_db = UsersDB()

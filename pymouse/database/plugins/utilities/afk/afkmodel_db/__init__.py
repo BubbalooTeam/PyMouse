@@ -3,7 +3,7 @@ from typing import Optional
 from pymouse import db, usersmodel_db
 
 class AFKDB:
-    def updateAFK(
+    async def updateAFK(
         self,
         user_id: int,
         is_afk: bool,
@@ -22,38 +22,38 @@ class AFKDB:
 
         afk_mapper["afk"] = {k: v for k, v in afk_mapper["afk"].items() if v is not None}
 
-        users_db.insert_or_update(
+        await users_db.insert_or_update(
             filter={"user_id": user_id},
             info=afk_mapper,
         )
 
-    def setAFK(
+    async def setAFK(
         self,
         user_id: int,
         time: str,
         reason: Optional[str] = None
     ):
-        self.updateAFK(
+        await self.updateAFK(
             user_id=user_id,
             is_afk=True,
             time=time,
             reason=reason,
         )
 
-    def unsetAFK(
+    async def unsetAFK(
         self,
         user_id: int,
     ):
-        self.updateAFK(
+        await self.updateAFK(
             user_id=user_id,
             is_afk=False,
         )
 
-    def getAFK(
+    async def getAFK(
         self,
         user_id: int,
     ) -> dict:
-        afkmap = usersmodel_db.users_db.getuser_dict(user_id).get("afk", {})
+        afkmap = await usersmodel_db.users_db.getuser_dict(user_id).get("afk", {})
         return afkmap
 
    

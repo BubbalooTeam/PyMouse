@@ -42,3 +42,8 @@ class HandleText:
     def input_str(m: Message) -> str:
         """Get text before of a command..."""
         return " ".join(m.text.split()[1:])
+
+class HandleBoolean:
+    @staticmethod
+    def get_ticket(state: bool):
+        return "✅" if state is True else "☑️"
