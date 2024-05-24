@@ -18,7 +18,7 @@ class Decorators:
                 user_id = m.from_user.id
                 if user_id == self.owner:
                     return await func(c, m, *args, **kwargs)
-                get_dev_by_id = await dev_db.find_one({"dev_users": user_id})
+                get_dev_by_id = dev_db.find_one({"dev_users": user_id})
                 if get_dev_by_id and only_owner is False:
                     return await func(c, m, *args, **kwargs)
                 else:
@@ -36,7 +36,7 @@ class Decorators:
                 actual_username = m.from_user.username
                 actual_uname = m.from_user.first_name + " " + m.from_user.last_name if not m.from_user.last_name is None else m.from_user.first_name
                 actual_languagebytg = m.from_user.language_code
-                await usersmodel_db.users_db.update_user(user_id, actual_uname, actual_username, actual_languagebytg)
+                usersmodel_db.users_db.update_user(user_id, actual_uname, actual_username, actual_languagebytg)
                 return await func(c, m, *args, **kwargs)
             return wrapper
         return decorator

@@ -1,7 +1,6 @@
 import json
 from typing import Optional
 
-from pymouse.utils import UtilsDecorator
 from ..exceptions import LocalDatabaseJsonError, LocalDatabaseNotFound
 
 class DataBase:
@@ -27,14 +26,12 @@ class DataBase:
             if collection not in self.parent_db.db:
                 self.parent_db.db[collection] = []
 
-        @UtilsDecorator().aiowrap()
-        def find(self):
+        def find(self) -> list:
             return self.parent_db.db[self.collection]
         
-        @UtilsDecorator().aiowrap()
-        async def find_one(self, filter: Optional[dict] = None):
+        def find_one(self, filter: Optional[dict] = None) -> dict:
             # find global collection info
-            collection_data = await self.find()
+            collection_data = self.find()
             if not filter:
                 print("[database/modules]: No information provided for find especified info...")
                 return
@@ -49,13 +46,12 @@ class DataBase:
             else:
                 return {}
 
-        @UtilsDecorator().aiowrap()
-        async def insert_or_update(self, filter: Optional[dict] = None, info: Optional[dict] = None):
+        def insert_or_update(self, filter: Optional[dict] = None, info: Optional[dict] = None) -> bool:
             if not info:
                 print("[database/modules]: No information provided for update...")
                 return
             inup = False
-            collection_data = await self.find()
+            collection_data = self.find()
             if filter:
                 # Find the index of the item to be updated
                 try:
@@ -75,7 +71,6 @@ class DataBase:
             self.parent_db.save_db()
             return inup
 
-        @UtilsDecorator().aiowrap()
         async def delete(self, filter: Optional[dict] = None) -> bool:
             """
             Remove a record from the database based on a specified key and its corresponding value.
@@ -88,7 +83,7 @@ class DataBase:
             """
             deleted = False
             if filter:
-                finder = await self.find()
+                finder = self.find()
                 for record in finder:
                     if all(record.get(key) == value for key, value in filter.items()):
                         finder.remove(record)

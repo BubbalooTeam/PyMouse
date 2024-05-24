@@ -43,7 +43,7 @@ class AFKUtils:
         afktxt = ""
         gr: str | None = None
         gt: str | None = None
-        afk = (await afkmodel_db.afk_db.getAFK(user.id))
+        afk = afkmodel_db.afk_db.getAFK(user.id)
         if afk.get("is_afk", False) != False:
             afktxt += "<b>{user} is unavalaible!</b>".format(user=user.mention)
             gr = afk.get("reason", None)

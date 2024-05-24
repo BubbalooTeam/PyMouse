@@ -15,7 +15,7 @@ class AFK_Plugins:
         if not user:
             return
 
-        is_afk = (await afkmodel_db.afk_db.getAFK(user.id)).get("is_afk", False)
+        is_afk = afkmodel_db.afk_db.getAFK(user.id).get("is_afk", False)
         if is_afk:
             await afk_utils.stop_afk(m)
             return
@@ -27,7 +27,7 @@ class AFK_Plugins:
 
         time = datetime.now().timestamp()
         # // Setting AFK in DataBase
-        await afkmodel_db.afk_db.setAFK(user.id, time, reason)
+        afkmodel_db.afk_db.setAFK(user.id, time, reason)
         afktext = "<b>{user} is now unavalaible!</b>".format(user=user.mention)
         if avreason:
             afktext += "\n<b>Reason:</b> <code>{reason}</code>".format(reason=reason)
@@ -47,7 +47,7 @@ class AFK_Plugins:
         except AttributeError:
             return
         
-        is_afk = (await afkmodel_db.afk_db.getAFK(user.id)).get("is_afk", False)
+        is_afk = afkmodel_db.afk_db.getAFK(user.id).get("is_afk", False)
         if is_afk:
             await afk_utils.stop_afk(m)
             return
