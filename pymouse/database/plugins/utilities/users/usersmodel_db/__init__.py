@@ -1,7 +1,8 @@
 from pymouse import db, log
 
 class UsersDB:
-    def find_user(self, user_id: int, actual_uname: str, actual_username: str, actual_tglang: str) -> bool:
+    @staticmethod
+    def find_user(user_id: int, actual_uname: str, actual_username: str, actual_tglang: str) -> bool:
         users_db = db.GetCollection("users")
         userinfo = users_db.find_one({"user_id": user_id})
         if userinfo:
@@ -31,7 +32,8 @@ class UsersDB:
         else:
             return None
         
-    def getuser_dict(self, user_id: int):
+    @staticmethod
+    def getuser_dict(user_id: int) -> dict:
         users_db = db.GetCollection("users")
         return users_db.find_one({"user_id": user_id})
 

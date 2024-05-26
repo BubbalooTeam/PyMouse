@@ -16,5 +16,6 @@ log.info("DataBase compiled with sucessfully...")
 # Bot utils
 from pymouse.database.plugins.utilities.users import usersmodel_db
 from pymouse.database.plugins.utilities.afk import afkmodel_db
+from pymouse.database.plugins.utilities.chats import chatsmodel_db
 
 from pymouse.decorators import Decorators

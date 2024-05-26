@@ -1,8 +1,9 @@
 from typing import Optional
 from functools import wraps
 from hydrogram.types import Message
+from hydrogram.enums import ChatType
 
-from pymouse import PyMouse, Config, db, usersmodel_db
+from pymouse import PyMouse, Config, db, usersmodel_db, chatsmodel_db
 
 class Decorators:
     def __init__(self):
@@ -37,6 +38,19 @@ class Decorators:
                 actual_uname = m.from_user.first_name + " " + m.from_user.last_name if not m.from_user.last_name is None else m.from_user.first_name
                 actual_languagebytg = m.from_user.language_code
                 usersmodel_db.users_db.update_user(user_id, actual_uname, actual_username, actual_languagebytg)
+                return await func(c, m, *args, **kwargs)
+            return wrapper
+        return decorator
+    
+    def SaveChats(self):
+        def decorator(func):
+            async def wrapper(c: PyMouse, m: Message, *args, **kwargs): # type: ignore
+                if m.chat.type == ChatType.PRIVATE:
+                    return await func(c, m, *args, **kwargs)
+                chat_id = m.chat.id
+                actual_chatname = m.chat.username
+                actual_chattitle = m.chat.title
+                chatsmodel_db.chats_db.update_chat(chat_id, actual_chattitle, actual_chatname)
                 return await func(c, m, *args, **kwargs)
             return wrapper
         return decorator
