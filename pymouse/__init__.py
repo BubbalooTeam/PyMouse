@@ -10,7 +10,7 @@ try:
 except Exception:
     log.info("Error in compiling DataBase...")
     exit()
-log.info("DataBase compiled with sucessfully...")
+log.info("DataBase compiled with successfully...")
 
 
 # Bot utils

@@ -25,7 +25,7 @@ class ChatsDB:
                     "chat_id": chat_id
                 }
             )
-            log.info("[database/plugins/utilities/chats]: (%s - %s) Chat updated with sucessfully!!", chat_id, actual_chattitle)
+            log.info("[database/plugins/utilities/chats]: (%s - %s) Chat updated with successfully!!", chat_id, actual_chattitle)
             return True
         else:
             return None

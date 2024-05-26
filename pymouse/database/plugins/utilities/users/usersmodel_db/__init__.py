@@ -27,7 +27,7 @@ class UsersDB:
                      "user_id": user_id,
                  }
              )
-             log.info("[database/plugins/utilities/users][UpdateUser]: (%s - %s) User updated with sucessfully!!", user_id, actual_uname)
+             log.info("[database/plugins/utilities/users][UpdateUser]: (%s - %s) User updated with successfully!!", user_id, actual_uname)
              return True
         else:
             return None
