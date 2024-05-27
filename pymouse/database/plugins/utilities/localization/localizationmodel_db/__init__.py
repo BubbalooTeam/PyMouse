@@ -47,7 +47,7 @@ class LocalizationDB:
             chat_type = msg.chat.type
             if chat_type in {ChatType.GROUP, ChatType.SUPERGROUP, ChatType.CHANNEL}:
                 return db.GetCollection("chats")
-            elif chat_type == ChatType.PRIVATE:
+            elif chat_type in {ChatType.PRIVATE, ChatType.BOT}:
                 return db.GetCollection("users")
             else:
                 log.critical("Chat type with enum (%s) is not supported!", chat_type)
@@ -79,5 +79,25 @@ class LocalizationDB:
             return language
         else:
             return None
+        
+    def set_chat_language(
+        self,
+        union: Union[Message, CallbackQuery],
+        language: str,
+    ):
+        db_ctx = self.get_database_context(union)
+        chat_id = self.get_chatid(union)
+        tck_type = "chat_id" if db_ctx.collection == "chats" else "user_id"
+        language_mapper = {
+            tck_type: chat_id,
+            "localization": {
+                "chat_lang": language,
+            }
+        }
+        db_ctx.insert_or_update(
+            filter={tck_type: chat_id},
+            info=language_mapper,
+        )
+
 
 localization_db = LocalizationDB()

@@ -1,9 +1,9 @@
-from typing import Optional
+from typing import Union, Optional
 from functools import wraps
-from hydrogram.types import Message
+from hydrogram.types import Message, CallbackQuery, InlineQuery
 from hydrogram.enums import ChatType
 
-from pymouse import PyMouse, Config, db, usersmodel_db, chatsmodel_db
+from pymouse import PyMouse, Config, db, usersmodel_db, chatsmodel_db, localization
 
 class Decorators:
     def __init__(self):
@@ -44,6 +44,7 @@ class Decorators:
     
     def SaveChats(self):
         def decorator(func):
+            @wraps(func)
             async def wrapper(c: PyMouse, m: Message, *args, **kwargs): # type: ignore
                 if m.chat.type == ChatType.PRIVATE:
                     return await func(c, m, *args, **kwargs)
@@ -52,5 +53,16 @@ class Decorators:
                 actual_chattitle = m.chat.title
                 chatsmodel_db.chats_db.update_chat(chat_id, actual_chattitle, actual_chatname)
                 return await func(c, m, *args, **kwargs)
+            return wrapper
+        return decorator
+    
+    def Locale(self):
+        """Get strings from chat localization"""
+        def decorator(func):
+            @wraps(func)
+            async def wrapper(c: PyMouse, union: Union[Message, CallbackQuery, InlineQuery], *args, **kwargs): # type: ignore
+                language = localization.get_localization_of_chat(union)
+                i18n = localization.strings.get(language, {})
+                return await func(c, union, *args, i18n, **kwargs)
             return wrapper
         return decorator

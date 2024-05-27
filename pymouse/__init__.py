@@ -19,4 +19,5 @@ from pymouse.database.plugins.utilities.afk import afkmodel_db
 from pymouse.database.plugins.utilities.chats import chatsmodel_db
 from pymouse.database.plugins.utilities.localization import localizationmodel_db
 
+from .utils.localization import localization
 from pymouse.decorators import Decorators

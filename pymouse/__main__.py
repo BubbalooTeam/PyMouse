@@ -4,10 +4,11 @@ import time
 from hydrogram import idle
 from hydrogram.errors import FloodWait, Unauthorized
 
-from pymouse import PyMouse, log
+from pymouse import PyMouse, log, localization
 from .services.load_handler.run import RunModules
 
 async def run_mouse():
+    localization.compile_locales()
     RunModules()
     await PyMouse.start()
     await idle()
