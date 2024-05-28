@@ -3,6 +3,9 @@
         "name": "Português (BRA)",
         "flag": "🇧🇷"
     },
+    "generic-strings": {
+        "reason": "\n<b>Motivo:</b> <code>{reason}</code>"
+    },
     "pm-menu": {
         "start-private": "Olá <b>{user}</b>, Eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para o seu chat.",
         "start-group": "<b>Olá! Meu nome é {bot}!</b>"

@@ -3,6 +3,9 @@
         "name": "English (USA)",
         "flag": "🇺🇸"
     },
+    "generic-strings": {
+        "reason": "\n<b>Reason:</b> <code>{reason}</code>"
+    },
     "pm-menu": {
         "start-private": "Hello <b>{user}</b>, I'am <b>{bot}</b>. A robot with cool and fun functions for your chat.",
         "start-group": "<b>Hello! My name is {bot}!</b>"
