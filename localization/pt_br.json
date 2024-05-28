@@ -4,6 +4,7 @@
         "flag": "🇧🇷"
     },
     "generic-strings": {
+
         "reason": "<b>Motivo:</b> <code>{reason}</code>"
     },
     "pm-menu": {
