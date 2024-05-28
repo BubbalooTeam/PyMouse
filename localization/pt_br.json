@@ -7,13 +7,13 @@
         "reason": "<b>Motivo:</b> <code>{reason}</code>"
     },
     "pm-menu": {
-        "start-private": "Hello <b>{user}</b>, I'am <b>{bot}</b>. A robot with cool and fun functions for your chat.",
-        "start-group": "<b>Hello! My name is {bot}!</b>"
+        "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
+        "start-group": "<b>Olá! Meu nome é {bot}!</b>"
     },
     "buttons": {
-        "about": "ℹ️ About",
-        "back": "Back",
-        "help": "👮 Help",
-        "language": "🌐 Language"
+        "about": "ℹ️ Sobre",
+        "back": "Voltar",
+        "help": "👮 Ajuda",
+        "language": "🌐 Idioma"
     }
 }
