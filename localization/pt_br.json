@@ -4,10 +4,11 @@
         "flag": "🇧🇷"
     },
     "generic-strings": {
-        "reason": "\n<b>Motivo:</b> <code>{reason}</code>"
+
+        "reason": "<b>Motivo:</b> <code>{reason}</code>"
     },
     "pm-menu": {
-        "start-private": "Olá <b>{user}</b>, Eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para o seu chat.",
+        "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
         "start-group": "<b>Olá! Meu nome é {bot}!</b>"
     },
     "buttons": {
