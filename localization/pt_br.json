@@ -10,7 +10,7 @@
     },
     "generic-strings": {
         "last_seen": "\n<b>Last seen there are:</b> <code>{formattedtime}</code>",
-        "reason": "\n<b>Motivo:</b> <code>{reason}</code>"
+        "reason": "<b>Motivo:</b> <code>{reason}</code>"
     },
     "pm-menu": {
         "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
