@@ -4,9 +4,9 @@
         "flag": "🇧🇷"
     },
     "afk": {
-        "is_unavalaible": "<b>{user} is unavalaible!</b>",
-        "is_now_unavalaible": "<b>{user} is now unavalaible!</b>",
-        "is_back": "<b>{user} is back!</b>"
+        "is_unavalaible": "<b>{user} está indisponível!</b>",
+        "is_now_unavalaible": "<b>{user} agora está indisponível!</b>",
+        "is_back": "<b>{user} voltou!</b>"
     },
     "generic-strings": {
         "last_seen": "\n<b>Last seen there are:</b> <code>{formattedtime}</code>",
