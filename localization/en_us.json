@@ -3,7 +3,13 @@
         "name": "English (USA)",
         "flag": "🇺🇸"
     },
+    "afk": {
+        "is_unavalaible": "<b>{user} is unavalaible!</b>",
+        "is_now_unavalaible": "<b>{user} is now unavalaible!</b>",
+        "is_back": "<b>{user} is back!</b>"
+    },
     "generic-strings": {
+        "last_seen": "\n<b>Last seen there are:</b> <code>{formattedtime}</code>",
         "reason": "\n<b>Reason:</b> <code>{reason}</code>"
     },
     "pm-menu": {

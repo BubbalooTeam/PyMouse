@@ -111,7 +111,7 @@ class Localization:
             total_strings=total_strings, 
             strings_translated=translated_strings, 
             strings_untranslated=untranslated_strings, 
-            percentage_translated=translation_percentage
+            percentage_translated=translation_percentage,
         )
 
 

@@ -13,6 +13,7 @@ class RunModules:
             load_modules.add_cmd(afk.AFK_Plugins().setupAFK, "afk", "AFK", "Mark yourself away (away from the keyboard).")
             load_modules.add_regex(afk.AFK_Plugins().setupAFK, r"^(?i:brb)(\s(.+))?")
             load_modules.add_cmd(pm_menu.PMMenu_Plugins().start_, "start")
+            load_modules.add_cmd(pm_menu.PMMenu_Plugins.glang_info, "lang_info")
             load_modules.add_cmd(sudoers.Sudoers_Plugins().ping, "ping")
             load_modules.add_cmd(sudoers.Sudoers_Plugins().rr, ["rr", "restart"])
             load_modules.add_cmd(sudoers.Sudoers_Plugins().shutdown, "shutdown")

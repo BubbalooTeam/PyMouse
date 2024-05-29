@@ -3,7 +3,7 @@ from hydrogram.types import Message, CallbackQuery
 from hydrogram.enums import ChatType
 from hydrokeyboard import InlineKeyboard, InlineButton
 
-from pymouse import PyMouse, Decorators
+from pymouse import PyMouse, Decorators, localization
 
 class PMMenu_Plugins:
     @staticmethod
@@ -20,7 +20,7 @@ class PMMenu_Plugins:
             ),
             InlineButton(
                 text=i18n["buttons"]["help"],
-                callback_data="HelpMenu",
+                callback_data="pm_menu:HelpMenu",
             ),
         )
         # Second row button's for start message
@@ -45,3 +45,10 @@ class PMMenu_Plugins:
                 text=start_text,
                 reply_markup=keyboard,
             )
+
+    async def glang_info(c: PyMouse, m: Message): # type: ignore
+        chat_language = localization.get_localization_of_chat(m)
+        lang_info = localization.get_statistics(chat_language)
+        text = "<b>Language Info:</b>\n\n<b>Total of Strings:</b> <code>{total_strings}</code>\n<b>Translated Strings:</b> <code>{translated_strings}</code>\n<b>Untranslated Strings:</b> <code>{untranslated_strings}</b>".format(total_strings=lang_info.total_strings, translated_strings=lang_info.strings_translated, untranslated_strings=lang_info.strings_untranslated)
+        text += "\n\nOh! All strings already translated!" if lang_info.percentage_translated >= 100 else "\n\nThere are still translations missing! Currently this bot is <code>{strings_percentage} % </code> translated.".format(strings_percentage=lang_info.percentage_translated)
+        await m.reply(text)
