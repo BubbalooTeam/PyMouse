@@ -3,13 +3,14 @@ from datetime import datetime
 from hydrogram import filters
 from hydrogram.types import Message
 
-from pymouse import PyMouse, afkmodel_db
+from pymouse import PyMouse, afkmodel_db, Decorators
 from pymouse.utils import HandleText
 from ..utilities import afk_utils
 
 class AFK_Plugins:
     @staticmethod
-    async def setupAFK(c: PyMouse, m: Message): # type: ignore
+    @Decorators.Locale
+    async def setupAFK(c: PyMouse, m: Message, i18n): # type: ignore
         user = m.from_user
         avreason = True
         if not user:
@@ -28,14 +29,15 @@ class AFK_Plugins:
         time = datetime.now().timestamp()
         # // Setting AFK in DataBase
         afkmodel_db.afk_db.setAFK(user.id, time, reason)
-        afktext = "<b>{user} is now unavalaible!</b>".format(user=user.mention)
+        afktext = i18n["afk"]["is-now-unavalaible"].format(user=user.mention)
         if avreason:
-            afktext += "\n<b>Reason:</b> <code>{reason}</code>".format(reason=reason)
+            afktext += i18n["generic-strings"]["reason"].format(reason=reason)
         await m.reply(afktext)
 
     @staticmethod
     @PyMouse.on_message(~filters.private & ~filters.bot & filters.all, group=2)
-    async def handleAFK(c: PyMouse, m: Message): # type: ignore
+    @Decorators().Locale()
+    async def handleAFK(c: PyMouse, m: Message, i18n): # type: ignore
         user = m.from_user
         if not user:
             return
@@ -49,7 +51,7 @@ class AFK_Plugins:
         
         is_afk = afkmodel_db.afk_db.getAFK(user.id).get("is_afk", False)
         if is_afk:
-            await afk_utils.stop_afk(m)
+            await afk_utils.stop_afk(m, i18n)
             return
         
-        await afk_utils.check_afk(c, m)
+        await afk_utils.check_afk(c, m, i18n)

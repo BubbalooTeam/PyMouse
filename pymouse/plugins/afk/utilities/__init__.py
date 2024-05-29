@@ -39,38 +39,38 @@ class AFKUtils:
             return None
     
     @staticmethod
-    async def sender_afk(user: User, m: Message) -> None:
+    async def sender_afk(user: User, m: Message, i18n: dict) -> None:
         afktxt = ""
         gr: str | None = None
         gt: str | None = None
         afk = afkmodel_db.afk_db.getAFK(user.id)
         if afk.get("is_afk", False) != False:
-            afktxt += "<b>{user} is unavalaible!</b>".format(user=user.mention)
+            afktxt += i18n["afk"]["is-unavalaible"].format(user=user.mention)
             gr = afk.get("reason", None)
             gt = afk.get("time", None)
             if gr != None:
-                afktxt += "\n<b>Reason:</b> <code>{reason}</code>".format(reason=gr)
+                afktxt += i18n["generic-strings"]["reason"].format(reason=gr)
             if afk.get("time", None) != None:
-                afktxt += "\n<b>Last seen there are:</b> <code>{formattedtime}</code>".format(formattedtime=UtilsTimer().time_formatter(datetime.now().timestamp() - gt))
+                afktxt += i18n["generic-strings"]["last-seen"].format(formattedtime=UtilsTimer().time_formatter(datetime.now().timestamp() - gt))
             await m.reply(afktxt)
         else:
             return None
 
-    async def check_afk(self, c: PyMouse, m: Message): # type: ignore
+    async def check_afk(self, c: PyMouse, m: Message, i18n: dict): # type: ignore
         user = await self.getMentioned(c, m)
         if user is not None:
-            await self.sender_afk(user, m)
+            await self.sender_afk(user, m, i18n)
         user = self.getReplied(m)
         if user is not None:
-            await self.sender_afk(user, m)
+            await self.sender_afk(user, m, i18n)
         return
 
     @staticmethod
-    async def stop_afk(m: Message):
+    async def stop_afk(m: Message, i18n: dict):
         user = m.from_user
         if not user:
             return
         afkmodel_db.afk_db.unsetAFK(user.id)
-        return await m.reply("<b>{user} is back!</b>".format(user=user.mention))
+        return await m.reply(i18n["afk"]["is-back"].format(user=user.mention))
 
 afk_utils = AFKUtils()
