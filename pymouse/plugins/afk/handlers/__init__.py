@@ -9,7 +9,7 @@ from ..utilities import afk_utils
 
 class AFK_Plugins:
     @staticmethod
-    @Decorators.Locale
+    @Decorators.Locale()
     async def setupAFK(c: PyMouse, m: Message, i18n): # type: ignore
         user = m.from_user
         avreason = True
