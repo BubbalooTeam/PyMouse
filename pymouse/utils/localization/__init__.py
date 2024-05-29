@@ -22,14 +22,14 @@ class LocalizationStats:
     `type:` int
     """
 
-    translated: int
+    strings_translated: int
     """
     The number of translated strings.
 
     `type:` int
     """
 
-    untranslated: int
+    strings_untranslated: int
     """
     The number of untranslated strings.
 
@@ -109,8 +109,8 @@ class Localization:
 
         return LocalizationStats(
             total_strings=total_strings, 
-            translated=translated_strings, 
-            untranslated=untranslated_strings, 
+            strings_translated=translated_strings, 
+            strings_untranslated=untranslated_strings, 
             percentage_translated=translation_percentage
         )
 
