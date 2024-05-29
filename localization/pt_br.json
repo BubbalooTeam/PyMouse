@@ -9,7 +9,7 @@
         "is-back": "<b>{user} voltou!</b>"
     },
     "generic-strings": {
-        "last-seen": "\n<b>Last seen there are:</b> <code>{formattedtime}</code>",
+        "last-seen": "\n<b>Visto por último há:</b> <code>{formattedtime}</code>",
         "reason": "\n<b>Motivo:</b> <code>{reason}</code>"
     },
     "pm-menu": {
