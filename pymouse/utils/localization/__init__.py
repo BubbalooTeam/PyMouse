@@ -88,7 +88,7 @@ class Localization:
                     if requested_value != default_value:
                         translated_strings += 1
                 else:
-                    if requested_value == default_language:
+                    if requested_value == default_value:
                         translated_strings += 1
             elif isinstance(requested_value, dict):
                 for subkey in requested_value:
