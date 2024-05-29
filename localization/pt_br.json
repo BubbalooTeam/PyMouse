@@ -4,13 +4,13 @@
         "flag": "🇧🇷"
     },
     "afk": {
-        "is-unavalaible": "<b>{user} está indisponível!</b>",
-        "is-now-unavalaible": "<b>{user} agora está indisponível!</b>",
-        "is-back": "<b>{user} voltou!</b>"
+        "is-unavalaible": "<b>{user} is unavalaible!</b>",
+        "is-now-unavalaible": "<b>{user} is now unavalaible!</b>",
+        "is-back": "<b>{user} is back!</b>"
     },
     "generic-strings": {
         "last-seen": "\n<b>Last seen there are:</b> <code>{formattedtime}</code>",
-        "reason": "\n<b>Motivo:</b> <code>{reason}</code>"
+        "reason": "<b>Motivo:</b> <code>{reason}</code>"
     },
     "pm-menu": {
         "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
