@@ -84,8 +84,12 @@ class Localization:
             if isinstance(requested_value, str):
                 nonlocal total_strings, translated_strings
                 total_strings += 1
-                if requested_value != default_value:
-                    translated_strings += 1
+                if language != self.default_language:
+                    if requested_value != default_value:
+                        translated_strings += 1
+                else:
+                    if requested_value == default_language:
+                        translated_strings += 1
             elif isinstance(requested_value, dict):
                 for subkey in requested_value:
                     if subkey in default_value:
@@ -111,7 +115,7 @@ class Localization:
             total_strings=total_strings, 
             strings_translated=translated_strings, 
             strings_untranslated=untranslated_strings, 
-            percentage_translated=translation_percentage,
+            percentage_translated=round(translation_percentage),
         )
 
 

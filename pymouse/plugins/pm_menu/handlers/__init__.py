@@ -50,5 +50,5 @@ class PMMenu_Plugins:
         chat_language = localization.get_localization_of_chat(m)
         lang_info = localization.get_statistics(chat_language)
         text = "<b>Language Info:</b>\n\n<b>Total of Strings:</b> <code>{total_strings}</code>\n<b>Translated Strings:</b> <code>{translated_strings}</code>\n<b>Untranslated Strings:</b> <code>{untranslated_strings}</code>".format(total_strings=lang_info.total_strings, translated_strings=lang_info.strings_translated, untranslated_strings=lang_info.strings_untranslated)
-        text += "\n\nOh! All strings already translated!" if lang_info.percentage_translated >= 100 else "\n\nThere are still translations missing! Currently this bot is <code>{strings_percentage} % </code> translated.".format(strings_percentage=round(lang_info.percentage_translated))
+        text += "\n\nOh! All strings already translated!" if lang_info.percentage_translated >= 100 else "\n\nThere are still translations missing! Currently this bot is <code>{strings_percentage} % </code> translated.".format(strings_percentage=lang_info.percentage_translated)
         await m.reply(text)
