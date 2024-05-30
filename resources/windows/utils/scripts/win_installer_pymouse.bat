@@ -18,4 +18,3 @@ if %errorlevel% neq 0 (
 )
 
 echo Updates of Termux are terminated! Initializing Install PyMouse Tool...
-:: Execute o que você precisa fazer aqui (por exemplo, instalar o PyMouse)
