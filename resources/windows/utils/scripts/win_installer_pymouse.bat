@@ -16,5 +16,3 @@ if %errorlevel% neq 0 (
     choco install python -y
     echo Python and tools installed successfully!
 )
-
-echo Updates of Termux are terminated! Initializing Install PyMouse Tool...
