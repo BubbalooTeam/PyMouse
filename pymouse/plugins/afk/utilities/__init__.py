@@ -5,7 +5,7 @@ from hydrogram.enums import MessageEntityType
 from hydrogram.errors import UsernameInvalid, PeerIdInvalid
 
 from pymouse import PyMouse, afkmodel_db
-from pymouse.utils import UtilsTimer
+from pymouse.utils import UsersError, UtilsTimer
 
 class AFKUtils:
     @staticmethod
@@ -15,7 +15,7 @@ class AFKUtils:
         user = m.text[entoffset : entoffset + entlength]
         try:
             ent = await c.get_users(user)
-        except (UsernameInvalid, PeerIdInvalid):
+        except UsersError:
             return None
         return ent
     

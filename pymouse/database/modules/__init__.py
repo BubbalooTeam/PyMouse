@@ -75,7 +75,7 @@ class DataBase:
             """
             Remove a record from the database based on a specified key and its corresponding value.
 
-            Args:
+            Arguments:
                 `filter (dict)`: A dictionary containing the key-value pair for filtering records.
 
             Returns:
