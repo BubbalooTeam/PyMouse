@@ -15,6 +15,7 @@ Requirements
 Features
 --------
 - A simplified `Local Database <https://github.com/BubbalooTeam/PyMouse/blob/main/pymouse/database/modules/__init__.py>`__
+- Multi-Language (i18n) using `Json Files <https://github.com/BubbalooTeam/PyMouse/tree/main/localization>`__ and `Localization Scripts <https://github.com/BubbalooTeam/PyMouse/blob/main/pymouse/utils/localization/__init__.py>`__
 
 Setup
 -----
