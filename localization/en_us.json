@@ -1,7 +1,10 @@
 {
     "language": {
         "name": "English (USA)",
-        "flag": "🇺🇸"
+        "flag": "🇺🇸",
+        "chat_language": "<b>Chat Language:</b> <code>{language_flag} - {language}</code>",
+        "native-language": "<b>This is the bot's native language. So it's <code>100% translated.</code></b>",
+        "missing-translations": "<b>Translations still missing! Only <code>{strings_percentage}%</code> of the bot is translated!</b>"
     },
     "afk": {
         "is-unavalaible": "<b>{user} is unavalaible!</b>",
@@ -19,6 +22,7 @@
     "buttons": {
         "about": "ℹ️ About",
         "back": "Back",
+        "change-language": "🌐 Change your language",
         "help": "👮 Help",
         "language": "🌐 Language"
     }
