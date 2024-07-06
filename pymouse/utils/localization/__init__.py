@@ -1,3 +1,15 @@
+#    PyMouse (Telegram BOT Project)
+#    Copyright (c) 2022-2024 - BubbalooTeam
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
 import json
 import os
 from pathlib import Path
@@ -70,7 +82,15 @@ class Localization:
         log.info("Localization compiled successfully!")
 
     def get_localization_of_chat(self, union: Union[Message, CallbackQuery, InlineQuery]):
-        """Get chat Localization."""
+        """
+        Get chat Localization.
+
+        Arguments:
+            `union (Union[Message, CallbackQuery, InlineQuery])`: The received message or query.
+
+        Returns:
+            `language(str)`: Representing Chat Language.
+        """
         locale = localizationmodel_db.localization_db.get_chat_language(union)
         if locale is None:
             return self.default_language
@@ -78,6 +98,15 @@ class Localization:
             return locale if locale in self.current_locales else self.default_language
         
     def get_statistics(self, language: str):
+        """
+        Gets string translation statistics for the specified language.
+
+        Arguments:
+            `language(str)`: Specified Language.
+
+        Returns:
+            `LocalizationStats`: Statistics for the specified language.
+        """
         default_language = self.strings.get(self.default_language, {})
         requested_language = self.strings.get(language, {})
         def recursive_count_strings(default_value, requested_value):

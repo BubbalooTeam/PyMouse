@@ -1,3 +1,15 @@
+#    PyMouse (Telegram BOT Project)
+#    Copyright (c) 2022-2024 - BubbalooTeam
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
 from datetime import datetime
 
 from hydrogram.types import Message, MessageEntity, User
@@ -46,11 +58,11 @@ class AFKUtils:
         afk = afkmodel_db.afk_db.getAFK(user.id)
         if afk.get("is_afk", False) != False:
             afktxt += i18n["afk"]["is-unavalaible"].format(user=user.mention)
-            gr = afk.get("reason", None)
-            gt = afk.get("time", None)
+            gr = afk.get("reason")
+            gt = afk.get("time")
             if gr != None:
                 afktxt += i18n["generic-strings"]["reason"].format(reason=gr)
-            if afk.get("time", None) != None:
+            if afk.get("time") != None:
                 afktxt += i18n["generic-strings"]["last-seen"].format(formattedtime=UtilsTimer().time_formatter(datetime.now().timestamp() - gt))
             await m.reply(afktxt)
         else:

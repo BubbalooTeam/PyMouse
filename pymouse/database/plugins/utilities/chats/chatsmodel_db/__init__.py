@@ -1,3 +1,15 @@
+#    PyMouse (Telegram BOT Project)
+#    Copyright (c) 2022-2024 - BubbalooTeam
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
 from pymouse import db, log
 
 class ChatsDB:
@@ -6,7 +18,7 @@ class ChatsDB:
         chats_db = db.GetCollection("chats")
         chatinfo = chats_db.find_one({"chat_id": chat_id})
         if chatinfo:
-            chatname = chatinfo.get("chatname", None)
+            chatname = chatinfo.get("chatname")
             chattitle = chatinfo.get("chattitle", "")
             if chatname == actual_chatname and chattitle == actual_title:
                 return True

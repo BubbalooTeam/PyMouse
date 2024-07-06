@@ -2,9 +2,15 @@
     "language": {
         "name": "English (USA)",
         "flag": "🇺🇸",
-        "chat_language": "<b>Chat Language:</b> <code>{language_flag} - {language}</code>",
-        "native-language": "<b>This is the bot's native language. So it's <code>100% translated.</code></b>",
-        "missing-translations": "<b>Translations still missing! Only <code>{strings_percentage}%</code> of the bot is translated!</b>"
+        "language-info": {
+            "chat-language": "<b>Chat Language:</b> <code>{language_flag} - {language}</code>",
+            "native-language": "<b>This is the bot's native language. So it's <code>100% translated.</code></b>",
+            "missing-translations": "<b>Translations still missing! Only <code>{strings_percentage}%</code> of the bot is translated!</b>",
+            "language-info": "\n\n<b>Language info:</b>",
+            "language-total-strings": "\n\n- <b>Total strings:</b> <code>{total_strings}</code>",
+            "language-translated": "\n- <b>Translated strings:</b> <code>{translated_strings}</code>",
+            "language-untranslated": "\n- <b>Untranslated strings:</b> <code>{untranslated_strings}</code>"
+        }
     },
     "afk": {
         "is-unavalaible": "<b>{user} is unavalaible!</b>",

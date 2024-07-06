@@ -10,13 +10,6 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-from hydrogram.errors import UserIdInvalid, UserNotParticipant, UsernameInvalid, UsernameNotOccupied, PeerIdInvalid
-
-class UsersError(
-    UserIdInvalid,
-    UserNotParticipant,
-    UsernameInvalid,
-    UsernameNotOccupied,
-    PeerIdInvalid,
-    ):
-    """Raise if error in handle users"""
+class WeatherLocationNotProvidedError(Exception):
+    """Raise if the location is not provided for Weather."""
+    pass
