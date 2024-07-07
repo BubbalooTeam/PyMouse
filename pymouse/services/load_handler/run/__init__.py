@@ -21,7 +21,6 @@ class RunModules:
                 afk,
                 pm_menu,
                 sudoers,
-                rothenete,
             )
             # Sudoers
             load_modules.add_cmd(afk.AFK_Plugins().setupAFK, "afk", "AFK", "Mark yourself away (away from the keyboard).")
