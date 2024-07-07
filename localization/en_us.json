@@ -23,13 +23,18 @@
     },
     "pm-menu": {
         "start-private": "Hello <b>{user}</b>, I'am <b>{bot}</b>. A robot with cool and fun functions for your chat.",
-        "start-group": "<b>Hello! My name is {bot}!</b>"
+        "start-group": "<b>Hello! My name is {bot}!</b>",
+        "privacy-policy": "<b>PyMouse Privacy Policy:</b>\n\n<i>This bot was designed and created to guarantee your security and privacy.\nThank you for your trust, our organization values ​​protecting your data and, moreover, we value quality.\n\nThe current privacy policy can be updated at any time, but this change will be communicated days in advance on the news channel.</i>"
+    },
+    "weather": {
+        "language": "en"
     },
     "buttons": {
         "about": "ℹ️ About",
         "back": "Back",
         "change-language": "🌐 Change your language",
         "help": "👮 Help",
-        "language": "🌐 Language"
+        "language": "🌐 Language",
+        "privacy": "🔒 Privacy"
     }
 }

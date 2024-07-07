@@ -16,8 +16,8 @@ from typing import Union
 from hydrogram.types import Message, InlineQuery
 
 from pymouse.assents import AllIcons
-from pymouse.utils import HandleText
-from pymouse.utils.tools.weather.exceptions import WeatherLocationNotProvidedError
+from pymouse.utils import HandleText, http
+from pymouse.utils.tools.weather.exceptions import WeatherLocationNotProvidedError, WeatherLocationNotFound
 
 status_emojis = {
     0: AllIcons.Weather.RAIN_THUMDERSTORM,
@@ -39,36 +39,45 @@ status_emojis = {
     16: AllIcons.Weather.SNOW,
     17: AllIcons.Weather.RAIN_THUMDERSTORM,
     18: AllIcons.Weather.RAIN,
-    19: "🌫",
-    20: "🌫",
-    21: "🌫",
-    22: "🌫",
-    23: "🌬",
-    24: "🌬",
-    25: "🌨",
-    26: "☁️",
-    27: "🌥",
-    28: "🌥",
-    29: "⛅️",
-    30: "⛅️",
-    31: "🌙",
+    19: AllIcons.Weather.FOG,
+    20: AllIcons.Weather.FOG,
+    21: AllIcons.Weather.FOG,
+    22: AllIcons.Weather.FOG,
+    23: AllIcons.Weather.WIND,
+    24: AllIcons.Weather.WIND,
+    25: AllIcons.Weather.SNOW,
+    26: AllIcons.Weather.CLOUDY,
+    27: AllIcons.Weather.MOSTLY_CLOUDY,
+    28: AllIcons.Weather.MOSTLY_CLOUDY,
+    29: AllIcons.Weather.PARTLY_CLOUDY,
+    30: AllIcons.Weather.PARTLY_CLOUDY,
+    31: AllIcons.Weather.MOON,
     32: AllIcons.Weather.SUNNY,
-    33: "🌤",
-    34: "🌤",
-    35: "⛈",
-    36: "🔥",
-    37: "🌩",
-    38: "🌩",
-    39: "🌧",
-    40: "🌧",
-    41: "❄️",
-    42: "❄️",
-    43: "❄️",
-    44: "n/a",
-    45: "🌧",
-    46: "🌨",
-    47: "🌩",
+    33: AllIcons.Weather.PARTLY_CLOUDY,
+    34: AllIcons.Weather.PARTLY_CLOUDY,
+    35: AllIcons.Weather.RAIN_THUMDERSTORM,
+    36: AllIcons.Weather.HOT,
+    37: AllIcons.Weather.THUMDERSTORM,
+    38: AllIcons.Weather.THUMDERSTORM,
+    39: AllIcons.Weather.RAIN,
+    40: AllIcons.Weather.RAIN,
+    41: AllIcons.Weather.SNOW,
+    42: AllIcons.Weather.SNOW,
+    43: AllIcons.Weather.SNOW,
+    44: AllIcons.Weather.RESYNC,
+    45: AllIcons.Weather.RAIN,
+    46: AllIcons.Weather.SNOW,
+    47: AllIcons.Weather.THUMDERSTORM,
 }
+
+@dataclass(frozen=True, slots=True)
+class WeatherLocationInfo:
+    latitude: int | None
+    longitude: int | None
+
+@dataclass(frozen=True, slots=True)
+class WeatherCoords:
+    geocode: str | None
 
 @dataclass(frozen=True, slots=True)
 class WeatherOverview:
@@ -87,10 +96,12 @@ class WeatherInfo:
 
 class Weather:
     def __init__(self) -> None:
-        self.get_coords: str = "https://api.weather.com/v3/location/search"
-        self.get_weather_url: str = "https://api.weather.com/v3/aggcommon/v3-wx-observations-current"
-        self.headers: dict = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 12; M2012K11AG Build/SQ1D.211205.017)"}
+        self.GetCoords: str = "https://api.weather.com/v3/location/search"
+        self.GetWeatherUrl: str = "https://api.weather.com/v3/aggcommon/v3-wx-observations-current"
+        self.Headers: dict = {"User-Agent": "Dalvik/2.1.0 (Linux; U; Android 12; M2012K11AG Build/SQ1D.211205.017)"}
+        self.weatherAPIKey = "8de2d8b3a93542c9a2d8b3a935a2c909"
 
+    @staticmethod
     def GetWeatherLocation(union: Union[Message, InlineQuery]) -> str:
         """
         Get the Location the user entered to check the Weather.
@@ -107,6 +118,7 @@ class Weather:
         else:
             return Localization
 
+    @staticmethod
     def _parse_WeatherInfo(weather_dict: dict) -> WeatherInfo:
         return WeatherInfo(
             temperature=weather_dict.get("temperature"),
@@ -118,3 +130,39 @@ class Weather:
                 wxPhraseLong=weather_dict.get("wxPhraseLong"),
             ),
         )
+    
+    @staticmethod
+    def _parse_WeatherLocationInfo(location_dict: dict) -> WeatherLocationInfo:
+        return WeatherLocationInfo(
+            latitude=location_dict.get("latitude")[0],
+            longitude=location_dict.get("longitude")[0],
+        )
+    
+    async def GetCoordsLocalization(self, union: Union[Message, InlineQuery], i18n: dict) -> WeatherCoords:
+        getLocation = self.GetWeatherLocation(union=union)
+        getCoordsParams = dict(
+            apiKey=self.weatherAPIKey,
+            format="json",
+            language=i18n["weather"]["language"],
+            query=getLocation
+        )
+        # Make a Request using HTTP Method
+        r = await http.get(
+            url=self.GetCoords,
+            headers=self.Headers,
+            params=getCoordsParams,
+        )
+        getted_json = r.json()
+        loc_json = getted_json.get("location")
+        if loc_json:
+            loc_tuple = self._parse_WeatherLocationInfo(
+                location_dict=loc_json,
+            )
+            return WeatherCoords(
+                geocode="{latitude},{longitude}".format(
+                    latitude=loc_tuple.latitude,
+                    longitude=loc_tuple.longitude,
+                )
+            )
+        else:
+            raise WeatherLocationNotFound("Location Requested Not Found!")

@@ -10,11 +10,12 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-# Class of Exceptions
-from .exceptions.users import UsersError
+from httpx import AsyncClient, Timeout
 
-# Bot Utils
-from .logger import log
-from .http import http
-from .tools.utilities import UtilsDecorator, UtilsTimer, HandleText
-from .tools.network import NetworkEvents, NetworkUtils
+http = AsyncClient(
+    http2=True, 
+    timeout=Timeout(
+        timeout=60, 
+        pool=None
+    )
+)

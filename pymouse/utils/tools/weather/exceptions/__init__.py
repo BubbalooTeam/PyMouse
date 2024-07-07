@@ -13,3 +13,7 @@
 class WeatherLocationNotProvidedError(Exception):
     """Raise if the location is not provided for Weather."""
     pass
+
+class WeatherLocationNotFound(Exception):
+    """Raise if the location provided Not-Found for Weather."""
+    pass
