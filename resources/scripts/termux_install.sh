@@ -1,3 +1,4 @@
+#!/bin/bash
 printf "$ [...] - Updating Termux install BOT, Please wait. . .\n\n"
 pkg update -y
 apt update
