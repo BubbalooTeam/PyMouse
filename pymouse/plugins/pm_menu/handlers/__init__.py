@@ -15,7 +15,7 @@ from hydrogram.types import Message, CallbackQuery
 from hydrogram.enums import ChatType
 from hydrokeyboard import InlineKeyboard, InlineButton
 
-from pymouse import PyMouse, Decorators, localization
+from pymouse import PyMouse, Decorators
 
 class PMMenu_Plugins:
     @staticmethod
@@ -32,7 +32,7 @@ class PMMenu_Plugins:
             ),
             InlineButton(
                 text=i18n["buttons"]["help"],
-                callback_data="pm_menu:HelpMenu",
+                callback_data="HelpMenu",
             ),
         )
         # Second row button's for start message
@@ -40,6 +40,10 @@ class PMMenu_Plugins:
             InlineButton(
                 text=i18n["buttons"]["about"],
                 callback_data="AboutMenu",
+            ),
+            InlineButton(
+                text=i18n["buttons"]["privacy"],
+                callback_data="PrivacyPolicy"
             )
         )
 
@@ -47,6 +51,7 @@ class PMMenu_Plugins:
         if isinstance(union, Message):
             if union.chat.type != ChatType.PRIVATE:
                 start_text = i18n["pm-menu"]["start-group"].format(bot=c.me.mention)
+                keyboard = None
             await c.send_message(
                 chat_id=union.chat.id,
                 text=start_text,
@@ -58,9 +63,46 @@ class PMMenu_Plugins:
                 reply_markup=keyboard,
             )
 
-    async def glang_info(c: PyMouse, m: Message): # type: ignore
-        chat_language = localization.get_localization_of_chat(m)
-        lang_info = localization.get_statistics(chat_language)
-        text = "<b>Language Info:</b>\n\n<b>Total of Strings:</b> <code>{total_strings}</code>\n<b>Translated Strings:</b> <code>{translated_strings}</code>\n<b>Untranslated Strings:</b> <code>{untranslated_strings}</code>".format(total_strings=lang_info.total_strings, translated_strings=lang_info.strings_translated, untranslated_strings=lang_info.strings_untranslated)
-        text += "\n\nOh! All strings already translated!" if lang_info.percentage_translated >= 100 else "\n\nThere are still translations missing! Currently this bot is <code>{strings_percentage} % </code> translated.".format(strings_percentage=lang_info.percentage_translated)
-        await m.reply(text)
+    @staticmethod  
+    @Decorators().Locale()
+    async def privacyPolicy(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
+        privacypolicyText = i18n["pm-menu"]["privacy-policy"].format(
+            bot=c.me.first_name,
+        )
+        keyboard = InlineKeyboard(row_width=1)
+        keyboard.add(
+            InlineButton(
+                text=i18n["buttons"]["privacy-data"],
+                callback_data="PrivacyData",
+            ),
+            InlineButton(
+                text=i18n["buttons"]["back"],
+                callback_data="StartBack"
+            )
+        )
+        if isinstance(union, Message):
+            await union.reply(
+                text=privacypolicyText,
+                reply_markup=keyboard,
+            )
+        elif isinstance(union, CallbackQuery):
+            await union.edit_message_text(
+                text=privacypolicyText,
+                reply_markup=keyboard,
+            )
+    
+    @staticmethod
+    @Decorators().Locale()
+    async def privacyPolicyRead(_, cb: CallbackQuery, i18n):
+        privacypolicyReadText = i18n["pm-menu"]["privacy-policyRead"]
+        keyboard = InlineKeyboard(row_width=2)
+        keyboard.add(
+            InlineButton(
+                text=i18n["buttons"]["your-data"],
+                callback_data="YourDataCollected",
+            )
+        )
+        await cb.edit_message_text(
+            text=privacypolicyReadText,
+            reply_markup=keyboard,
+        )

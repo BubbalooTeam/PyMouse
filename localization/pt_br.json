@@ -24,16 +24,26 @@
     "pm-menu": {
         "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
         "start-group": "<b>Olá! Meu nome é {bot}!</b>",
-        "privacy-policy": "<b>Política de privacidade do PyMouse:</b>\n\n<i>Este bot foi pensado e criado para garantir sua segurança e privacidade.\nObrigado pela confiança, nossa organização preza pela proteção dos seus dados e, além disso, prezamos pela qualidade.\n\nA atual política de privacidade pode ser atualizada a qualquer momento, mas essa alteração será comunicada com dias de antecedência no canal de notícias.</i>"
+        "privacy-policy": "<b>Política de privacidade do PyMouse:</b>\n\n<i>Este bot foi pensado e criado para garantir sua segurança e privacidade.\nObrigado pela confiança, nossa organização preza pela proteção dos seus dados e, além disso, prezamos pela qualidade.\n\nA atual política de privacidade pode ser atualizada a qualquer momento, mas essa alteração será comunicada com dias de antecedência no canal de notícias.</i>",
+        "privacy-policyRead": "<b>Informações que este bot coleta:</b>\n\n<i>- <b>Informações básicas do usuário:</b> ID do usuário, nome, sobrenome, idioma e nome de usuário.\n- <b>Informações básicas do grupo:</b> ID do bate-papo, título do bate-papo, nome de usuário e tipo de bate-papo.\n- <b>Configurações do BOT:</b> coisas como seu idioma de bate-papo com o bot e quaisquer outras configurações serão coletadas.</i>\n\n<b>Como e por que essas informações são coletadas?</b>\n\n<code><u>Essas informações podem ser capturadas por decoradores, 'pequenas peças' com as quais você interage com o bot e ele pode salvar essas informações básicas, seja uma mensagem direta ou não.\nNeste caso, essas informações podem ser coletadas para melhorar a experiência e funcionalidade do serviço prestado pelo bot.</u></code>\n\n<b>Observação:</b> <i>Todas as informações coletadas são públicas e estão disponíveis para uso no Telegram, mas não sabemos sua identidade 'REAL'.</i>"
     },
     "weather": {
-        "language": "pt"
+        "humidity": "Umidade: {humidity} %",
+        "language": "pt",
+        "location-name": "Localização: {location}",
+        "temperature": "{temperature} °C",
+        "temperature-FeelsLike": "Sensação Térmica: {feelslike} °C",
+        "units": "m",
+        "wind": "Vento: {windspeed} km/h"
     },
     "buttons": {
         "about": "ℹ️ Sobre",
         "back": "Voltar",
         "change-language": "🌐 Change your language",
         "help": "👮 Ajuda",
-        "language": "🌐 Idioma"
+        "language": "🌐 Idioma",
+        "privacy": "🔒 Privacidade",
+        "privacy-data": "🔐 Quais dados coletamos",
+        "your-data": "🗃️ Seus dados"
     }
 }

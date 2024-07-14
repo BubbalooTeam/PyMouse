@@ -11,6 +11,7 @@ dependencies = [
     "hydrogram @ git+https://github.com/hydrogram/hydrogram@dev",
     "hydrokeyboard @ git+https://github.com/fnixdev/HydroKeyboard.git",
     "python-dotenv>=1.0.1",
+    "pytz>=2024.1",
     "speedtest-cli>=2.1.3",
     "tgcrypto>=1.2.5",
 ]

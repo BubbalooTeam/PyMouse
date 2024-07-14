@@ -25,8 +25,8 @@ class RunModules:
             # Sudoers
             load_modules.add_cmd(afk.AFK_Plugins().setupAFK, "afk", "AFK", "Mark yourself away (away from the keyboard).")
             load_modules.add_regex(afk.AFK_Plugins().setupAFK, r"^(?i:brb)(\s(.+))?")
+            load_modules.add_cmd(pm_menu.PMMenu_Plugins().privacyPolicy, "privacy")
             load_modules.add_cmd(pm_menu.PMMenu_Plugins().start_, "start")
-            load_modules.add_cmd(pm_menu.PMMenu_Plugins.glang_info, "lang_info")
             load_modules.add_cmd(sudoers.Sudoers_Plugins().ping, "ping")
             load_modules.add_cmd(sudoers.Sudoers_Plugins().rr, ["rr", "restart"])
             load_modules.add_cmd(sudoers.Sudoers_Plugins().shutdown, "shutdown")
@@ -35,5 +35,10 @@ class RunModules:
             load_modules.cmds_loader()
             # Final loader => Leave "load_modules.regex_loader()" last, if you put it before the regex will not be added correctly, causing failures!
             load_modules.regex_loader()
+            # Callbacks
+            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().start_, r"^StartBack$")
+            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().privacyPolicy, r"^PrivacyPolicy$")
+            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().privacyPolicyRead, r"^PrivacyData$")
+            load_modules.callbacks_loader()
         except (ImportError, re.error) as e:
             raise LoadModulesError("Modules are not loaded correctly for reason: {error}".format(error=e))
