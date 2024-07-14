@@ -24,10 +24,17 @@
     "pm-menu": {
         "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
         "start-group": "<b>Olá! Meu nome é {bot}!</b>",
-        "privacy-policy": "<b>PyMouse Privacy Policy:</b>\n\n<i>This bot was designed and created to guarantee your security and privacy.\nThank you for your trust, our organization values ​​protecting your data and, moreover, we value quality.\n\nThe current privacy policy can be updated at any time, but this change will be communicated days in advance on the news channel.</i>"
+        "privacy-policy": "<b>{bot} Privacy Policy:</b>\n\n<i>This bot was designed and created to guarantee your security and privacy.\nThank you for your trust, our organization values ​​protecting your data and, moreover, we value quality.\n\nThe current privacy policy can be updated at any time, but this change will be communicated days in advance on the news channel.</i>",
+        "privacy-policyRead": "<b>Information that this bot collects:</b>\n\n<i>- <b>Basic User Information:</b> User ID, First Name, Last Name, Language and Username.\n- <b>Basic Group Information:</b> Chat ID, Chat Title, Username and Chat Type.\n- <b>BOT Settings:</b> Things like your Chat Language with the bot and any other settings will be collected.</i>\n\n<b>How and why is this information collected?</b>\n\n<code><u>This information can be captured by decorators, 'little pieces' that when you interact with the bot, it can save this basic information, whether it's a direct message or not.\nIn this case, this information can be collected to improve the experience and functionality of the service provided by the bot.</u></code>\n\n<b>Note:</b> <i>All the information collected is public and available for use on Telegram, but we don't know your 'REAL' identity.</i>"
     },
     "weather": {
-        "language": "en"
+        "humidity": "Humidity: {humidity} %",
+        "language": "en",
+        "location-name": "Location: {location}",
+        "temperature": "{temperature} °F",
+        "temperature-FeelsLike": "Thermal Sensation: {feelslike} °F",
+        "units": "e",
+        "wind": "Wind: {windspeed} mph"
     },
     "buttons": {
         "about": "ℹ️ Sobre",
@@ -35,6 +42,8 @@
         "change-language": "🌐 Change your language",
         "help": "👮 Ajuda",
         "language": "🌐 Idioma",
-        "privacy": "🔒 Privacy"
+        "privacy": "🔒 Privacy",
+        "privacy-data": "🔐 What data do we collect",
+        "your-data": "🗃️ Your data"
     }
 }
