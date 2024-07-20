@@ -510,7 +510,7 @@ class Weather:
             )
             draw.text(
                 xy=(XText, YText + 240),
-                text=ForecastDaily.overview.shortcast,
+                text=ForecastDaily.overview.shortcast[:18] + "..." if ForecastDaily.overview.shortcast >= 18 else ForecastDaily.overview.shortcast,
                 font=SmallFont,
                 fill="yellow"
             )
