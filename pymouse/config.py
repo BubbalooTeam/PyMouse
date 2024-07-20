@@ -59,6 +59,7 @@ class Config:
     API_HASH = os.getenv("API_HASH")
     BOT_TOKEN = os.getenv("BOT_TOKEN")
     CROWDIN_URL = os.getenv("CROWDIN_URL", "https://crowdin.com/project/pymouse")
+    DOWNLOAD_PATH = "pymouse/downloads/"
     IPV6 = bool(os.getenv("IPV6", False))
     LOG_CHANNEL = int(os.getenv("LOG_CHANNEL"))
     OWNER_ID = int(os.getenv("OWNER_ID"))

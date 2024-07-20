@@ -34,7 +34,11 @@
         "temperature": "{temperature} °C",
         "temperature-FeelsLike": "Sensação Térmica: {feelslike} °C",
         "units": "m",
-        "wind": "Vento: {windspeed} km/h"
+        "wind": "Vento: {windspeed} km/h",
+        "reason": {
+            "weatherNotProvided": "<b>A localização não foi fornecida para mim.</b>\n\n<b>Uso:</b> <code>/weather (location)</code>",
+            "weatherLocationNotFound": "<b>Essa localização especificada, não foi encontrada!</b>"
+        }
     },
     "buttons": {
         "about": "ℹ️ Sobre",

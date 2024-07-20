@@ -19,12 +19,14 @@ class RunModules:
         try:
             from pymouse.plugins import (
                 afk,
+                miscellaneous,
                 pm_menu,
                 sudoers,
             )
             # Sudoers
             load_modules.add_cmd(afk.AFK_Plugins().setupAFK, "afk", "AFK", "Mark yourself away (away from the keyboard).")
             load_modules.add_regex(afk.AFK_Plugins().setupAFK, r"^(?i:brb)(\s(.+))?")
+            load_modules.add_cmd(miscellaneous.Misccellaneous().weatherHandle, "weather")
             load_modules.add_cmd(pm_menu.PMMenu_Plugins().privacyPolicy, "privacy")
             load_modules.add_cmd(pm_menu.PMMenu_Plugins().start_, "start")
             load_modules.add_cmd(sudoers.Sudoers_Plugins().ping, "ping")

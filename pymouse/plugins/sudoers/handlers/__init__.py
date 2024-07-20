@@ -8,12 +8,14 @@ from datetime import datetime
 
 from pymouse import PyMouse, Decorators, log
 from pymouse.utils import NetworkUtils, NetworkEvents
+from pymouse.utils.tools.weather import Weather
+from pymouse.utils.tools.weather.exceptions import WeatherLocationNotFound, WeatherLocationNotProvidedError
 
 class Sudoers_Plugins:
     @staticmethod
     @Decorators().require_dev()
     async def rr(c: PyMouse, m: Message): #type: ignore
-        sent = await m.reply("<i>Restarting...</i>") 
+        sent = await m.reply("<i>Restarting...</i>")
         args = [sys.executable, "-m", "pymouse"]
         await sent.edit("<b>PyMouse is now Restarted!</b>")
         os.execl(sys.executable, *args)

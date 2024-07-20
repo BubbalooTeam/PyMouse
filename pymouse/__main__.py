@@ -16,15 +16,27 @@ import time
 from hydrogram import idle
 from hydrogram.errors import FloodWait, Unauthorized
 
-from pymouse import PyMouse, log, localization
+from pymouse import PyMouse, log, localization, DownloadPaths
+from pymouse.utils import http
 from .services.load_handler.run import RunModules
+
+def RestartClean():
+    log.debug("Deleting the old folder and all its contents...")
+    del_msg = DownloadPaths().Delete_DownloadPath()
+    log.debug(msg=del_msg) if del_msg in ("Deleted directory and all content there..", "Path doesn't exists..") else log.critical(msg=del_msg)
+
+    log.debug("Creating the new folder...")
+    create_msg = DownloadPaths().Make_DownloadPath()
+    log.debug(msg=create_msg) if create_msg in ("Created directory with sucessfully..", "Path already Exists..") else log.critical(msg=create_msg)
 
 async def run_mouse():
     localization.compile_locales()
+    RestartClean()
     RunModules()
     await PyMouse.start()
     await idle()
     await PyMouse.stop()
+    await http.aclose()
 
 if __name__ == "__main__" :
     loop = asyncio.get_event_loop()
