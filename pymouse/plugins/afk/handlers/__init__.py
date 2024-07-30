@@ -30,7 +30,7 @@ class AFK_Plugins:
 
         is_afk = afkmodel_db.afk_db.getAFK(user.id).get("is_afk", False)
         if is_afk:
-            await afk_utils.stop_afk(m)
+            await afk_utils.stop_afk(m, i18n)
             return
         # // Get informations for Toggling AFK to ON
         reason = HandleText().input_str(m)
@@ -60,10 +60,10 @@ class AFK_Plugins:
                     return
         except AttributeError:
             return
-        
+
         is_afk = afkmodel_db.afk_db.getAFK(user.id).get("is_afk", False)
         if is_afk:
             await afk_utils.stop_afk(m, i18n)
             return
-        
+
         await afk_utils.check_afk(c, m, i18n)
