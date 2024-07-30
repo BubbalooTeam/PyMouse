@@ -1,4 +1,4 @@
-from os import path, makedirs
+from os import path, makedirs, remove
 from shutil import rmtree
 
 from pymouse import Config
@@ -27,4 +27,13 @@ class DownloadPaths:
             except Exception:
                 return "Fail in DELETE Directory.."
             return "Deleted directory and all content there.."
+        return "Path doesn't exists.."
+
+    def Delete_FileName(self, filename: str):
+        if path.exists(filename):
+            try:
+                remove(filename)
+            except Exception:
+                return "Fail in DELETE FileName.."
+            return "Deleted filename and all content there.."
         return "Path doesn't exists.."

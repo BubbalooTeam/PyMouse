@@ -22,7 +22,7 @@ from .services.load_handler.run import RunModules
 
 def RestartClean():
     Ddown_path = DownloadPaths().Delete_DownloadPath()
-    if Ddown_path == ["Path doesn't exists..", "Deleted directory and all content there.."]:
+    if Ddown_path in ["Path doesn't exists..", "Deleted directory and all content there.."]:
         DownloadPaths().Make_DownloadPath()
     else:
         log.error("Failed to delete download path.")

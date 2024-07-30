@@ -1,8 +1,8 @@
 from shutil import rmtree
 
-from hydrogram.types import Message, InlineQuery
+from hydrogram.types import Message
 
-from pymouse import Weather, DownloadPaths
+from pymouse import Weather, DownloadPaths, log
 from pymouse.utils.tools.weather.exceptions import (
     WeatherLocationNotFound,
     WeatherLocationNotProvidedError
@@ -41,8 +41,8 @@ async def HandleWeather(m: Message, i18n: dict):
         photo=graphic,
     )
 
-    rmpath = DownloadPaths().Delete_DownloadPath()
-    if rmpath in {"Deleted directory and all content there..", "Path doesn't exists.."}:
+    rmpath = DownloadPaths().Delete_FileName(graphic)
+    if rmpath in ["Path doesn't exists..", "Deleted filename and all content there.."]:
         pass
     else:
-        print("Fail in delete directory.")
+        log.error("Fail in Delete Filename..")
