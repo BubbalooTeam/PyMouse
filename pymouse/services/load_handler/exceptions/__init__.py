@@ -12,4 +12,3 @@
 
 class LoadModulesError(Exception):
     """Raise if the modules are not loaded correctly"""
-    pass

@@ -32,7 +32,7 @@ class MakeConfig:
     def make_config(self):
         with open("config.env", "a") as file:
             for var in vars.keys():
-                inp = input("Enter {variable} -> ({bollean})\n: ".format(
+                inp = input("Enter {variable} -> ({boolean})\n: ".format(
                     variable=var,
                     boolean=vars.get(var, "Optional")
                     )

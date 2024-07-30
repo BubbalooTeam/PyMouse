@@ -21,7 +21,6 @@ class PMMenu_Plugins:
     @staticmethod
     @Decorators().Locale()
     async def start_(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
-        msg = union.message if isinstance(union, CallbackQuery) else union
         keyboard = InlineKeyboard()
 
         # Row button's for start message
@@ -63,7 +62,7 @@ class PMMenu_Plugins:
                 reply_markup=keyboard,
             )
 
-    @staticmethod  
+    @staticmethod
     @Decorators().Locale()
     async def privacyPolicy(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
         privacypolicyText = i18n["pm-menu"]["privacy-policy"].format(
@@ -90,7 +89,7 @@ class PMMenu_Plugins:
                 text=privacypolicyText,
                 reply_markup=keyboard,
             )
-    
+
     @staticmethod
     @Decorators().Locale()
     async def privacyPolicyRead(_, cb: CallbackQuery, i18n):
