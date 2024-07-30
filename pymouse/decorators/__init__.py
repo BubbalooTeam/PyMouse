@@ -38,7 +38,7 @@ class Decorators:
                     return None
             return wrapper
         return decorator
-    
+
     def SaveUsers(self):
         def decorator(func):
             @wraps(func)
@@ -53,7 +53,7 @@ class Decorators:
                 return await func(c, m, *args, **kwargs)
             return wrapper
         return decorator
-    
+
     def SaveChats(self):
         def decorator(func):
             @wraps(func)
@@ -67,7 +67,7 @@ class Decorators:
                 return await func(c, m, *args, **kwargs)
             return wrapper
         return decorator
-    
+
     def Locale(self):
         """Get strings from chat localization"""
         def decorator(func):

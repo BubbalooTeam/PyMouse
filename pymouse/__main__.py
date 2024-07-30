@@ -21,13 +21,11 @@ from pymouse.utils import http
 from .services.load_handler.run import RunModules
 
 def RestartClean():
-    log.debug("Deleting the old folder and all its contents...")
-    del_msg = DownloadPaths().Delete_DownloadPath()
-    log.debug(msg=del_msg) if del_msg in ("Deleted directory and all content there..", "Path doesn't exists..") else log.critical(msg=del_msg)
-
-    log.debug("Creating the new folder...")
-    create_msg = DownloadPaths().Make_DownloadPath()
-    log.debug(msg=create_msg) if create_msg in ("Created directory with sucessfully..", "Path already Exists..") else log.critical(msg=create_msg)
+    Ddown_path = DownloadPaths().Delete_DownloadPath()
+    if Ddown_path == ["Path doesn't exists..", "Deleted directory and all content there.."]:
+        DownloadPaths().Make_DownloadPath()
+    else:
+        log.error("Failed to delete download path.")
 
 async def run_mouse():
     localization.compile_locales()
