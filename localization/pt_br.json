@@ -40,6 +40,15 @@
             "weatherLocationNotFound": "<b>Essa localização especificada, não foi encontrada!</b>"
         }
     },
+    "youtube-dl": {
+        "downloading": "<b>Baixando seu vídeo/música, por favor aguarde...</b>",
+        "uploading": "<b>Fazendo o envio do seu vídeo/música, por favor aguarde...</b>",
+        "checkers": {
+            "noArgs": "Qual é o título do vídeo, nome do canal ou URL do vídeo para download?",
+            "excededLimit": "Você excedeu o meu limite máximo de download, no caso 1GB de vídeo/música. Você pode optar por baixar em uma resolução menor, ou contratar um dos nossos planos para poder fazer download's de até 2GB de vídeo/música.",
+            "notforYou": "Este botão do Dowloader do YouTube não é direcionado a você."
+        }
+    },
     "buttons": {
         "about": "ℹ️ Sobre",
         "back": "Voltar",
