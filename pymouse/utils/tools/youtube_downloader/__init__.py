@@ -1,6 +1,5 @@
 from asyncio import sleep
 from collections import defaultdict
-from io import StringIO
 from json import dumps, loads
 from typing import Any, Dict, List, Union, Optional
 from tqdm import tqdm
@@ -46,28 +45,29 @@ class YouTubeDownloader:
     ):
         return ins.extract_info(url, download)
 
-    @staticmethod
-    async def youhook(
-        cb: CallbackQuery,
-        infos: dict,
-        i18n: dict
-    ):
-        if infos.get("status") == "downloading":
-            # percentage = infos.get("_percent_str")
-            eta = infos.get("_eta_str")
-            speed = infos.get("_speed_str")
-            tb = infos.get("_downloaded_bytes_str")
-            tt = infos.get("_total_bytes_str")
-            try:
-                downloading_text = str(i18n["youtube-dl"]["downloading"] + "\n\n" + "Tamanho: {tb} / {tt}" + "\n" + "Velocidade: {speed}" + "\n" + "Aguarde: {eta}").format(
+    class YouHooker:
+        def __init__(
+            self,
+            cb: CallbackQuery,
+            i18n: dict
+        ):
+            self.cb = cb
+            self.i18n = i18n
+
+        async def youhook(self, d: dict):
+            if d.get("status") == "downloading":
+                eta = d.get("_eta_str")
+                speed = d.get("_speed_str")
+                tb = d.get("_downloaded_bytes_str")
+                tt = d.get("_total_bytes_str")
+                # //
+                downloading_text = str(self.i18n["youtube-dl"]["downloading"] + "\n\n" + "Tamanho: {tb} / {tt}" + "\n" + "Velocidade: {speed}" + "\n" + "Aguarde: {eta}").format(
                     tb=tb,
                     tt=tt,
                     speed=speed,
                     eta=eta
                 )
-                return await cb.edit_message_caption(caption=downloading_text)
-            except Exception as e:
-                return log.error(e)
+                await self.cb.edit_message_caption(caption=downloading_text)
 
 class Buttons(InlineKeyboardMarkup):
     def __init__(self, inline_keyboard: List[List["InlineKeyboardButton"]]):

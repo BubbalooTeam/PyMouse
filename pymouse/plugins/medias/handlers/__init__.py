@@ -122,13 +122,10 @@ class Medias_Plugins:
                 else:
                     format_ = "video"
 
-                async def hook(infos: dict):
-                    await YouTubeDownloader().youhook(
-                        cb=cb,
-                        infos=infos,
-                        i18n=i18n
-                    )
-                    return [infos]
+                ProgressiveHook = YouTubeDownloader().YouHooker(
+                    cb=cb,
+                    i18n=i18n
+                )
 
                 if format_ == "video":
                     await c.send_chat_action(chat_id, ChatAction.RECORD_VIDEO)
@@ -137,7 +134,7 @@ class Medias_Plugins:
                         "geo_bypass": True,
                         "nocheckcertificate": True,
                         "outtmpl": path.join(path_, "%(title)s-%(format)s.%(ext)s"),
-                        "progress_hooks": [hook],
+                        "progress_hooks": [ProgressiveHook.youhook],
                         "logger": log,
                         "format": uid,
                         "writethumbnail": True,
@@ -166,7 +163,7 @@ class Medias_Plugins:
                     await c.send_chat_action(chat_id, ChatAction.RECORD_AUDIO)
                     options = {
                         "outtmpl": path.join(path_, "%(title)s-%(format)s.%(ext)s"),
-                        "progress_hooks": [hook],
+                        "progress_hooks": [ProgressiveHook.youhook],
                         "logger": log,
                         "writethumbnail": True,
                         "prefer_ffmpeg": True,
