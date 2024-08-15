@@ -12,12 +12,13 @@ dependencies = [
     "hydrokeyboard @ git+https://github.com/DaviisDev/HydroKeyboard.git",
     "python-dotenv>=1.0.1",
     "pytz>=2024.1",
+    "sentry-sdk>=2.13.0",
     "speedtest-cli>=2.1.3",
     "tgcrypto>=1.2.5",
     "tqdm>=4.66.4",
     "wget>=3.2",
     "youtube-search-python>=1.6.6",
-    "yt_dlp>=2024.07.25",
+    "yt_dlp>=2024.8.6",
 ]
 
 
