@@ -11,12 +11,15 @@
 
 
 import asyncio
+import sentry_sdk
 import time
+
+from traceback import format_exc
 
 from hydrogram import idle
 from hydrogram.errors import FloodWait, Unauthorized
 
-from pymouse import PyMouse, log, localization, DownloadPaths
+from pymouse import PyMouse, Config, log, localization, DownloadPaths
 from pymouse.utils import http
 from .services.load_handler.run import RunModules
 
@@ -27,9 +30,21 @@ def RestartClean():
     else:
         log.error("Failed to delete download path.")
 
+def IntegrateSentry(sentry_dsn: str, version: str):
+    log.info("Initializing Sentry integration...")
+    sentry_sdk.init(
+        dsn=sentry_dsn,
+        release=version,
+    )
+    log.info("Sentry started!")
+
 async def run_mouse():
     localization.compile_locales()
     RestartClean()
+    IntegrateSentry(
+        sentry_dsn=Config.SENTRY_DSN,
+        version=Config.VERSION,
+    )
     RunModules()
     await PyMouse.start()
     await idle()
@@ -49,7 +64,6 @@ if __name__ == "__main__" :
     except KeyboardInterrupt:
         pass
     except Exception as err:
-        e = err.__traceback__
-        log.error(err.with_traceback(e))
+        log.error(err)
     finally:
         loop.stop()
