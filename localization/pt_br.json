@@ -3,8 +3,8 @@
         "name": "Português (BRA)",
         "flag": "🇧🇷",
         "language-info": {
-            "chat-language": "<b>Chat Language:</b> <code>{language_flag} - {language}</code>",
-            "native-language": "<b>This is the bot's native language. So it's <code>100% translated.</code></b>",
+            "chat-language": "<b>Idioma do chat:</b> <code>{language_flag} - {language}</code>",
+            "native-language": "<b>Este é o idioma nativo do bot. Está <code>100% traduzido.</code></b>",
             "missing-translations": "<b>Translations still missing! Only <code>{strings_percentage}%</code> of the bot is translated!</b>",
             "language-info": "\n\n<b>Language info:</b>",
             "language-total-strings": "\n\n- <b>Total strings:</b> <code>{total_strings}</code>",
