@@ -5,8 +5,8 @@
         "language-info": {
             "chat-language": "<b>Idioma do chat:</b> <code>{language_flag} - {language}</code>",
             "native-language": "<b>Este é o idioma nativo do bot. Está <code>100% traduzido.</code></b>",
-            "missing-translations": "<b>Translations still missing! Only <code>{strings_percentage}%</code> of the bot is translated!</b>",
-            "language-info": "\n\n<b>Language info:</b>",
+            "missing-translations": "<b>Ainda há traduções faltando! Apenas <code>{strings_percentage}%</code> do bot foi traduzido!</b>",
+            "language-info": "\n\n<b>Informações do idioma:</b>",
             "language-total-strings": "\n\n- <b>Total strings:</b> <code>{total_strings}</code>",
             "language-translated": "\n- <b>Translated strings:</b> <code>{translated_strings}</code>",
             "language-untranslated": "\n- <b>Untranslated strings:</b> <code>{untranslated_strings}</code>"
@@ -24,39 +24,39 @@
     "pm-menu": {
         "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
         "start-group": "<b>Olá! Meu nome é {bot}!</b>",
-        "privacy-policy": "<b>{bot} Privacy Policy:</b>\n\n<i>This bot was designed and created to guarantee your security and privacy.\nThank you for your trust, our organization values ​​protecting your data and, moreover, we value quality.\n\nThe current privacy policy can be updated at any time, but this change will be communicated days in advance on the news channel.</i>",
+        "privacy-policy": "<b>{bot} Política de Privacidade:</b>\n\n<i>Este bot foi projetado e criado para garantir sua segurança e privacidade.\nObrigado pela sua confiança, nossa organização valoriza a proteção dos seus dados, além disso, valorizamos qualidade.\n\nA política de privacidade atual pode ser atualizada a qualquer momento, mas essa mudança será comunicada com dias de antecedência no canal de notícias.</i>",
         "privacy-policyRead": "<b>Information that this bot collects:</b>\n\n<i>- <b>Basic User Information:</b> User ID, First Name, Last Name, Language and Username.\n- <b>Basic Group Information:</b> Chat ID, Chat Title, Username and Chat Type.\n- <b>BOT Settings:</b> Things like your Chat Language with the bot and any other settings will be collected.</i>\n\n<b>How and why is this information collected?</b>\n\n<code><u>This information can be captured by decorators, 'little pieces' that when you interact with the bot, it can save this basic information, whether it's a direct message or not.\nIn this case, this information can be collected to improve the experience and functionality of the service provided by the bot.</u></code>\n\n<b>Note:</b> <i>All the information collected is public and available for use on Telegram, but we don't know your 'REAL' identity.</i>"
     },
     "weather": {
-        "humidity": "Humidity: {humidity} %",
+        "humidity": "Umidade: {humidity} %",
         "language": "en",
-        "location-name": "Location: {location}",
+        "location-name": "Localização: {location}",
         "temperature": "{temperature} °F",
-        "temperature-FeelsLike": "Thermal Sensation: {feelslike} °F",
+        "temperature-FeelsLike": "Sensação Térmica: {feelslike} °F",
         "units": "e",
-        "wind": "Wind: {windspeed} mph",
+        "wind": "Vento: {windspeed} km/h",
         "reason": {
             "weatherNotProvided": "<b>The location was not provided to me.</b>\n\n<b>Usage:</b> <code>/weather (location)</code>",
-            "weatherLocationNotFound": "<b>This specified location was not found!</b>"
+            "weatherLocationNotFound": "<b>O local especificado não foi encontrado!</b>"
         }
     },
     "youtube-dl": {
-        "downloading": "<b>Downloading your video/music, please wait...</b>",
-        "uploading": "<b>Uploading your video/music, please wait...</b>",
+        "downloading": "<b>Realizando o download do seu vídeo/música. Por favor, aguarde.</b>",
+        "uploading": "<b>Enviando seu vídeo/música. Por favor, aguarde...</b>",
         "checkers": {
-            "noArgs": "What is the video title, channel name or video URL to download?",
-            "excededLimit": "You have exceeded my maximum download limit, in this case 1GB of video/music. You can choose to download in a lower resolution, or purchase one of our plans to be able to download up to 2GB of video/music.",
+            "noArgs": "Qual é o título do vídeo, nome do canal ou o URL do vídeo a ser baixado?",
+            "excededLimit": "Você excedeu meu limite de download máximo, neste caso, 1GB de vídeo/música. Você pode optar por downloads em resoluções mais baixas, ou assinar um dos nossos planos para ser capaz de realizar o download de até 2GB de vídeo/música.",
             "notforYou": "This YouTube Dowloader button is not directed at you."
         }
     },
     "buttons": {
         "about": "ℹ️ Sobre",
         "back": "Voltar",
-        "change-language": "🌐 Change your language",
+        "change-language": "🌐 Alterar seu idioma",
         "help": "👮 Ajuda",
         "language": "🌐 Idioma",
-        "privacy": "🔒 Privacy",
-        "privacy-data": "🔐 What data do we collect",
-        "your-data": "🗃️ Your data"
+        "privacy": "🔒 Privacidade",
+        "privacy-data": "🔐 Quais dados coletamos",
+        "your-data": "🗃️ Seus dados"
     }
 }
