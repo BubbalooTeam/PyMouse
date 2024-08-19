@@ -1,16 +1,17 @@
-from asyncio import sleep
+from dataclasses import dataclass
 from collections import defaultdict
 from json import dumps, loads
+from os import path
 from typing import Any, Dict, List, Union, Optional
-from tqdm import tqdm
 from uuid import uuid4
 
 from yt_dlp import YoutubeDL
 from yt_dlp.utils import DownloadError, ExtractorError, GeoRestrictedError
 
 from hydrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from hydrogram.enums import ChatAction
 
-from pymouse import Decorators, log
+from pymouse import PyMouse, Decorators, log
 from pymouse.utils import http
 
 
@@ -18,6 +19,13 @@ from typing import Optional
 
 YT = "https://www.youtube.com/"
 YT_VID_URL = YT + "watch?v="
+
+@dataclass(frozen=True, slots=True)
+class YouTubeDownloaderInfo:
+    filename: str
+    duration: int
+    full_title: str
+    channel: str
 
 def sublists(input_list: List[Any], width: int = 3) -> List[List[Any]]:
     """retuns a single list of multiple sublist of fixed width"""
@@ -44,30 +52,6 @@ class YouTubeDownloader:
         download: Optional[bool] = True
     ):
         return ins.extract_info(url, download)
-
-    class YouHooker:
-        def __init__(
-            self,
-            cb: CallbackQuery,
-            i18n: dict
-        ):
-            self.cb = cb
-            self.i18n = i18n
-
-        async def youhook(self, d: dict):
-            if d.get("status") == "downloading":
-                eta = d.get("_eta_str")
-                speed = d.get("_speed_str")
-                tb = d.get("_downloaded_bytes_str")
-                tt = d.get("_total_bytes_str")
-                # //
-                downloading_text = str(self.i18n["youtube-dl"]["downloading"] + "\n\n" + "Tamanho: {tb} / {tt}" + "\n" + "Velocidade: {speed}" + "\n" + "Aguarde: {eta}").format(
-                    tb=tb,
-                    tt=tt,
-                    speed=speed,
-                    eta=eta
-                )
-                await self.cb.edit_message_caption(caption=downloading_text)
 
 class Buttons(InlineKeyboardMarkup):
     def __init__(self, inline_keyboard: List[List["InlineKeyboardButton"]]):
@@ -256,7 +240,13 @@ class YT_DLP:
             file = down.get("requested_downloads")[0]["filepath"]
             duration = down.get("duration")
             title = down.get("fulltitle")
-            return file, duration, title
+            uploader = down.get("uploader")
+            return YouTubeDownloaderInfo(
+                filename=file,
+                duration=duration,
+                full_title=title,
+                channel=uploader
+            )
         except DownloadError:
             log.error("[DownloadError] : Failed to Download Media")
         except GeoRestrictedError:
@@ -286,3 +276,99 @@ class YT_DLP:
                 thumb_link = link
                 break
         return thumb_link
+
+    @staticmethod
+    async def send_media(
+        c: PyMouse, # type: ignore
+        cb: CallbackQuery,
+        chat_id: int,
+        thumb: str,
+        media_type: str,
+        media_class: YouTubeDownloaderInfo,
+        i18n: dict
+    ):
+        await cb.edit_message_caption(
+            caption=i18n["youtube-dl"]["uploading"],
+        )
+        if media_type == "video":
+            await c.send_chat_action(
+                chat_id=chat_id,
+                action=ChatAction.UPLOAD_VIDEO,
+            )
+            await c.send_video(
+                chat_id=chat_id,
+                video=media_class.filename,
+                caption=media_class.full_title,
+                duration=media_class.duration,
+                thumb=thumb,
+            )
+        elif media_type == "audio":
+            await c.send_chat_action(
+                chat_id=chat_id,
+                action=ChatAction.UPLOAD_AUDIO,
+            )
+            await c.send_audio(
+                chat_id=chat_id,
+                audio=media_class.filename,
+                caption=media_class.full_title,
+                duration=media_class.duration,
+                thumb=thumb,
+            )
+        else:
+            log.error("Format not avalaible!")
+
+    async def downloader_method(
+        self,
+        cb: CallbackQuery,
+        vid: str,
+        filepath: str,
+        media_type: str,
+        frt: str,
+        i18n: dict
+    ) -> YouTubeDownloaderInfo:
+        if media_type == "video":
+            opts = dict(
+                addmetadata=True,
+                geo_bypass=True,
+                nocheckcertificate=True,
+                outtmpl=path.join(filepath, "%(title)s-%(format)s.%(ext)s"),
+                logger=log,
+                format=frt,
+                prefer_ffmpeg=True,
+                postprocessors=list([dict(key="FFmpegMetadata")]),
+                quiet=True,
+                logtostderr=True
+            )
+        elif media_type == "audio":
+            opts = dict(
+                outtmpl=path.join(filepath, "%(title)s-%(format)s.%(ext)s"),
+                logger=log,
+                prefer_ffmpeg=True,
+                format="bestaudio/best",
+                geo_bypass=True,
+                nocheckcertificate=True,
+                postprocessors=list(
+                    [
+                        dict(
+                            key="FFmpegExtractAudio",
+                            preferredcodec="mp3",
+                            preferredquality=frt,
+                        ),
+                        dict(key="FFmpegMetadata"),
+                    ],
+                ),
+                quiet=True,
+                logtostderr=True,
+            )
+
+        url = "https://www.youtube.com/watch?v={vid_key}".format(
+            vid_key=vid,
+        )
+        await cb.edit_message_caption(
+            caption=i18n["youtube-dl"]["downloading"],
+        )
+        youtube_downloader = await self.downloader(
+            url=url,
+            options=opts
+        )
+        return youtube_downloader

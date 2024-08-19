@@ -4,13 +4,15 @@ from re import compile
 from wget import download
 from tempfile import TemporaryDirectory
 from youtubesearchpython.__future__ import VideosSearch
+from traceback import format_exc
 
 from hydrogram.types import Message, CallbackQuery, InputMediaPhoto, InputMediaAudio, InputMediaVideo
 from hydrogram.errors import MessageNotModified
 from hydrogram.enums import ChatAction
 from hydrokeyboard import InlineKeyboard, InlineButton
 
-from pymouse import PyMouse, Decorators, Config, log, YT_DLP, YouTubeDownloader, DownloadPaths
+from pymouse import PyMouse, Decorators, Config, log, YT_DLP, DownloadPaths
+from pymouse.plugins.medias.utilities import YouTubeDownloadAndSendMedia
 from pymouse.utils import HandleText
 
 YOUTUBE_REGEX = compile(
@@ -106,10 +108,14 @@ class Medias_Plugins:
         except Exception:
             chat_id = int(inf[3])
         if not cb.from_user.id == user_id:
-            return await cb.answer(await i18n["youtube-dl"]["checkers"]["notforYou"], show_alert=True)
+            return await cb.answer(i18n["youtube-dl"]["checkers"]["notforYou"], show_alert=True)
         try:
             if inf[0] == "yt_gen":
-                x = (await YT_DLP().get_download_button(key, user_id))
+                x = (await YT_DLP().get_download_button(
+                    yt_id=key,
+                    user_id=user_id
+                    )
+                )
                 await cb.edit_message_caption(caption=x.caption, reply_markup=x.buttons)
             else:
                 uid = inf[2]
@@ -122,87 +128,27 @@ class Medias_Plugins:
                 else:
                     format_ = "video"
 
-                ProgressiveHook = YouTubeDownloader().YouHooker(
+                await YouTubeDownloadAndSendMedia(
+                    c=c,
                     cb=cb,
-                    i18n=i18n
+                    chat_id=chat_id,
+                    vid=key,
+                    thumb=thumb,
+                    filepath=path_,
+                    media_type=format_,
+                    format_uid=uid,
+                    i18n=i18n,
                 )
 
-                if format_ == "video":
-                    await c.send_chat_action(chat_id, ChatAction.RECORD_VIDEO)
-                    options = {
-                        "addmetadata": True,
-                        "geo_bypass": True,
-                        "nocheckcertificate": True,
-                        "outtmpl": path.join(path_, "%(title)s-%(format)s.%(ext)s"),
-                        "progress_hooks": [ProgressiveHook.youhook],
-                        "logger": log,
-                        "format": uid,
-                        "writethumbnail": True,
-                        "prefer_ffmpeg": True,
-                        "postprocessors": [{"key": "FFmpegMetadata"}],
-                        "quiet": True,
-                        "logtostderr": True,
-                        "no_warnings": True
-                    }
-                    file, duration, title = (await YT_DLP().downloader(
-                        url=f"https://www.youtube.com/watch?v={key}", options=options
-                    ))
-
-                    await c.send_chat_action(chat_id, ChatAction.UPLOAD_VIDEO)
-
-                    await cb.edit_message_caption(
-                        caption=i18n["youtube-dl"]["uploading"],
-                    )
-                    await cb.edit_message_media(
-                        media=InputMediaVideo(
-                            media=file, duration=duration, caption=title, thumb=thumb
-                        )
-                    )
-
-                elif format_ == "audio":
-                    await c.send_chat_action(chat_id, ChatAction.RECORD_AUDIO)
-                    options = {
-                        "outtmpl": path.join(path_, "%(title)s-%(format)s.%(ext)s"),
-                        "progress_hooks": [ProgressiveHook.youhook],
-                        "logger": log,
-                        "writethumbnail": True,
-                        "prefer_ffmpeg": True,
-                        "format": "bestaudio/best",
-                        "geo_bypass": True,
-                        "nocheckcertificate": True,
-                        "postprocessors": [
-                            {
-                                "key": "FFmpegExtractAudio",
-                                "preferredcodec": "mp3",
-                                "preferredquality": uid,
-                            },
-                            {"key": "EmbedThumbnail"},
-                            {"key": "FFmpegMetadata"},
-                        ],
-                        "quiet": True,
-                        "no_warnings": True,
-                        "logtostderr": True,
-                    }
-                    file, duration, title = (await YT_DLP().downloader(
-                        url=f"https://www.youtube.com/watch?v={key}", options=options
-                    ))
-
-                    await c.send_chat_action(chat_id, ChatAction.UPLOAD_AUDIO)
-
-                    await cb.edit_message_caption(
-                        caption=i18n["youtube-dl"]["uploading"]
-                    )
-                    await cb.edit_message_media(
-                        media=InputMediaAudio(
-                            media=file, duration=duration, caption=title, thumb=thumb
-                        )
-                    )
-                else:
-                    await cb.answer("[Format Error] Fail in generate video in this format.", show_alert=True)
+                await PyMouse.delete_messages(
+                    chat_id=chat_id,
+                    message_ids=cb.message.id,
+                )
                 DownloadPaths().Delete_FileName(filename=thumb)
                 rmtree(tempdir)
         except MessageNotModified:
             return
         except Exception as e:
-            log.error(e)
+            err = format_exc(limit=3020)
+            log.error(err)
             return
