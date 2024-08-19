@@ -140,7 +140,7 @@ class Medias_Plugins:
                     i18n=i18n,
                 )
 
-                await PyMouse.delete_messages(
+                await c.delete_messages(
                     chat_id=chat_id,
                     message_ids=cb.message.id,
                 )
