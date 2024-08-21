@@ -9,13 +9,14 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
+from io import BytesIO
 from typing import Union
+
 from hydrogram.types import Message, CallbackQuery
 from hydrogram.enums import ChatType
 from hydrokeyboard import InlineKeyboard, InlineButton
 
-from pymouse import PyMouse, Decorators
+from pymouse import PyMouse, Decorators, usersmodel_db
 
 class PMMenu_Plugins:
     @staticmethod
@@ -105,3 +106,23 @@ class PMMenu_Plugins:
             text=privacypolicyReadText,
             reply_markup=keyboard,
         )
+
+    @staticmethod
+    @Decorators().Locale()
+    async def ReadYourData(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
+        user_id = cb.from_user.id
+        # GET data in the DataBase.
+        data = usersmodel_db.users_db.getuser_dict(
+            user_id=user_id,
+        )
+        # Make document with informations.
+        file = BytesIO(str.encode(str(data)))
+        file.name = "{user_id}_dataInfos.txt".format(
+            user_id=user_id,
+        )
+        await cb.edit_message_text("Sending your data...")
+        msg = await PyMouse.send_document(
+            chat_id=user_id,
+            document=file,
+        )
+        await cb.edit_message_text("Your details have been sent to you, check your messages in PyMouse profile.")
