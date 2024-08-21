@@ -47,7 +47,6 @@ class MakeConfig:
         log.info("Successfully created config.env file...")
 # === #
 
-
 if os.path.exists("config.env"):
     load_dotenv("config.env")
 else:
