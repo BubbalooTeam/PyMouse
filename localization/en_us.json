@@ -10,7 +10,9 @@
             "language-total-strings": "\n\n- <b>Total strings:</b> <code>{total_strings}</code>",
             "language-translated": "\n- <b>Translated strings:</b> <code>{translated_strings}</code>",
             "language-untranslated": "\n- <b>Untranslated strings:</b> <code>{untranslated_strings}</code>"
-        }
+        },
+        "switch-lang": "Below, select the language you want to use.",
+        "switched-lang": "The language of this chat has been set to {language}."
     },
     "afk": {
         "is-unavalaible": "<b>{user} is unavalaible!</b>",
@@ -25,7 +27,7 @@
         "start-private": "Hello <b>{user}</b>, I'am <b>{bot}</b>. A robot with cool and fun functions for your chat.",
         "start-group": "<b>Hello! My name is {bot}!</b>",
         "privacy-policy": "<b>{bot} Privacy Policy:</b>\n\n<i>This bot was designed and created to guarantee your security and privacy.\nThank you for your trust, our organization values ​​protecting your data and, moreover, we value quality.\n\nThe current privacy policy can be updated at any time, but this change will be communicated days in advance on the news channel.</i>",
-        "privacy-policyRead": "<b>Information that this bot collects:</b>\n\n<i>- <b>Basic User Information:</b> User ID, First Name, Last Name, Language and Username.\n- <b>Basic Group Information:</b> Chat ID, Chat Title, Username and Chat Type.\n- <b>BOT Settings:</b> Things like your Chat Language with the bot and any other settings will be collected.</i>\n\n<b>How and why is this information collected?</b>\n\n<code><u>This information can be captured by decorators, 'little pieces' that when you interact with the bot, it can save this basic information, whether it's a direct message or not.\nIn this case, this information can be collected to improve the experience and functionality of the service provided by the bot.</u></code>\n\n<b>Note:</b> <i>All the information collected is public and available for use on Telegram, but we don't know your 'REAL' identity.</i>"
+        "privacy-policyRead": "Click the button below to read and open of the <b>{bot}</b> Privacy Policy."
     },
     "weather": {
         "humidity": "Humidity: {humidity} %",
@@ -57,6 +59,7 @@
         "language": "🌐 Language",
         "privacy": "🔒 Privacy",
         "privacy-data": "🔐 What data do we collect",
+        "open-privacy-policy": "🔒 Open Privacy Policy",
         "your-data": "🗃️ Your data"
     }
 }

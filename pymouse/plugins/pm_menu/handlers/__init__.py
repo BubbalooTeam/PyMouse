@@ -17,6 +17,7 @@ from hydrogram.enums import ChatType
 from hydrokeyboard import InlineKeyboard, InlineButton
 
 from pymouse import PyMouse, Decorators, usersmodel_db
+from pymouse.plugins.pm_menu.utilities.localization import LocalizationInfo
 
 class PMMenu_Plugins:
     @staticmethod
@@ -28,7 +29,7 @@ class PMMenu_Plugins:
         keyboard.row(
             InlineButton(
                 text=i18n["buttons"]["language"],
-                callback_data="LangConfigOpts.start_back",
+                callback_data="LangMenu|StartBack|LangMenu",
             ),
             InlineButton(
                 text=i18n["buttons"]["help"],
@@ -93,14 +94,20 @@ class PMMenu_Plugins:
 
     @staticmethod
     @Decorators().Locale()
-    async def privacyPolicyRead(_, cb: CallbackQuery, i18n):
-        privacypolicyReadText = i18n["pm-menu"]["privacy-policyRead"]
+    async def privacyPolicyRead(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
+        privacypolicyReadText = i18n["pm-menu"]["privacy-policyRead"].format(
+            bot=c.me.first_name,
+        )
         keyboard = InlineKeyboard(row_width=2)
         keyboard.add(
             InlineButton(
+                text=i18n["buttons"]["open-privacy-policy"],
+                url="https://book.bubbalooteam.me/pymouse/privacy-policy",
+            ),
+            InlineButton(
                 text=i18n["buttons"]["your-data"],
                 callback_data="YourDataCollected",
-            )
+            ),
         )
         await cb.edit_message_text(
             text=privacypolicyReadText,
@@ -121,8 +128,67 @@ class PMMenu_Plugins:
             user_id=user_id,
         )
         await cb.edit_message_text("Sending your data...")
-        msg = await PyMouse.send_document(
+        msg = await c.send_document(
             chat_id=user_id,
             document=file,
         )
         await cb.edit_message_text("Your details have been sent to you, check your messages in PyMouse profile.")
+
+    @staticmethod
+    @Decorators().Locale()
+    async def ChangeLanguageMenu(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
+        inf = cb.data.split("|")
+        changemenu_back = inf[1]
+        changelang_back = inf[2]
+
+        text_and_buttons = await LocalizationInfo().get_changelang_text_and_buttons(
+            c=c,
+            union=cb,
+            i18n=i18n,
+            lang_callback="ChangeLanguage|{changemenu_back}|{changelang_back}".format(
+                changemenu_back=changemenu_back,
+                changelang_back=changelang_back
+            ),
+            back_callback=changemenu_back
+        )
+        await cb.edit_message_text(
+            text=text_and_buttons.text,
+            reply_markup=text_and_buttons.buttons,
+        )
+
+    @staticmethod
+    @Decorators().Locale()
+    async def SelectLanguageMenu(_, cb: CallbackQuery, i18n): # type: ignore
+        inf = cb.data.split("|")
+        changemenu_back = inf[1]
+        changelang_back = inf[2]
+
+        text_and_buttons = await LocalizationInfo().get_switchlang_text_and_buttons(
+            i18n=i18n,
+            changemenu_back=changemenu_back,
+            back_callback="{changelang_back}|{changemenu_back}|LangMenu".format(
+                changelang_back=changelang_back,
+                changemenu_back=changemenu_back,
+            ),
+        )
+        await cb.edit_message_text(
+            text=text_and_buttons.text,
+            reply_markup=text_and_buttons.buttons,
+        )
+
+    @staticmethod
+    @Decorators().Locale()
+    async def SwitchLanguage(_, cb: CallbackQuery, i18n):
+        inf = cb.data.split("|")
+        language = inf[1]
+        changemenu_back = inf[2]
+
+        # == #
+        await LocalizationInfo().switchLanguage(
+            union=cb,
+            language=language,
+            sleeper=0.5
+        )
+
+        # === #
+        await LocalizationInfo().send_switchedlang_text_and_buttons(_, cb, changemenu_back)

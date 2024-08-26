@@ -96,7 +96,25 @@ class Localization:
             return self.default_language
         else:
             return locale if locale in self.current_locales else self.default_language
-        
+
+    @staticmethod
+    def switchLanguage(
+        union: Union[Message, CallbackQuery],
+        language: str,
+    ):
+        """
+        Switch chat localization/language.
+
+        Arguments:
+            `union (Union[Message, CallbackQuery, InlineQuery])`: The received message or query.
+            `language(str)`: The switched chat language.
+        """
+        localizationmodel_db.localization_db.set_chat_language(
+            union=union,
+            language=language
+        )
+
+
     def get_statistics(self, language: str):
         """
         Gets string translation statistics for the specified language.
@@ -141,9 +159,9 @@ class Localization:
         untranslated_strings = total_strings - translated_strings
 
         return LocalizationStats(
-            total_strings=total_strings, 
-            strings_translated=translated_strings, 
-            strings_untranslated=untranslated_strings, 
+            total_strings=total_strings,
+            strings_translated=translated_strings,
+            strings_untranslated=untranslated_strings,
             percentage_translated=round(translation_percentage),
         )
 

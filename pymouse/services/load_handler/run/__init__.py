@@ -44,6 +44,9 @@ class RunModules:
             load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().privacyPolicy, r"^PrivacyPolicy$")
             load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().privacyPolicyRead, r"^PrivacyData$")
             load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().ReadYourData, r"^YourDataCollected$")
+            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().ChangeLanguageMenu, r"^LangMenu\|(.*)$")
+            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().SelectLanguageMenu, r"ChangeLanguage\|(.*)$")
+            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().SwitchLanguage, r"SwitchLang\|(.*)$")
             load_modules.add_callback_btn(medias.Medias_Plugins().download_handler, r"yt_(gen|dl)\|(.*)$")
             load_modules.add_callback_btn(medias.Medias_Plugins.ytdl_scroll_callback, r"ytdl_scroll\|(.*)$")
 
