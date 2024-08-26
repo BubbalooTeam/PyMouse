@@ -10,7 +10,9 @@
             "language-total-strings": "\n\n- <b>Total strings:</b> <code>{total_strings}</code>",
             "language-translated": "\n- <b>Translated strings:</b> <code>{translated_strings}</code>",
             "language-untranslated": "\n- <b>Untranslated strings:</b> <code>{untranslated_strings}</code>"
-        }
+        },
+        "switch-lang": "Below, select the language you want to use.",
+        "switched-lang": "The language of this chat has been set to {language}."
     },
     "afk": {
         "is-unavalaible": "<b>{user} está indisponível!</b>",
@@ -25,7 +27,7 @@
         "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
         "start-group": "<b>Olá! Meu nome é {bot}!</b>",
         "privacy-policy": "<b>{bot} Política de Privacidade:</b>\n\n<i>Este bot foi projetado e criado para garantir sua segurança e privacidade.\nObrigado pela sua confiança, nossa organização valoriza a proteção dos seus dados, além disso, valorizamos qualidade.\n\nA política de privacidade atual pode ser atualizada a qualquer momento, mas essa mudança será comunicada com dias de antecedência no canal de notícias.</i>",
-        "privacy-policyRead": "<b>Informações que este bot coleta:</b>\n\n<i>- <b>Informações básicas do usuário:</b> ID do usuário, primeiro nome, último nome, idioma e nome de usuário.\n- <b>Informações básicas de grupo:</b> ID do chat, título do chat, nome de usuário e tipo de chat.\n- <b>Configurações do bot:</b> Coisas como o idioma do seu chat com o bot e quaisquer outras configurações serão coletadas.</i>\n\n<b>Como e por que estas informações são coletadas?</b>\n\n<code><u>Estas informações podem ser capturadas por decoradores, que são 'pequenos componentes' que quando você interage com o bot, podem salvar essas informações básicas, seja através de uma mensagem direta ou não.\nNeste caso, esta informação pode ser coletada para melhorar a experiência e funcionalidade do serviço prestado pelo bot.</u></code>\n\n<b>Nota:</b> <i>Toda informação coletada é pública e disponível para uso no Telegram, mas não sabemos sua identidade 'REAL'.</i>"
+        "privacy-policyRead": "Click the button below to read and open of the <b>{bot}</b> Privacy Policy."
     },
     "weather": {
         "humidity": "Umidade: {humidity} %",
@@ -57,6 +59,7 @@
         "language": "🌐 Idioma",
         "privacy": "🔒 Privacidade",
         "privacy-data": "🔐 Quais dados coletamos",
+        "open-privacy-policy": "🔒 Open Privacy Policy",
         "your-data": "🗃️ Seus dados"
     }
 }
