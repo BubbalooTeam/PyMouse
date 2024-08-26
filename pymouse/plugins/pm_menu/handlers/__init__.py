@@ -128,7 +128,7 @@ class PMMenu_Plugins:
             user_id=user_id,
         )
         await cb.edit_message_text("Sending your data...")
-        msg = await c.send_document(
+        await c.send_document(
             chat_id=user_id,
             document=file,
         )

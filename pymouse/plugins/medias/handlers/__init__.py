@@ -17,7 +17,7 @@ from tempfile import TemporaryDirectory
 from youtubesearchpython.__future__ import VideosSearch
 from traceback import format_exc
 
-from hydrogram.types import Message, CallbackQuery, InputMediaPhoto, InputMediaAudio, InputMediaVideo
+from hydrogram.types import Message, CallbackQuery, InputMediaPhoto
 from hydrogram.errors import MessageNotModified
 from hydrogram.enums import ChatAction
 from hydrokeyboard import InlineKeyboard, InlineButton
@@ -37,7 +37,6 @@ class Medias_Plugins:
     @Decorators().Locale()
     async def ytdl_handler(_, m: Message, i18n): # type: ignore
         query = HandleText().input_str(union=m)
-        chat_id = m.chat.id
         keyboard = InlineKeyboard()
         # //
         if not query:
@@ -159,7 +158,7 @@ class Medias_Plugins:
                 rmtree(tempdir)
         except MessageNotModified:
             return
-        except Exception as e:
+        except Exception:
             err = format_exc(limit=3020)
             log.error(err)
             return

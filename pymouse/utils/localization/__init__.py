@@ -127,6 +127,7 @@ class Localization:
         """
         default_language = self.strings.get(self.default_language, {})
         requested_language = self.strings.get(language, {})
+
         def recursive_count_strings(default_value, requested_value):
             if isinstance(requested_value, str):
                 nonlocal total_strings, translated_strings

@@ -14,8 +14,6 @@ import asyncio
 import sentry_sdk
 import time
 
-from traceback import format_exc
-
 from hydrogram import idle
 from hydrogram.errors import FloodWait, Unauthorized
 

@@ -25,9 +25,6 @@ from hydrogram.enums import ChatAction
 from pymouse import PyMouse, Decorators, log
 from pymouse.utils import http
 
-
-from typing import Optional
-
 YT = "https://www.youtube.com/"
 YT_VID_URL = YT + "watch?v="
 
