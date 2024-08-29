@@ -17,38 +17,36 @@ from ..handlers import load_modules
 class RunModules:
     def __init__(self):
         try:
-            from pymouse.plugins import (
-                afk,
-                medias,
-                miscellaneous,
-                pm_menu,
-                sudoers,
-            )
+            from pymouse.plugins.afk.handlers import AFK_Plugins
+            from pymouse.plugins.medias.handlers import Medias_Plugins
+            from pymouse.plugins.miscellaneous.handlers import Misccellaneous_Plugins
+            from pymouse.plugins.pm_menu.handlers import PMMenu_Plugins
+            from pymouse.plugins.sudoers.handlers import Sudoers_Plugins
             # Sudoers
-            load_modules.add_cmd(afk.AFK_Plugins().setupAFK, "afk")
-            load_modules.add_regex(afk.AFK_Plugins().setupAFK, r"^(?i:brb)(\s(.+))?")
-            load_modules.add_cmd(medias.Medias_Plugins().ytdl_handler, "ytdl")
-            load_modules.add_cmd(miscellaneous.Misccellaneous().weatherHandle, "weather")
-            load_modules.add_cmd(pm_menu.PMMenu_Plugins().privacyPolicy, "privacy")
-            load_modules.add_cmd(pm_menu.PMMenu_Plugins().start_, "start")
-            load_modules.add_cmd(sudoers.Sudoers_Plugins().ping, "ping")
-            load_modules.add_cmd(sudoers.Sudoers_Plugins().rr, ["rr", "restart"])
-            load_modules.add_cmd(sudoers.Sudoers_Plugins().shutdown, "shutdown")
-            load_modules.add_cmd(sudoers.Sudoers_Plugins().speed_test, "speedtest")
+            load_modules.add_cmd(AFK_Plugins().setupAFK, "afk")
+            load_modules.add_regex(AFK_Plugins().setupAFK, r"^(?i:brb)(\s(.+))?")
+            load_modules.add_cmd(Medias_Plugins().ytdl_handler, "ytdl")
+            load_modules.add_cmd(Misccellaneous_Plugins().weatherHandle, "weather")
+            load_modules.add_cmd(PMMenu_Plugins().privacyPolicy, "privacy")
+            load_modules.add_cmd(PMMenu_Plugins().start_, "start")
+            load_modules.add_cmd(Sudoers_Plugins().ping, "ping")
+            load_modules.add_cmd(Sudoers_Plugins().rr, ["rr", "restart"])
+            load_modules.add_cmd(Sudoers_Plugins().shutdown, "shutdown")
+            load_modules.add_cmd(Sudoers_Plugins().speed_test, "speedtest")
             # Final loader => Leave "load_modules.cmds_loader()" last, if you put it before the commands will not be added correctly, causing failures!
             load_modules.cmds_loader()
             # Final loader => Leave "load_modules.regex_loader()" last, if you put it before the regex will not be added correctly, causing failures!
             load_modules.regex_loader()
             # Callbacks
-            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().start_, r"^StartBack$")
-            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().privacyPolicy, r"^PrivacyPolicy$")
-            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().privacyPolicyRead, r"^PrivacyData$")
-            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().ReadYourData, r"^YourDataCollected$")
-            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().ChangeLanguageMenu, r"^LangMenu\|(.*)$")
-            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().SelectLanguageMenu, r"ChangeLanguage\|(.*)$")
-            load_modules.add_callback_btn(pm_menu.PMMenu_Plugins().SwitchLanguage, r"SwitchLang\|(.*)$")
-            load_modules.add_callback_btn(medias.Medias_Plugins().download_handler, r"yt_(gen|dl)\|(.*)$")
-            load_modules.add_callback_btn(medias.Medias_Plugins.ytdl_scroll_callback, r"ytdl_scroll\|(.*)$")
+            load_modules.add_callback_btn(PMMenu_Plugins().start_, r"^StartBack$")
+            load_modules.add_callback_btn(PMMenu_Plugins().privacyPolicy, r"^PrivacyPolicy$")
+            load_modules.add_callback_btn(PMMenu_Plugins().privacyPolicyRead, r"^PrivacyData$")
+            load_modules.add_callback_btn(PMMenu_Plugins().ReadYourData, r"^YourDataCollected$")
+            load_modules.add_callback_btn(PMMenu_Plugins().ChangeLanguageMenu, r"^LangMenu\|(.*)$")
+            load_modules.add_callback_btn(PMMenu_Plugins().SelectLanguageMenu, r"ChangeLanguage\|(.*)$")
+            load_modules.add_callback_btn(PMMenu_Plugins().SwitchLanguage, r"SwitchLang\|(.*)$")
+            load_modules.add_callback_btn(Medias_Plugins().download_handler, r"yt_(gen|dl)\|(.*)$")
+            load_modules.add_callback_btn(Medias_Plugins().ytdl_scroll_callback, r"ytdl_scroll\|(.*)$")
 
             load_modules.callbacks_loader()
         except (ImportError, re.error) as e:
