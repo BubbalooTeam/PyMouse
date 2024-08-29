@@ -28,7 +28,6 @@ class ModulesLoader:
         self.cmds = []
         self.callbacks = []
         self.regex = []
-        self.helpable = {}
         self.regex_count = 0
         self.cmds_count = 0
         self.callbacks_count = 0
