@@ -25,7 +25,7 @@ class RunModules:
                 sudoers,
             )
             # Sudoers
-            load_modules.add_cmd(afk.AFK_Plugins().setupAFK, "afk", "AFK", "Mark yourself away (away from the keyboard).")
+            load_modules.add_cmd(afk.AFK_Plugins().setupAFK, "afk")
             load_modules.add_regex(afk.AFK_Plugins().setupAFK, r"^(?i:brb)(\s(.+))?")
             load_modules.add_cmd(medias.Medias_Plugins().ytdl_handler, "ytdl")
             load_modules.add_cmd(miscellaneous.Misccellaneous().weatherHandle, "weather")
