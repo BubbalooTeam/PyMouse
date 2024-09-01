@@ -24,6 +24,7 @@ from hydrogram.enums import ChatAction
 
 from pymouse import PyMouse, Decorators, log
 from pymouse.utils import http
+from .exceptions import YouTubeExtractError
 
 YT = "https://www.youtube.com/"
 YT_VID_URL = YT + "watch?v="
@@ -200,19 +201,24 @@ class YT_DLP:
                             callback_data=f"yt_dl|{yt_id}|{frmt_id}+140|{user_id}|v",
                         )
                     )
-            buttons += sublists(video_btns, width=2)
-            buttons += best_audio_btn
-            buttons += sublists(
-                list(
-                    map(
-                        lambda x: InlineKeyboardButton(
-                            audio_dict[x], callback_data=f"yt_dl|{yt_id}|{x}|{user_id}|a"
-                        ),
-                        sorted(audio_dict.keys(), reverse=True),
-                    )
-                ),
-                width=2,
-            )
+            if video_btns and best_audio_btn != []:
+                buttons += sublists(video_btns, width=2)
+                buttons += best_audio_btn
+                if audio_dict != {}:
+                    buttons += sublists(
+                        list(
+                            map(
+                                lambda x: InlineKeyboardButton(
+                                    audio_dict[x], callback_data=f"yt_dl|{yt_id}|{x}|{user_id}|a"
+                            ),
+                            sorted(audio_dict.keys(), reverse=True),
+                        )
+                    ),
+                    width=2,
+                )
+        if buttons == []:
+            msg = "Failed to extract info of download buttons!"
+            raise YouTubeExtractError(msg)
 
         return SearchResult(
             yt_id,

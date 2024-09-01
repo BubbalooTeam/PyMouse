@@ -14,7 +14,6 @@ from datetime import datetime
 
 from hydrogram.types import Message, MessageEntity, User
 from hydrogram.enums import MessageEntityType
-from hydrogram.errors import UsernameInvalid, PeerIdInvalid
 
 from pymouse import PyMouse, afkmodel_db
 from pymouse.utils import UsersError, UtilsTimer
@@ -30,7 +29,7 @@ class AFKUtils:
         except UsersError:
             return None
         return ent
-    
+
 
     async def getMentioned(self, c: PyMouse, m: Message) -> User | None: # type: ignore
         u: User | None = None
@@ -41,7 +40,7 @@ class AFKUtils:
                 elif y.type == MessageEntityType.TEXT_MENTION:
                     u = y.user
         return u
-    
+
     @staticmethod
     def getReplied(m: Message) -> User | None:
         replied = m.reply_to_message
@@ -49,7 +48,7 @@ class AFKUtils:
             return replied.from_user
         else:
             return None
-    
+
     @staticmethod
     async def sender_afk(user: User, m: Message, i18n: dict) -> None:
         afktxt = ""

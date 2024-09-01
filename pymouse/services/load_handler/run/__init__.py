@@ -17,16 +17,9 @@ from ..handlers import load_modules
 class RunModules:
     def __init__(self):
         try:
-            from pymouse.plugins.afk.handlers import AFK_Plugins
-            from pymouse.plugins.medias.handlers import Medias_Plugins
-            from pymouse.plugins.miscellaneous.handlers import Misccellaneous_Plugins
             from pymouse.plugins.pm_menu.handlers import PMMenu_Plugins
             from pymouse.plugins.sudoers.handlers import Sudoers_Plugins
             # Sudoers
-            load_modules.add_cmd(AFK_Plugins().setupAFK, "afk")
-            load_modules.add_regex(AFK_Plugins().setupAFK, r"^(?i:brb)(\s(.+))?")
-            load_modules.add_cmd(Medias_Plugins().ytdl_handler, "ytdl")
-            load_modules.add_cmd(Misccellaneous_Plugins().weatherHandle, "weather")
             load_modules.add_cmd(PMMenu_Plugins().privacyPolicy, "privacy")
             load_modules.add_cmd(PMMenu_Plugins().start_, "start")
             load_modules.add_cmd(Sudoers_Plugins().ping, "ping")
@@ -45,8 +38,6 @@ class RunModules:
             load_modules.add_callback_btn(PMMenu_Plugins().ChangeLanguageMenu, r"^LangMenu\|(.*)$")
             load_modules.add_callback_btn(PMMenu_Plugins().SelectLanguageMenu, r"ChangeLanguage\|(.*)$")
             load_modules.add_callback_btn(PMMenu_Plugins().SwitchLanguage, r"SwitchLang\|(.*)$")
-            load_modules.add_callback_btn(Medias_Plugins().download_handler, r"yt_(gen|dl)\|(.*)$")
-            load_modules.add_callback_btn(Medias_Plugins().ytdl_scroll_callback, r"ytdl_scroll\|(.*)$")
 
             load_modules.callbacks_loader()
         except (ImportError, re.error) as e:

@@ -9,11 +9,13 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from HydroPatch.router import Router
 from pymouse.utils import log
 from pymouse.config import Config
 from pymouse.client import PyMouse, START_TIME
 from pymouse.database.modules import DataBase
 
+router = Router()
 
 log.info("Compiling DataBase...")
 try:

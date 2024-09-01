@@ -16,10 +16,13 @@ import time
 
 from hydrogram import idle
 from hydrogram.errors import FloodWait, Unauthorized
+from HydroPatch import PatchManager
 
-from pymouse import PyMouse, Config, log, localization, DownloadPaths
+from pymouse import PyMouse, Config, log, localization, DownloadPaths, router
 from pymouse.utils import http
 from .services.load_handler.run import RunModules
+
+patcher = PatchManager(client=PyMouse)
 
 def RestartClean():
     Ddown_path = DownloadPaths().Delete_DownloadPath()
@@ -43,6 +46,7 @@ async def run_mouse():
         sentry_dsn=Config.SENTRY_DSN,
         version=Config.VERSION,
     )
+    patcher.include_router(router=router)
     RunModules()
     await PyMouse.start()
     await idle()
