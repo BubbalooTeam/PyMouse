@@ -24,7 +24,7 @@ from hydrokeyboard import InlineKeyboard, InlineButton
 
 from pymouse import PyMouse, Decorators, Config, log, YT_DLP, DownloadPaths, router
 from pymouse.utils import HandleText
-from ..utilities.ytdl import yt_utils
+from ..utilities.youtube import yt_utils
 
 YOUTUBE_REGEX = compile(
     r"(?m)http(?:s?):\/\/(?:www\.)?(?:music\.)?youtu(?:be\.com\/(watch\?v=|shorts/|embed/)|\.be\/|)(?P<id>([\w\-\_]{11}))(&(amp;)?‌​[\w\?‌​=]*)?"
