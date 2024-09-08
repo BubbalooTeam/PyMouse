@@ -17,11 +17,8 @@ from ..handlers import load_modules
 class RunModules:
     def __init__(self):
         try:
-            from pymouse.plugins.pm_menu.handlers import PMMenu_Plugins
             from pymouse.plugins.sudoers.handlers import Sudoers_Plugins
             # Sudoers
-            load_modules.add_cmd(PMMenu_Plugins().privacyPolicy, "privacy")
-            load_modules.add_cmd(PMMenu_Plugins().start_, "start")
             load_modules.add_cmd(Sudoers_Plugins().ping, "ping")
             load_modules.add_cmd(Sudoers_Plugins().rr, ["rr", "restart"])
             load_modules.add_cmd(Sudoers_Plugins().shutdown, "shutdown")
@@ -30,15 +27,5 @@ class RunModules:
             load_modules.cmds_loader()
             # Final loader => Leave "load_modules.regex_loader()" last, if you put it before the regex will not be added correctly, causing failures!
             load_modules.regex_loader()
-            # Callbacks
-            load_modules.add_callback_btn(PMMenu_Plugins().start_, r"^StartBack$")
-            load_modules.add_callback_btn(PMMenu_Plugins().privacyPolicy, r"^PrivacyPolicy$")
-            load_modules.add_callback_btn(PMMenu_Plugins().privacyPolicyRead, r"^PrivacyData$")
-            load_modules.add_callback_btn(PMMenu_Plugins().ReadYourData, r"^YourDataCollected$")
-            load_modules.add_callback_btn(PMMenu_Plugins().ChangeLanguageMenu, r"^LangMenu\|(.*)$")
-            load_modules.add_callback_btn(PMMenu_Plugins().SelectLanguageMenu, r"ChangeLanguage\|(.*)$")
-            load_modules.add_callback_btn(PMMenu_Plugins().SwitchLanguage, r"SwitchLang\|(.*)$")
-
-            load_modules.callbacks_loader()
         except (ImportError, re.error) as e:
             raise LoadModulesError("Modules are not loaded correctly for reason: {error}".format(error=e))
