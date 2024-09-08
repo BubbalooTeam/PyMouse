@@ -3,16 +3,16 @@
         "name": "Português (BRA)",
         "flag": "🇧🇷",
         "language-info": {
-            "chat-language": "<b>Chat Language:</b> <code>{language_flag} - {language}</code>",
-            "native-language": "<b>This is the bot's native language. So it's <code>100% translated.</code></b>",
-            "missing-translations": "<b>Translations still missing! Only <code>{strings_percentage}%</code> of the bot is translated!</b>",
-            "language-info": "\n\n<b>Language info:</b>",
-            "language-total-strings": "\n\n- <b>Total strings:</b> <code>{total_strings}</code>",
-            "language-translated": "\n- <b>Translated strings:</b> <code>{translated_strings}</code>",
-            "language-untranslated": "\n- <b>Untranslated strings:</b> <code>{untranslated_strings}</code>"
+            "chat-language": "<b>Idioma do chat:</b> <code>{language_flag} - {language}</code>",
+            "native-language": "<b>Este é o idioma nativo do bot. Está <code>100% traduzido.</code></b>",
+            "missing-translations": "<b>Ainda há traduções faltando! Apenas <code>{strings_percentage}%</code> do bot foi traduzido!</b>",
+            "language-info": "\n\n<b>Informações do idioma:</b>",
+            "language-total-strings": "- <b>Total de cordas:</b> <code>{total_strings}</code>",
+            "language-translated": "\n- <b>Cordas traduzidas:</b> <code>{translated_strings}</code>",
+            "language-untranslated": "\n- <b>Cordas sem tradução:</b> <code>{untranslated_strings}</code>"
         },
-        "switch-lang": "Below, select the language you want to use.",
-        "switched-lang": "The language of this chat has been set to {language}."
+        "switch-lang": "Escolha o idioma que você quer usar abaixo.",
+        "switched-lang": "O idioma desse chat foi definido para {language}."
     },
     "afk": {
         "is-unavalaible": "<b>{user} está indisponível!</b>",
@@ -26,40 +26,40 @@
     "pm-menu": {
         "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
         "start-group": "<b>Olá! Meu nome é {bot}!</b>",
-        "privacy-policy": "<b>Política de privacidade do PyMouse:</b>\n\n<i>Este bot foi pensado e criado para garantir sua segurança e privacidade.\nObrigado pela confiança, nossa organização preza pela proteção dos seus dados e, além disso, prezamos pela qualidade.\n\nA atual política de privacidade pode ser atualizada a qualquer momento, mas essa alteração será comunicada com dias de antecedência no canal de notícias.</i>",
+        "privacy-policy": "<b>{bot} Política de Privacidade:</b>\n\n<i>Este bot foi projetado e criado para garantir sua segurança e privacidade.\nObrigado pela sua confiança, nossa organização valoriza a proteção dos seus dados, além disso, valorizamos qualidade.\n\nA política de privacidade atual pode ser atualizada a qualquer momento, mas essa mudança será comunicada com dias de antecedência no canal de notícias.</i>",
         "privacy-policyRead": "Clique no botão abaixo para ler e abrir a Política de Privacidade do <b>{bot}</b>."
     },
     "weather": {
         "humidity": "Umidade: {humidity} %",
         "language": "pt",
         "location-name": "Localização: {location}",
-        "temperature": "{temperature} °C",
-        "temperature-FeelsLike": "Sensação Térmica: {feelslike} °C",
+        "temperature": "{temperature} ° C",
+        "temperature-FeelsLike": "Sensação Térmica: {feelslike} °F",
         "units": "m",
         "wind": "Vento: {windspeed} km/h",
         "reason": {
-            "weatherNotProvided": "<b>A localização não foi fornecida para mim.</b>\n\n<b>Uso:</b> <code>/weather (location)</code>",
-            "weatherLocationNotFound": "<b>Essa localização especificada, não foi encontrada!</b>"
+            "weatherNotProvided": "<b>A localização não foi fornecida para mim.</b>\n\n<b>Uso:</b> <code>/weather (localização)</code>",
+            "weatherLocationNotFound": "<b>O local especificado não foi encontrado!</b>"
         }
     },
     "youtube-dl": {
-        "downloading": "<b>Baixando seu vídeo/música, por favor aguarde...</b>",
-        "uploading": "<b>Fazendo o envio do seu vídeo/música, por favor aguarde...</b>",
+        "downloading": "<b>Realizando o download do seu vídeo/música. Por favor, aguarde.</b>",
+        "uploading": "<b>Enviando seu vídeo/música. Por favor, aguarde...</b>",
         "checkers": {
-            "noArgs": "Qual é o título do vídeo, nome do canal ou URL do vídeo para download?",
-            "excededLimit": "Você excedeu o meu limite máximo de download, no caso 1GB de vídeo/música. Você pode optar por baixar em uma resolução menor, ou contratar um dos nossos planos para poder fazer download's de até 2GB de vídeo/música.",
-            "notforYou": "Este botão do Dowloader do YouTube não é direcionado a você."
+            "noArgs": "Qual é o título do vídeo, nome do canal ou o URL do vídeo a ser baixado?",
+            "excededLimit": "Você excedeu meu limite de download máximo, neste caso, 1GB de vídeo/música. Você pode optar por downloads em resoluções mais baixas, ou assinar um dos nossos planos para ser capaz de realizar o download de até 2GB de vídeo/música.",
+            "notforYou": "Esse botão do downloader do YouTube não é para você."
         }
     },
     "buttons": {
         "about": "ℹ️ Sobre",
         "back": "Voltar",
-        "change-language": "🌐 Change your language",
+        "change-language": "🌐 Alterar seu idioma",
         "help": "👮 Ajuda",
         "language": "🌐 Idioma",
         "privacy": "🔒 Privacidade",
         "privacy-data": "🔐 Quais dados coletamos",
-        "open-privacy-policy": "🔒 Abrir a Política de Privacidade",
+        "open-privacy-policy": "🔒 Abrir Política de Privacidade",
         "your-data": "🗃️ Seus dados"
     }
 }
