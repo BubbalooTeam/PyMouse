@@ -20,7 +20,6 @@ from HydroPatch import PatchManager
 
 from pymouse import PyMouse, Config, log, localization, DownloadPaths, router
 from pymouse.utils import http
-from .services.load_handler.run import RunModules
 
 patcher = PatchManager(client=PyMouse)
 
@@ -47,7 +46,6 @@ async def run_mouse():
         version=Config.VERSION,
     )
     patcher.include_router(router=router)
-    RunModules()
     await PyMouse.start()
     await idle()
     await PyMouse.stop()
