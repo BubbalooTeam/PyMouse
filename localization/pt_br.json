@@ -7,12 +7,12 @@
             "native-language": "<b>Este é o idioma nativo do bot. Está <code>100% traduzido.</code></b>",
             "missing-translations": "<b>Ainda há traduções faltando! Apenas <code>{strings_percentage}%</code> do bot foi traduzido!</b>",
             "language-info": "\n\n<b>Informações do idioma:</b>",
-            "language-total-strings": "\n\n- <b>Total strings:</b> <code>{total_strings}</code>",
-            "language-translated": "\n- <b>Translated strings:</b> <code>{translated_strings}</code>",
-            "language-untranslated": "\n- <b>Untranslated strings:</b> <code>{untranslated_strings}</code>"
+            "language-total-strings": "- <b>Total de cordas:</b> <code>{total_strings}</code>",
+            "language-translated": "\n- <b>Cordas traduzidas:</b> <code>{translated_strings}</code>",
+            "language-untranslated": "\n- <b>Cordas sem tradução:</b> <code>{untranslated_strings}</code>"
         },
-        "switch-lang": "Below, select the language you want to use.",
-        "switched-lang": "The language of this chat has been set to {language}."
+        "switch-lang": "Escolha o idioma que você quer usar abaixo.",
+        "switched-lang": "O idioma desse chat foi definido para {language}."
     },
     "afk": {
         "is-unavalaible": "<b>{user} está indisponível!</b>",
@@ -27,18 +27,18 @@
         "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
         "start-group": "<b>Olá! Meu nome é {bot}!</b>",
         "privacy-policy": "<b>{bot} Política de Privacidade:</b>\n\n<i>Este bot foi projetado e criado para garantir sua segurança e privacidade.\nObrigado pela sua confiança, nossa organização valoriza a proteção dos seus dados, além disso, valorizamos qualidade.\n\nA política de privacidade atual pode ser atualizada a qualquer momento, mas essa mudança será comunicada com dias de antecedência no canal de notícias.</i>",
-        "privacy-policyRead": "Click the button below to read and open of the <b>{bot}</b> Privacy Policy."
+        "privacy-policyRead": "Clique no botão abaixo para ler e abrir a Política de Privacidade do <b>{bot}</b>."
     },
     "weather": {
         "humidity": "Umidade: {humidity} %",
-        "language": "en",
+        "language": "pt",
         "location-name": "Localização: {location}",
-        "temperature": "{temperature} °F",
+        "temperature": "{temperature} ° C",
         "temperature-FeelsLike": "Sensação Térmica: {feelslike} °F",
-        "units": "e",
+        "units": "m",
         "wind": "Vento: {windspeed} km/h",
         "reason": {
-            "weatherNotProvided": "<b>The location was not provided to me.</b>\n\n<b>Usage:</b> <code>/weather (location)</code>",
+            "weatherNotProvided": "<b>A localização não foi fornecida para mim.</b>\n\n<b>Uso:</b> <code>/weather (localização)</code>",
             "weatherLocationNotFound": "<b>O local especificado não foi encontrado!</b>"
         }
     },
@@ -48,7 +48,7 @@
         "checkers": {
             "noArgs": "Qual é o título do vídeo, nome do canal ou o URL do vídeo a ser baixado?",
             "excededLimit": "Você excedeu meu limite de download máximo, neste caso, 1GB de vídeo/música. Você pode optar por downloads em resoluções mais baixas, ou assinar um dos nossos planos para ser capaz de realizar o download de até 2GB de vídeo/música.",
-            "notforYou": "This YouTube Dowloader button is not directed at you."
+            "notforYou": "Esse botão do downloader do YouTube não é para você."
         }
     },
     "buttons": {
@@ -59,7 +59,7 @@
         "language": "🌐 Idioma",
         "privacy": "🔒 Privacidade",
         "privacy-data": "🔐 Quais dados coletamos",
-        "open-privacy-policy": "🔒 Open Privacy Policy",
+        "open-privacy-policy": "🔒 Abrir Política de Privacidade",
         "your-data": "🗃️ Seus dados"
     }
 }
