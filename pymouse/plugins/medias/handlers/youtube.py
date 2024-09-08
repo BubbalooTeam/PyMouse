@@ -11,7 +11,7 @@
 
 from shutil import rmtree
 from os import path
-from re import compile
+from re import compile as comp
 from wget import download
 from tempfile import TemporaryDirectory
 from youtubesearchpython.__future__ import VideosSearch
@@ -26,7 +26,7 @@ from pymouse import PyMouse, Decorators, Config, log, YT_DLP, DownloadPaths, rou
 from pymouse.utils import HandleText
 from ..utilities.youtube import yt_utils
 
-YOUTUBE_REGEX = compile(
+YOUTUBE_REGEX = comp(
     r"(?m)http(?:s?):\/\/(?:www\.)?(?:music\.)?youtu(?:be\.com\/(watch\?v=|shorts/|embed/)|\.be\/|)(?P<id>([\w\-\_]{11}))(&(amp;)?‌​[\w\?‌​=]*)?"
 )
 
