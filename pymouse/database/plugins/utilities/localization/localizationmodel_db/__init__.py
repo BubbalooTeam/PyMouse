@@ -1,3 +1,15 @@
+#    PyMouse (Telegram BOT Project)
+#    Copyright (c) 2022-2024 - BubbalooTeam
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
 from typing import Union
 from hydrogram.types import Message, CallbackQuery, InlineQuery
 from hydrogram.enums import ChatType
@@ -13,10 +25,10 @@ class LocalizationDB:
         Returns the chatID.
 
         Arguments:
-            union (Union[Message, CallbackQuery, InlineQuery]): The received message or query.
+            `union (Union[Message, CallbackQuery, InlineQuery])`: The received message or query.
 
         Returns:
-            int | None: The chat ID or None if not supported.
+            `int | None`: The chat ID or None if not supported.
         """
         if isinstance(union, InlineQuery):
             return union.from_user.id
@@ -35,10 +47,10 @@ class LocalizationDB:
         Returns the appropriate database collection.
 
         Arguments:
-            union (Union[Message, CallbackQuery, InlineQuery]): The received message or query.
+            `union (Union[Message, CallbackQuery, InlineQuery])`: The received message or query.
 
         Returns:
-            db.Collection: The corresponding database collection.
+            `db.Collection`: The corresponding database collection.
         """
         if isinstance(union, InlineQuery):
             return db.GetCollection("users")
@@ -64,10 +76,10 @@ class LocalizationDB:
         Returns the chat language.
 
         Arguments:
-            union (Union[Message, CallbackQuery, InlineQuery]): The received message or query.
+            `union (Union[Message, CallbackQuery, InlineQuery])`: The received message or query.
 
         Returns:
-            str | None: The chat language or None if not supported.
+            `str | None`: The chat language or None if not supported.
         """
         db_ctx = self.get_database_context(union)
         chat_id = self.get_chatid(union)
@@ -75,7 +87,7 @@ class LocalizationDB:
         get_chat = db_ctx.find_one({tck_type: chat_id})
         if get_chat is not None:
             language_class = get_chat.get("localization", {})
-            language = language_class.get("chat_lang", None)
+            language = language_class.get("chat_lang")
             return language
         else:
             return None
@@ -85,6 +97,13 @@ class LocalizationDB:
         union: Union[Message, CallbackQuery],
         language: str,
     ):
+        """
+        Change the language of the chat.
+
+        Returns:
+            `union (Union[Message, CallbackQuery])`: The received message or query.
+            `language`: The new language to be spoken in the chat.
+        """
         db_ctx = self.get_database_context(union)
         chat_id = self.get_chatid(union)
         tck_type = "chat_id" if db_ctx.collection == "chats" else "user_id"

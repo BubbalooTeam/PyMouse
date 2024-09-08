@@ -1,6 +1,18 @@
-import time
+#    PyMouse (Telegram BOT Project)
+#    Copyright (c) 2022-2024 - BubbalooTeam
 
-from hydrogram.types import Message
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+from typing import Union
+
+from hydrogram.types import Message, InlineQuery
 
 from typing import Callable
 from functools import partial, wraps
@@ -39,9 +51,10 @@ class UtilsTimer:
 
 class HandleText:
     @staticmethod
-    def input_str(m: Message) -> str:
+    def input_str(union: Union[Message, InlineQuery]) -> str:
         """Get text before of a command..."""
-        return " ".join(m.text.split()[1:])
+        text = union.text if isinstance(union, Message) else union.query
+        return " ".join(text.split()[1:])
 
 class HandleBoolean:
     @staticmethod

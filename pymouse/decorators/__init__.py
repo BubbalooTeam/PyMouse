@@ -1,5 +1,17 @@
-from typing import Union, Optional
-from functools import wraps
+#    PyMouse (Telegram BOT Project)
+#    Copyright (c) 2022-2024 - BubbalooTeam
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+from asyncio import get_event_loop
+from typing import Union, Optional, Callable
+from functools import partial, wraps
 from hydrogram.types import Message, CallbackQuery, InlineQuery
 from hydrogram.enums import ChatType
 
@@ -9,8 +21,22 @@ class Decorators:
     def __init__(self):
         self.owner = Config.OWNER_ID
 
+    def aiowrap(self):
+        """
+        Runs a synchronous function in the background, so that it does not create bugs in an asynchronous function
+        """
+        def decorator(func: Callable) -> Callable:
+            @wraps(func)
+            async def wrapper(*args, loop=None, executor=None, **kwargs):
+                if loop is None:
+                    loop = get_event_loop()
+                pfunc = partial(func, *args, **kwargs)
+                return await loop.run_in_executor(executor, pfunc)
+            return wrapper
+        return decorator
+
     def require_dev(self, only_owner: Optional[bool] = False):
-        def decorator(func):
+        def decorator(func) -> Callable:
             @wraps(func)
             async def wrapper(c: PyMouse, m: Message, *args, **kwargs): # type: ignore
                 dev_db = db.GetCollection("sudoers")
@@ -26,9 +52,9 @@ class Decorators:
                     return None
             return wrapper
         return decorator
-    
+
     def SaveUsers(self):
-        def decorator(func):
+        def decorator(func) -> Callable:
             @wraps(func)
             async def wrapper(c: PyMouse, m: Message, *args, **kwargs): # type: ignore
                 if not m.from_user:
@@ -41,9 +67,9 @@ class Decorators:
                 return await func(c, m, *args, **kwargs)
             return wrapper
         return decorator
-    
+
     def SaveChats(self):
-        def decorator(func):
+        def decorator(func) -> Callable:
             @wraps(func)
             async def wrapper(c: PyMouse, m: Message, *args, **kwargs): # type: ignore
                 if m.chat.type == ChatType.PRIVATE:
@@ -55,10 +81,10 @@ class Decorators:
                 return await func(c, m, *args, **kwargs)
             return wrapper
         return decorator
-    
+
     def Locale(self):
         """Get strings from chat localization"""
-        def decorator(func):
+        def decorator(func) -> Callable:
             @wraps(func)
             async def wrapper(c: PyMouse, union: Union[Message, CallbackQuery, InlineQuery], *args, **kwargs): # type: ignore
                 language = localization.get_localization_of_chat(union)

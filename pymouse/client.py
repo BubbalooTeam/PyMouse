@@ -1,3 +1,15 @@
+#    PyMouse (Telegram BOT Project)
+#    Copyright (c) 2022-2024 - BubbalooTeam
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
 import time
 
 from hydrogram import Client, __version__
@@ -16,6 +28,7 @@ class PyMouseBOT(Client):
             api_id=Config.API_ID,
             api_hash=Config.API_HASH,
             bot_token=Config.BOT_TOKEN,
+            plugins=dict(root="pymouse.plugins"),
             parse_mode=ParseMode.HTML,
             workers=Config.WORKERS,
             ipv6=Config.IPV6,

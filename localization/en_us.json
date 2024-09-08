@@ -2,9 +2,17 @@
     "language": {
         "name": "English (USA)",
         "flag": "🇺🇸",
-        "chat_language": "<b>Chat Language:</b> <code>{language_flag} - {language}</code>",
-        "native-language": "<b>This is the bot's native language. So it's <code>100% translated.</code></b>",
-        "missing-translations": "<b>Translations still missing! Only <code>{strings_percentage}%</code> of the bot is translated!</b>"
+        "language-info": {
+            "chat-language": "<b>Chat Language:</b> <code>{language_flag} - {language}</code>",
+            "native-language": "<b>This is the bot's native language. So it's <code>100% translated.</code></b>",
+            "missing-translations": "<b>Translations still missing! Only <code>{strings_percentage}%</code> of the bot is translated!</b>",
+            "language-info": "\n\n<b>Language info:</b>",
+            "language-total-strings": "\n\n- <b>Total strings:</b> <code>{total_strings}</code>",
+            "language-translated": "\n- <b>Translated strings:</b> <code>{translated_strings}</code>",
+            "language-untranslated": "\n- <b>Untranslated strings:</b> <code>{untranslated_strings}</code>"
+        },
+        "switch-lang": "Below, select the language you want to use.",
+        "switched-lang": "The language of this chat has been set to {language}."
     },
     "afk": {
         "is-unavalaible": "<b>{user} is unavalaible!</b>",
@@ -17,13 +25,41 @@
     },
     "pm-menu": {
         "start-private": "Hello <b>{user}</b>, I'am <b>{bot}</b>. A robot with cool and fun functions for your chat.",
-        "start-group": "<b>Hello! My name is {bot}!</b>"
+        "start-group": "<b>Hello! My name is {bot}!</b>",
+        "privacy-policy": "<b>{bot} Privacy Policy:</b>\n\n<i>This bot was designed and created to guarantee your security and privacy.\nThank you for your trust, our organization values ​​protecting your data and, moreover, we value quality.\n\nThe current privacy policy can be updated at any time, but this change will be communicated days in advance on the news channel.</i>",
+        "privacy-policyRead": "Click the button below to read and open of the <b>{bot}</b> Privacy Policy."
+    },
+    "weather": {
+        "humidity": "Humidity: {humidity} %",
+        "language": "en",
+        "location-name": "Location: {location}",
+        "temperature": "{temperature} °F",
+        "temperature-FeelsLike": "Thermal Sensation: {feelslike} °F",
+        "units": "e",
+        "wind": "Wind: {windspeed} mph",
+        "reason": {
+            "weatherNotProvided": "<b>The location was not provided to me.</b>\n\n<b>Usage:</b> <code>/weather (location)</code>",
+            "weatherLocationNotFound": "<b>This specified location was not found!</b>"
+        }
+    },
+    "youtube-dl": {
+        "downloading": "<b>Downloading your video/music, please wait...</b>",
+        "uploading": "<b>Uploading your video/music, please wait...</b>",
+        "checkers": {
+            "noArgs": "What is the video title, channel name or video URL to download?",
+            "excededLimit": "You have exceeded my maximum download limit, in this case 1GB of video/music. You can choose to download in a lower resolution, or purchase one of our plans to be able to download up to 2GB of video/music.",
+            "notforYou": "This YouTube Dowloader button is not directed at you."
+        }
     },
     "buttons": {
         "about": "ℹ️ About",
         "back": "Back",
         "change-language": "🌐 Change your language",
         "help": "👮 Help",
-        "language": "🌐 Language"
+        "language": "🌐 Language",
+        "privacy": "🔒 Privacy",
+        "privacy-data": "🔐 What data do we collect",
+        "open-privacy-policy": "🔒 Open Privacy Policy",
+        "your-data": "🗃️ Your data"
     }
 }
