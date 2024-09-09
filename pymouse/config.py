@@ -21,6 +21,7 @@ vars = {
     "API_HASH": "Required",
     "BOT_TOKEN": "Required",
     "SENTRY_DSN": "Required",
+    "GSMARENA_API": "Required",
     "CROWDIN_URL": "Optional",
     "IPV6": "Optional",
     "LOG_CHANNEL": "Required",
@@ -59,6 +60,7 @@ class Config:
     API_HASH = os.getenv("API_HASH")
     BOT_TOKEN = os.getenv("BOT_TOKEN")
     SENTRY_DSN = os.getenv("SENTRY_DSN")
+    GSMARENA_API = os.getenv("GSMARENA_API")
     CROWDIN_URL = os.getenv("CROWDIN_URL", "https://crowdin.com/project/pymouse")
     DOWNLOAD_PATH = "pymouse/downloads/"
     IPV6 = bool(os.getenv("IPV6", False))
