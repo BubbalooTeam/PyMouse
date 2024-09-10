@@ -4,22 +4,20 @@ version = "1.0.0"
 authors = [{ name = "DaviisDev", email = "kannaxuserbot@gmail.com" }]
 requires-python = ">=3.9"
 dependencies = [
-    "bs4>=0.0.2",
-    "babel>=2.14.0",
-    "heroku3>=5.2.1",
-    "httpx[http2,socks]>=0.27.2",
+    "bs4==0.0.2",
+    "heroku3==5.2.1",
+    "httpx[http2,socks]==0.27.2",
     "hydrogram @ git+https://github.com/hydrogram/hydrogram@dev",
     "hydrokeyboard @ git+https://github.com/DaviisDev/HydroKeyboard.git",
     "HydroPatch @ git+https://github.com/DaviisDev/HydroPatch.git",
-    "python-dotenv>=1.0.1",
-    "pytz>=2024.1",
-    "sentry-sdk>=2.13.0",
-    "speedtest-cli>=2.1.3",
+    "python-dotenv==1.0.1",
+    "pytz==2024.1",
+    "sentry-sdk==2.13.0",
+    "speedtest-cli==2.1.3",
     "tgcrypto>=1.2.5",
-    "tqdm>=4.66.4",
-    "wget>=3.2",
-    "youtube-search-python>=1.6.6",
-    "yt_dlp>=2024.8.6",
+    "wget==3.2",
+    "youtube-search-python==1.6.6",
+    "yt_dlp==2024.8.6",
 ]
 
 
