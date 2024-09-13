@@ -16,12 +16,11 @@ from pymouse import log
 from dotenv import load_dotenv
 
 # === #
-vars = {
+neededVars = {
     "API_ID": "Required",
     "API_HASH": "Required",
     "BOT_TOKEN": "Required",
     "SENTRY_DSN": "Required",
-    "GSMARENA_API": "Required",
     "CROWDIN_URL": "Optional",
     "IPV6": "Optional",
     "LOG_CHANNEL": "Required",
@@ -33,13 +32,13 @@ vars = {
 class MakeConfig:
     def make_config(self):
         with open("config.env", "a") as file:
-            for var in vars.keys():
+            for var in neededVars.keys():
                 inp = input("Enter {variable} -> ({boolean})\n: ".format(
                     variable=var,
-                    boolean=vars.get(var, "Optional")
+                    boolean=neededVars.get(var, "Optional")
                     )
                 )
-                if inp == "" and vars.get(var, "Optional") != "Required":
+                if inp == "" and neededVars.get(var, "Optional") != "Required":
                     continue
                 else:
                     while inp == "":
@@ -60,7 +59,6 @@ class Config:
     API_HASH = os.getenv("API_HASH")
     BOT_TOKEN = os.getenv("BOT_TOKEN")
     SENTRY_DSN = os.getenv("SENTRY_DSN")
-    GSMARENA_API = os.getenv("GSMARENA_API")
     CROWDIN_URL = os.getenv("CROWDIN_URL", "https://crowdin.com/project/pymouse")
     DOWNLOAD_PATH = "pymouse/downloads/"
     IPV6 = bool(os.getenv("IPV6", False))
