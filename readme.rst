@@ -6,6 +6,8 @@ PyMouse
 
 =======
 
+|License| |Codacy| |Crowdin|
+
 A helpfull and funny bot developed with Python.
 
 Requirements
@@ -26,3 +28,11 @@ Setup
 Android PyMouse Installer Tool (Termux):
 ----------------------------------------
 - Run: ``bash resources/scripts/termux_install.sh``
+
+.. Badges
+.. |License| image:: https://img.shields.io/github/license/BubbalooTeam/PyMouse
+  :target: https://github.com/BubbalooTeam/PyMouse/blob/main/LICENSE
+.. |Codacy| image:: https://app.codacy.com/project/badge/Grade/b80780e9b2a643a982752349e164ce89
+  :target: https://app.codacy.com/gh/BubbalooTeam/PyMouse/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade
+.. |Crowdin| image:: https://badges.crowdin.net/pymouse/localized.svg
+  :target: https://crowdin.com/project/pymouse
