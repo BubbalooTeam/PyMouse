@@ -7,7 +7,7 @@
             "native-language": "<b>Este é o idioma nativo do bot. Está <code>100% traduzido.</code></b>",
             "missing-translations": "<b>Ainda há traduções faltando! Apenas <code>{strings_percentage}%</code> do bot foi traduzido!</b>",
             "language-info": "\n\n<b>Informações do idioma:</b>",
-            "language-total-strings": "\n\n- <b>Total de cordas:</b> <code>{total_strings}</code>",
+            "language-total-strings": "\n\n\\n\\n- <b>Total de cordas:</b> <code>{total_strings}</code>",
             "language-translated": "\n- <b>Cordas traduzidas:</b> <code>{translated_strings}</code>",
             "language-untranslated": "\n- <b>Cordas sem tradução:</b> <code>{untranslated_strings}</code>"
         },
@@ -25,20 +25,20 @@
     },
     "gsmarena": {
         "phoneFormatter": {
-            "status": "Status",
-            "network": "Network",
-            "dimensions": "Dimensions",
-            "weight": "Weight",
-            "jack": "3.5mm jack",
-            "usb": "USB connector",
-            "sensors": "Sensors",
-            "battery": "Battery",
-            "charging": "Charging",
-            "display": "Display",
-            "chipset": "Chipset's",
-            "main_camera": "Rear Camera",
-            "selfie_camera": "Front Camera",
-            "memory": "ROM Memory"
+            "status": "Situação",
+            "network": "Rede",
+            "dimensions": "Dimensões",
+            "weight": "Peso",
+            "jack": "Conector de 3,5 mm",
+            "usb": "Conector USB",
+            "sensors": "Sensores",
+            "battery": "Bateria",
+            "charging": "Carregamento",
+            "display": "Tela",
+            "chipset": "Chipsets",
+            "main_camera": "Câmera Traseira",
+            "selfie_camera": "Câmera Frontal",
+            "memory": "Memória ROM"
         }
 
     },
