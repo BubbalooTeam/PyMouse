@@ -30,7 +30,7 @@ class UtilsDecorator:
                 return await loop.run_in_executor(executor, pfunc)
             return wrapper
         return decorator
-    
+
 class UtilsTimer:
     @staticmethod
     def time_formatter(seconds: float) -> str:

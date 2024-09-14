@@ -71,7 +71,7 @@ class DataBase:
                 `list`: Representing collection content.
             """
             return self.parent_db.db[self.collection]
-        
+
         def find_one(self, filter: Optional[dict] = None) -> dict:
             """
             Fetches information in a collection according to the specified filter.

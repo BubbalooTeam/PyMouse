@@ -23,6 +23,7 @@ from pymouse.utils.tools.gsm_arena.exceptions import (
     GSMarenaCategoryError,
     GSMarenaDeviceNotFound,
     GSMarenaManyRequests,
+    GSMarenaPhoneInvalid,
 )
 
 @dataclass(frozen=True, slots=True)
@@ -70,7 +71,10 @@ class GSMarena:
             if r.status_code == 400:
                 msg = "An error occurred in the Client (BadRequest), please try again."
                 raise GSMarenaBadRequest(msg)
-            if r.status_code == 429:
+            elif r.status_code == 404:
+                msg = "The device is invalid, please try other device."
+                raise GSMarenaPhoneInvalid(msg)
+            elif r.status_code == 429:
                 msg = "Please wait while we automatically unlock PyMouse access. This process may take minutes, hours, days, or even weeks."
                 raise GSMarenaManyRequests(msg)
             else:

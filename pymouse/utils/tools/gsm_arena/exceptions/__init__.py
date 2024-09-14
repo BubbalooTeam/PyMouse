@@ -12,6 +12,3 @@ class GSMarenaDeviceNotFound(Exception):
 
 class GSMarenaPhoneInvalid(Exception):
     """Raise if 'phone' parameter is invalid."""
-
-class GSMarenaFailIndex(Exception):
-    """Raise if there is any failure to index the returned information."""

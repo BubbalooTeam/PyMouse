@@ -32,7 +32,7 @@ class NetworkUtils:
         cc = result.get("server", {}).get("cc", "No Infos")
         path = (result.get("share", NetworkEvents.FAIL_IN_EXTRACT_PHOTOS))
         return dl, ul, name, host, ping, isp, country, cc, path
-    
+
 class NetworkEvents:
     RUNNING_SPEEDTEST = "https://telegra.ph/file/4beef2f3139e3b160615f.jpg"
     FAIL_IN_EXTRACT_PHOTOS = "https://telegra.ph/file/da2852745e2cc6160e40e.jpg"

@@ -41,7 +41,7 @@ class ChatsDB:
             return True
         else:
             return None
-        
+
     @staticmethod
     def get_chat_dict(chat_id: int) -> dict:
         chats_db = db.GetCollection("chats")
