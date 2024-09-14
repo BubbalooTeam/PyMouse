@@ -9,8 +9,8 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Some parts of this code are based on the PyKorone project
-# (https://github.com/HitaloM/PyKorone/tree/main/src/korone/modules/gsm_arena), which is licensed under the 3-Clause BSD license.
+#    Some parts of this code are based on the PyKorone project
+#    (https://github.com/HitaloM/PyKorone/tree/main/src/korone/modules/gsm_arena), which is licensed under the 3-Clause BSD license.
 
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
