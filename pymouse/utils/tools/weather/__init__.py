@@ -25,7 +25,7 @@ from pymouse.assents import AllIcons, AllFonts
 from pymouse.utils import HandleText, http
 from pymouse.utils.tools.weather.exceptions import WeatherLocationNotProvidedError, WeatherLocationNotFound
 
-Icons = {
+WeatherIcons = {
     0: AllIcons.Weather.RAIN_THUMDERSTORM,
     1: AllIcons.Weather.RAIN_THUMDERSTORM,
     2: AllIcons.Weather.RAIN_THUMDERSTORM,
@@ -138,7 +138,7 @@ class Weather:
         Returns:
             - `IconImage(Image.open)`: Represents the icon image.
         """
-        FilePath: str = Icons.get(IconCode)
+        FilePath: str = WeatherIcons.get(IconCode)
         pil_img = Image.open(
             fp=FilePath,
         )
