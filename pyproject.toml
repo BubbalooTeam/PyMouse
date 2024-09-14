@@ -1,7 +1,7 @@
 [project]
 name = "PyMouse"
 version = "1.0.0"
-authors = [{ name = "DaviisDev", email = "kannaxuserbot@gmail.com" }]
+authors = [{ name = "BubbalooTeam", email = "bubbalooteam@proton.me" }]
 requires-python = ">=3.9"
 dependencies = [
     "bs4==0.0.2",
