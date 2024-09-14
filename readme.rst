@@ -32,7 +32,7 @@ Android PyMouse Installer Tool (Termux):
 .. Badges
 .. |License| image:: https://img.shields.io/github/license/BubbalooTeam/PyMouse
   :target: https://github.com/BubbalooTeam/PyMouse/blob/PyMouse/LICENSE
-.. |Codacy| image:: https://app.codacy.com/project/badge/Grade/b80780e9b2a643a982752349e164ce89
+.. |Codacy| image:: https://app.codacy.com/project/badge/Grade/9148c59045e74794886d2a1cd1e575ee
   :target: https://app.codacy.com/gh/BubbalooTeam/PyMouse/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade
 .. |Crowdin| image:: https://badges.crowdin.net/pymouse/localized.svg
   :target: https://crowdin.com/project/pymouse
