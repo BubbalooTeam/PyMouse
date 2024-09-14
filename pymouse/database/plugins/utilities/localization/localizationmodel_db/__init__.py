@@ -67,7 +67,7 @@ class LocalizationDB:
         else:
             log.critical("This instance is not supported!")
             return None
-            
+
     def get_chat_language(
         self,
         union: Union[Message, CallbackQuery, InlineQuery],
@@ -91,7 +91,7 @@ class LocalizationDB:
             return language
         else:
             return None
-        
+
     def set_chat_language(
         self,
         union: Union[Message, CallbackQuery],

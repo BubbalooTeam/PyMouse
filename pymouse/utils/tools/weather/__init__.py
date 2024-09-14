@@ -25,7 +25,7 @@ from pymouse.assents import AllIcons, AllFonts
 from pymouse.utils import HandleText, http
 from pymouse.utils.tools.weather.exceptions import WeatherLocationNotProvidedError, WeatherLocationNotFound
 
-Icons = {
+WeatherIcons = {
     0: AllIcons.Weather.RAIN_THUMDERSTORM,
     1: AllIcons.Weather.RAIN_THUMDERSTORM,
     2: AllIcons.Weather.RAIN_THUMDERSTORM,
@@ -138,7 +138,7 @@ class Weather:
         Returns:
             - `IconImage(Image.open)`: Represents the icon image.
         """
-        FilePath: str = Icons.get(IconCode)
+        FilePath: str = WeatherIcons.get(IconCode)
         pil_img = Image.open(
             fp=FilePath,
         )
@@ -373,6 +373,16 @@ class Weather:
         weather: WeatherResponse,
         i18n: dict,
     ):
+        """
+        Generates an interface with a detailed weather forecast about the current weather and the next 7 days.
+
+        Arguments:
+            - `weather(WeatherResponse)`: All necessary information such as current weather, forecast for the next 7 days and location are stored in this Response.
+            - `i18n(dict)`: Dictionary of international words.
+
+        Returns:
+            - `os.path.abspath`: Returns the absolute path to where the weather forecast image was saved.
+        """
         hash_code = uuid4()
         width, height = 3840, 2160
         gradient = Image.new('RGB', (width, height), "#02455B")

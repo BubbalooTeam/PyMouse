@@ -14,24 +14,24 @@ import os
 
 class TermuxUtils:
     PyMouseLogo = """
-     _____       __  __                      
-    |  __ \     |  \/  |                     
-    | |__) |   _| \  / | ___  _   _ ___  ___ 
+     _____       __  __
+    |  __ \     |  \/  |
+    | |__) |   _| \  / | ___  _   _ ___  ___
     |  ___/ | | | |\/| |/ _ \| | | / __|/ _ \\
     | |   | |_| | |  | | (_) | |_| \__ \  __/
     |_|    \__, |_|  |_|\___/ \__,_|___/\___|
-            __/ |                            
+            __/ |
            |___/
                      """
-    
+
     TermuxInstallerMessage = """
     • PyMouse Installer via Termux:
 
-        • Initializing the Installation (Do Not Turn Off Your Device During Installation...). 
+        • Initializing the Installation (Do Not Turn Off Your Device During Installation...).
 
         • It is possible that the process will take a while.
                      """
-    
+
     PIP_COMMAND = "pip install -Ue ."
 
     APT_PACKAGES = [
@@ -42,7 +42,7 @@ class TermuxUtils:
 class Termux:
     def print_empty(self):
         print()
-    
+
     def install_apt(self, packages: list):
         self.print_empty()
         print("[...] - Installing packages using APT...\n")

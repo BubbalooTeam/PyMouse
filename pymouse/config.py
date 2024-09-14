@@ -16,7 +16,7 @@ from pymouse import log
 from dotenv import load_dotenv
 
 # === #
-vars = {
+neededVars = {
     "API_ID": "Required",
     "API_HASH": "Required",
     "BOT_TOKEN": "Required",
@@ -32,13 +32,13 @@ vars = {
 class MakeConfig:
     def make_config(self):
         with open("config.env", "a") as file:
-            for var in vars.keys():
+            for var in neededVars.keys():
                 inp = input("Enter {variable} -> ({boolean})\n: ".format(
                     variable=var,
-                    boolean=vars.get(var, "Optional")
+                    boolean=neededVars.get(var, "Optional")
                     )
                 )
-                if inp == "" and vars.get(var, "Optional") != "Required":
+                if inp == "" and neededVars.get(var, "Optional") != "Required":
                     continue
                 else:
                     while inp == "":

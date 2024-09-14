@@ -25,7 +25,7 @@
     },
     "gsmarena": {
         "phoneFormatter": {
-            "status": "SItuação",
+            "status": "Situação",
             "network": "Rede",
             "dimensions": "Dimensões",
             "weight": "Peso",
@@ -40,6 +40,7 @@
             "selfie_camera": "Câmera Frontal",
             "memory": "Memória ROM"
         }
+
     },
     "pm-menu": {
         "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",

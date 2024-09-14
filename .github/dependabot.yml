@@ -3,7 +3,7 @@ updates:
 - package-ecosystem: "pip"
   directory: "/"
   schedule:
-    interval: "weekly"
+    interval: "daily"
   groups:
     dev-dependencies:
       patterns:
@@ -11,4 +11,4 @@ updates:
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
-    interval: "weekly"
+    interval: "daily"

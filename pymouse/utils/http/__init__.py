@@ -13,9 +13,9 @@
 from httpx import AsyncClient, Timeout
 
 http = AsyncClient(
-    http2=True, 
+    http2=True,
     timeout=Timeout(
-        timeout=60, 
-        pool=None
+        timeout=60,
+        pool=None,
     )
 )

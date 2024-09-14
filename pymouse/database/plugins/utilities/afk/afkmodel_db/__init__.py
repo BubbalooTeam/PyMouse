@@ -68,5 +68,5 @@ class AFKDB:
         afkmap = usersmodel_db.users_db.getuser_dict(user_id).get("afk", {})
         return afkmap
 
-   
+
 afk_db = AFKDB()

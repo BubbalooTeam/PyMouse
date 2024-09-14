@@ -25,7 +25,7 @@ class UsersDB:
                 return True
             return False
         return False
-    
+
     def update_user(self, user_id: int, actual_uname: str, actual_username: str, actual_tglang: str):
         users_db = db.GetCollection("users")
         finders = self.find_user(user_id, actual_uname, actual_username, actual_tglang)
@@ -43,7 +43,7 @@ class UsersDB:
              return True
         else:
             return None
-        
+
     @staticmethod
     def getuser_dict(user_id: int) -> dict:
         users_db = db.GetCollection("users")
