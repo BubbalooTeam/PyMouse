@@ -18,7 +18,7 @@ def formatGSMarenaMessage(gsmarenaBaseResult: GSMarenaDeviceBaseResult, i18n: di
             spec_value=value
         )
         for key, value in phone.items()
-        if value.strip() and value.strip() != "-" and deviceI18N.get(key) is not None
+        if value and value.strip() != "-" and deviceI18N.get(key) is not None
     ]
 
 
