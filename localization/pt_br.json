@@ -39,6 +39,10 @@
             "main_camera": "Câmera Traseira",
             "selfie_camera": "Câmera Frontal",
             "memory": "Memória ROM"
+        },
+        "reason": {
+            "deviceNotProvided": "<b>The device was not provided to me.</b>\n\n<b>Usage:</b> <code>/d S24 Ultra</code>",
+            "deviceNotFound": "<b>Device not Found.</b>"
         }
     },
     "pm-menu": {
