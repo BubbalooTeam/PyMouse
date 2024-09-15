@@ -39,6 +39,10 @@
             "main_camera": "Rear Camera",
             "selfie_camera": "Front Camera",
             "memory": "ROM Memory"
+        },
+        "reason": {
+            "deviceNotProvided": "<b>The device was not provided to me.</b>\n\n<b>Usage:</b> <code>/d S24 Ultra</code>",
+            "deviceNotFound": "<b>Device not Found.</b>"
         }
 
     },

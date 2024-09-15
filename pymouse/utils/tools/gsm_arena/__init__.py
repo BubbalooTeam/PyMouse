@@ -20,7 +20,6 @@ from typing import Any
 from pymouse.utils import http
 from pymouse.utils.tools.gsm_arena.exceptions import (
     GSMarenaBadRequest,
-    GSMarenaCategoryError,
     GSMarenaDeviceNotFound,
     GSMarenaManyRequests,
     GSMarenaPhoneInvalid,
@@ -159,10 +158,7 @@ class GSMarena:
         categoryData = next((item for item in specifications if item["category"] == category), None)
 
         if not categoryData:
-            msg = "The {category} category cannot be found, please refine your code.".format(
-                category=category
-            )
-            raise GSMarenaCategoryError(msg)
+            return
 
         if attrs:
             return "\n".join(spec.get("value")
@@ -176,6 +172,7 @@ class GSMarena:
         specifications_map = {
             "status": GSMarenaBaseFormatResult(category="Launch", attrs=["Status"]),
             "network": GSMarenaBaseFormatResult(category="Network", attrs=["Technology"]),
+            "dimensions": GSMarenaBaseFormatResult(category="Body", attrs=["Dimensions"]),
             "weight": GSMarenaBaseFormatResult(category="Body", attrs=["Weight"]),
             "jack": GSMarenaBaseFormatResult(category="Sound", attrs=["3.5mm jack"]),
             "usb": GSMarenaBaseFormatResult(category="Comms", attrs=["USB"]),

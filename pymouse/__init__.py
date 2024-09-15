@@ -35,5 +35,6 @@ from pymouse.database.plugins.utilities.localization import localizationmodel_db
 from pymouse.utils.tools.DownloadPath import DownloadPaths
 from pymouse.utils.localization import localization
 from pymouse.decorators import Decorators
+from pymouse.utils.tools.gsm_arena import GSMarena, GSMarenaSearchResults, GSMarenaDeviceBaseResult
 from pymouse.utils.tools.weather import Weather
 from pymouse.utils.tools.youtube_downloader import YouTubeDownloader, YT_DLP
