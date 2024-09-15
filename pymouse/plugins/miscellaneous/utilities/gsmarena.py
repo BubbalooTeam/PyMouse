@@ -23,12 +23,16 @@ def formatGSMarenaMessage(gsmarenaBaseResult: GSMarenaDeviceBaseResult, i18n: di
 
 
     formatted_message = (
-        f"<a href='{gsmarenaBaseResult.image}'>"
-        f"\u2000</a>"
-        f"<a href='{gsmarenaBaseResult.url}'>"
-        f"<b>{gsmarenaBaseResult.name}</b></a>"
-        f"\n\n{"\n\n".join(attrs)}"
+        "<a href='{image}'>{space}</a>"
+        "<a href='{url}'><b>{name}</b></a>\n\n{attrs}"
+    ).format(
+        image=gsmarenaBaseResult.image,
+        space="\u2000",
+        url=gsmarenaBaseResult.url,
+        name=gsmarenaBaseResult.name,
+        attrs="\n\n".join(attrs)
     )
+
     return formatted_message
 
 async def HandleGSMarena(m: Message, i18n: dict):
