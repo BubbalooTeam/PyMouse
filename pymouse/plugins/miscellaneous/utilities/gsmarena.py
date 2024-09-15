@@ -22,7 +22,13 @@ def formatGSMarenaMessage(gsmarenaBaseResult: GSMarenaDeviceBaseResult, i18n: di
     ]
 
 
-    formatted_message = f"<a href='{gsmarenaBaseResult.image}'>{gsmarenaBaseResult.name}</a>\n\n{"\n\n".join(attrs)}"
+    formatted_message = (
+        f"<a href='{gsmarenaBaseResult.image}'>"
+        f"\u2000</a>"
+        f"<a href='{gsmarenaBaseResult.url}'>"
+        f"<b>{gsmarenaBaseResult.name}</b></a>"
+        f"\n\n{"\n\n".join(attrs)}"
+    )
     return formatted_message
 
 async def HandleGSMarena(m: Message, i18n: dict):
@@ -32,7 +38,10 @@ async def HandleGSMarena(m: Message, i18n: dict):
             getDevice = await gsm_arena.search_device(query=query)
             fetchDevice = await gsm_arena.fetch_device(device=getDevice.results[0].id)
             formatedMessage = formatGSMarenaMessage(gsmarenaBaseResult=fetchDevice, i18n=i18n)
-            await m.reply(formatedMessage)
+            await m.reply(
+                text=formatedMessage,
+                disable_web_page_preview=False,
+            )
         except GSMarenaDeviceNotFound as err:
             await m.reply(i18n["gsmarena"]["reason"]["deviceNotFound"])
             log.warning("%s: %s", err, query)

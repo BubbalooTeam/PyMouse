@@ -39,6 +39,7 @@ class GSMarenaSearchResults:
 @dataclass(frozen=True, slots=True)
 class GSMarenaDeviceBaseResult:
     name: str | None
+    url: str | None
     image: str | None
     phone_details: list[dict]
 
@@ -118,6 +119,7 @@ class GSMarena:
                 device=device,
             ),
         )
+        url = "https://www.gsmarena.com/{device}.php".format(device=device)
         soup = BeautifulSoup(html, 'html.parser')
 
         name_base = soup.find(class_='specs-phone-name-title')
@@ -149,6 +151,7 @@ class GSMarena:
                 pass
         return GSMarenaDeviceBaseResult(
             name=name,
+            url=url,
             image=image,
             phone_details=phoneDetails,
         )
