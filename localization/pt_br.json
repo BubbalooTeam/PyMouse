@@ -53,14 +53,15 @@
         "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
         "start-group": "<b>Olá! Meu nome é {bot}!</b>",
         "privacy-policy": "<b>{bot} Política de Privacidade:</b>\n\n<i>Este bot foi projetado e criado para garantir sua segurança e privacidade.\nObrigado pela sua confiança, nossa organização valoriza a proteção dos seus dados, além disso, valorizamos qualidade.\n\nA política de privacidade atual pode ser atualizada a qualquer momento, mas essa mudança será comunicada com dias de antecedência no canal de notícias.</i>",
-        "privacy-policyRead": "Clique no botão abaixo para ler e abrir a Política de Privacidade do <b>{bot}</b>."
+        "privacy-policyRead": "Clique no botão abaixo para ler e abrir a Política de Privacidade do <b>{bot}</b>.",
+        "help-below": "Click the button below to open the documentation and get help of the <b>{bot}</b>."
     },
     "weather": {
         "humidity": "Umidade: {humidity} %",
         "language": "pt",
         "location-name": "Localização: {location}",
         "temperature": "{temperature} ° C",
-        "temperature-FeelsLike": "Sensação Térmica: {feelslike} °F",
+        "temperature-FeelsLike": "Sensação Térmica: {feelslike} °C",
         "units": "m",
         "wind": "Vento: {windspeed} km/h",
         "reason": {
