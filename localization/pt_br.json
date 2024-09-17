@@ -7,7 +7,7 @@
             "native-language": "<b>Este é o idioma nativo do bot. Está <code>100% traduzido.</code></b>",
             "missing-translations": "<b>Ainda há traduções faltando! Apenas <code>{strings_percentage}%</code> do bot foi traduzido!</b>",
             "language-info": "\n\n<b>Informações do idioma:</b>",
-            "language-total-strings": "\n\n- <b>Total de cordas:</b> <code>{total_strings}</code>",
+            "language-total-strings": "\n\n\\n\\n- <b>Total de cordas:</b> <code>{total_strings}</code>",
             "language-translated": "\n- <b>Cordas traduzidas:</b> <code>{translated_strings}</code>",
             "language-untranslated": "\n- <b>Cordas sem tradução:</b> <code>{untranslated_strings}</code>"
         },
@@ -41,14 +41,13 @@
             "memory": "Memória ROM"
         },
         "checkers": {
-            "notforYou": "The device model selection button listed by GSMarena is not targeted at you."
+            "notforYou": "O botão de seleção de modelo de dispositivo listado pela GSMarena não é direcionado para você."
         },
         "reason": {
-            "deviceLister": "I was returned different variations of different devices with the query <b>{query}</b>, choose a model from these devices using the buttons below.",
-            "deviceNotProvided": "<b>The device was not provided to me.</b>\n\n<b>Usage:</b> <code>/d S24 Ultra</code>",
-            "deviceNotFound": "<b>Device not Found.</b>"
+            "deviceLister": "Foram retornadas diferentes variações de diferentes dispositivos com a consulta <b>{query}</b>, escolha um modelo destes dispositivos usando os botões abaixo.",
+            "deviceNotProvided": "<b>O dispositivo não foi fornecido para mim.</b>\n\n<b>Uso:</b> <code>/d S24 Ultra</code>",
+            "deviceNotFound": "<b>Dispositivo não encontrado.</b>"
         }
-
     },
     "pm-menu": {
         "start-private": "Olá, <b>{user}</b>, eu sou <b>{bot}</b>. Um robô com funções legais e divertidas para a sua sala de conversação.",
