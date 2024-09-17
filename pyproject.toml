@@ -10,6 +10,7 @@ dependencies = [
     "hydrogram @ git+https://github.com/hydrogram/hydrogram@dev",
     "hydrokeyboard @ git+https://github.com/DaviisDev/HydroKeyboard.git",
     "HydroPatch @ git+https://github.com/DaviisDev/HydroPatch.git",
+    "pillow==10.4.0",
     "python-dotenv==1.0.1",
     "pytz==2024.2",
     "sentry-sdk==2.14.0",

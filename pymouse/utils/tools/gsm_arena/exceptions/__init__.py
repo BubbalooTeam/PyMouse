@@ -4,9 +4,6 @@ class GSMarenaManyRequests(Exception):
 class GSMarenaBadRequest(Exception):
     """Raise if a 'BadRequest' error occurs."""
 
-class GSMarenaCategoryError(Exception):
-    """Raise if specified category is invalid."""
-
 class GSMarenaDeviceNotFound(Exception):
     """Raise if the device requested by the user doesn't not exist or is unavailable on GSMarena."""
 
