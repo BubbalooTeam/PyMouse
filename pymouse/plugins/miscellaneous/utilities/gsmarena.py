@@ -1,8 +1,10 @@
-from typing import Any
+from re import sub as subs
+from typing import Union
 
-from hydrogram.types import Message
+from hydrogram.types import Message, CallbackQuery
+from hydrokeyboard import InlineKeyboard, InlineButton
 
-from pymouse import GSMarena, GSMarenaDeviceBaseResult, log
+from pymouse import GSMarena, GSMarenaDeviceBaseResult, GSMarenaSearchResults, log
 from pymouse.utils import HandleText
 from pymouse.utils.tools.gsm_arena.exceptions import GSMarenaDeviceNotFound
 
@@ -35,19 +37,70 @@ def formatGSMarenaMessage(gsmarenaBaseResult: GSMarenaDeviceBaseResult, i18n: di
 
     return formatted_message
 
-async def HandleGSMarena(m: Message, i18n: dict):
-    query = HandleText().input_str(union=m)
-    if query:
-        try:
-            getDevice = await gsm_arena.search_device(query=query)
-            fetchDevice = await gsm_arena.fetch_device(device=getDevice.results[0].id)
-            formatedMessage = formatGSMarenaMessage(gsmarenaBaseResult=fetchDevice, i18n=i18n)
-            await m.reply(
-                text=formatedMessage,
-                disable_web_page_preview=False,
-            )
-        except GSMarenaDeviceNotFound as err:
-            await m.reply(i18n["gsmarena"]["reason"]["deviceNotFound"])
-            log.warning("%s: %s", err, query)
-    else:
-        await m.reply(i18n["gsmarena"]["reason"]["deviceNotProvided"])
+def GSMarenaCreateKeyboard(search: GSMarenaSearchResults, user_id: int):
+    def formatDeviceName(name: str) -> str:
+        # Insert spaces between lowercase letters and numbers
+        name_with_spaces = subs(r'([a-z])([0-9])', r'\1 \2', name)
+        # Insert spaces between lowercase and uppercase letters
+        formatted_name = subs(r'([a-z])([A-Z])', r'\1 \2', name_with_spaces)
+
+        # Capitalize each word
+        final_name = formatted_name.title()
+
+        return final_name
+    keyboard = InlineKeyboard(row_width=2)
+    buttons = []
+    for device in search.results:
+        buttons.append(
+            InlineButton(
+                text=formatDeviceName(
+                    name=device.name
+                ),
+                callback_data="device|{device_id}|{user_id}".format(
+                    device_id=device.id,
+                    user_id=user_id,
+                ),
+            ),
+        )
+        if len(buttons) >= 30:
+            break
+    keyboard.add(*buttons)
+    return keyboard
+
+
+async def HandleGSMarena(union: Union[Message, CallbackQuery], i18n: dict):
+    sender = union.reply if isinstance(union, Message) else union.edit_message_text
+    async def GSMarenaBuildMessage(deviceID: str, i18n: dict):
+        fetchDevice = await gsm_arena.fetch_device(device=deviceID)
+        formatedMessage = formatGSMarenaMessage(gsmarenaBaseResult=fetchDevice, i18n=i18n)
+        return await sender(
+            text=formatedMessage,
+            disable_web_page_preview=False,
+        )
+    if isinstance(union, Message):
+        query = HandleText().input_str(union=union)
+        if query:
+            try:
+                getDevice = await gsm_arena.search_device(query=query)
+                if len(getDevice.results) >= 2:
+                    keyboard = GSMarenaCreateKeyboard(search=getDevice, user_id=union.from_user.id)
+                    return await union.reply(
+                        text=i18n["gsmarena"]["reason"]["deviceLister"].format(
+                            query=query,
+                        ),
+                        reply_markup=keyboard,
+                    )
+                await GSMarenaBuildMessage(deviceID=getDevice.results[0].id, i18n=i18n)
+            except GSMarenaDeviceNotFound as err:
+                await union.reply(i18n["gsmarena"]["reason"]["deviceNotFound"])
+                log.warning("%s: %s", err, query)
+        else:
+            await union.reply(i18n["gsmarena"]["reason"]["deviceNotProvided"])
+    elif isinstance(union, CallbackQuery):
+        inf = union.data.split("|")
+        deviceID = inf[1]
+        userID = inf[2]
+
+        if union.from_user.id != int(userID):
+            return await union.answer(i18n["gsmarena"]["checkers"]["notforYou"], show_alert=True)
+        await GSMarenaBuildMessage(deviceID=deviceID, i18n=i18n)

@@ -40,7 +40,11 @@
             "selfie_camera": "Front Camera",
             "memory": "ROM Memory"
         },
+        "checkers": {
+            "notforYou": "The device model selection button listed by GSMarena is not targeted at you."
+        },
         "reason": {
+            "deviceLister": "I was returned different variations of different devices with the query <b>{query}</b>, choose a model from these devices using the buttons below.",
             "deviceNotProvided": "<b>The device was not provided to me.</b>\n\n<b>Usage:</b> <code>/d S24 Ultra</code>",
             "deviceNotFound": "<b>Device not Found.</b>"
         }
