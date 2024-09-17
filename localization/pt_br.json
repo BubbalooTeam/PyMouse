@@ -41,12 +41,12 @@
             "memory": "Memória ROM"
         },
         "checkers": {
-            "notforYou": "The device model selection button listed by GSMarena is not targeted at you."
+            "notforYou": "O botão de seleção de modelo de dispositivo listado pela GSMarena não é direcionado para você."
         },
         "reason": {
-            "deviceLister": "I was returned different variations of different devices with the query <b>{query}</b>, choose a model from these devices using the buttons below.",
-            "deviceNotProvided": "<b>The device was not provided to me.</b>\n\n<b>Usage:</b> <code>/d S24 Ultra</code>",
-            "deviceNotFound": "<b>Device not Found.</b>"
+            "deviceLister": "Foram retornadas diferentes variações de diferentes dispositivos com a consulta <b>{query}</b>, escolha um modelo destes dispositivos usando os botões abaixo.",
+            "deviceNotProvided": "<b>O dispositivo não foi fornecido para mim.</b>\n\n<b>Uso:</b> <code>/d S24 Ultra</code>",
+            "deviceNotFound": "<b>Dispositivo não encontrado.</b>"
         }
     },
     "pm-menu": {
