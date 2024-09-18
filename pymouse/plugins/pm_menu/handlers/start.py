@@ -58,6 +58,10 @@ async def start_(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type
             reply_markup=keyboard
         )
     elif isinstance(union, CallbackQuery):
+        if isinstance(union, Message):
+            if union.message.chat.type != ChatType.PRIVATE:
+                start_text = i18n["pm-menu"]["start-group"].format(bot=c.me.mention)
+                keyboard = None
         await union.edit_message_text(
             text=start_text,
             reply_markup=keyboard,
