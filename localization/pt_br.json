@@ -61,7 +61,7 @@
         "language": "pt",
         "location-name": "Localização: {location}",
         "temperature": "{temperature} ° C",
-        "temperature-FeelsLike": "Sensação Térmica: {feelslike} °F",
+        "temperature-FeelsLike": "Sensação Térmica: {feelslike} °C",
         "units": "m",
         "wind": "Vento: {windspeed} km/h",
         "reason": {

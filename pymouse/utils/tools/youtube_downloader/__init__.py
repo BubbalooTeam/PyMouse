@@ -13,13 +13,14 @@ from dataclasses import dataclass
 from collections import defaultdict
 from json import dumps, loads
 from os import path
+from pathlib import Path
 from typing import Any, Dict, List, Union, Optional
 from uuid import uuid4
 
 from yt_dlp import YoutubeDL
 from yt_dlp.utils import DownloadError, ExtractorError, GeoRestrictedError
 
-from hydrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from hydrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaVideo, InputMediaAudio
 from hydrogram.enums import ChatAction
 
 from pymouse import PyMouse, Decorators, log
@@ -304,29 +305,32 @@ class YT_DLP:
         await cb.edit_message_caption(
             caption=i18n["youtube-dl"]["uploading"],
         )
+
         if media_type == "video":
             await c.send_chat_action(
                 chat_id=chat_id,
                 action=ChatAction.UPLOAD_VIDEO,
             )
-            await c.send_video(
-                chat_id=chat_id,
-                video=media_class.filename,
-                caption=media_class.full_title,
-                duration=media_class.duration,
-                thumb=thumb,
+            await cb.edit_message_media(
+                media=InputMediaVideo(
+                    media=Path(media_class.filename),
+                    caption=media_class.full_title,
+                    duration=media_class.duration,
+                    thumb=thumb,
+                )
             )
         elif media_type == "audio":
             await c.send_chat_action(
                 chat_id=chat_id,
                 action=ChatAction.UPLOAD_AUDIO,
             )
-            await c.send_audio(
-                chat_id=chat_id,
-                audio=media_class.filename,
-                caption=media_class.full_title,
-                duration=media_class.duration,
-                thumb=thumb,
+            await cb.edit_message_media(
+                media=InputMediaAudio(
+                    media=Path(media_class.filename),
+                    caption=media_class.full_title,
+                    duration=media_class.duration,
+                    thumb=thumb,
+                )
             )
         else:
             log.error("Format not avalaible!")

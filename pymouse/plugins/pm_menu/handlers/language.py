@@ -9,22 +9,30 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from typing import Union
+
 from hydrogram import filters
-from hydrogram.types import CallbackQuery
+from hydrogram.types import Message, CallbackQuery
 
 from pymouse import PyMouse, Decorators, router
 from pymouse.plugins.pm_menu.utilities.localization import LocalizationInfo
 
+@router.message(filters.command(["setlang", "lang"]))
 @router.callback(filters.regex(r"^LangMenu\|(.*)$"))
 @Decorators().Locale()
-async def ChangeLanguageMenu(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
-    inf = cb.data.split("|")
-    changemenu_back = inf[1]
-    changelang_back = inf[2]
+async def ChangeLanguageMenu(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
+    sender = union.edit_message_text if isinstance(union, CallbackQuery) else union.reply
+    if isinstance(union, CallbackQuery):
+        inf = union.data.split("|")
+        changemenu_back = inf[1]
+        changelang_back = inf[2]
+    elif isinstance(union, Message):
+        changemenu_back = "StartBack"
+        changelang_back = "LangMenu"
 
     text_and_buttons = await LocalizationInfo().get_changelang_text_and_buttons(
         c=c,
-        union=cb,
+        union=union,
         i18n=i18n,
         lang_callback="ChangeLanguage|{changemenu_back}|{changelang_back}".format(
             changemenu_back=changemenu_back,
@@ -32,7 +40,7 @@ async def ChangeLanguageMenu(c: PyMouse, cb: CallbackQuery, i18n): # type: ignor
         ),
         back_callback=changemenu_back
     )
-    await cb.edit_message_text(
+    await sender(
         text=text_and_buttons.text,
         reply_markup=text_and_buttons.buttons,
     )

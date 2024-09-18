@@ -31,10 +31,6 @@ async def privacyPolicy(c: PyMouse, union: Union[Message, CallbackQuery], i18n):
             text=i18n["buttons"]["privacy-data"],
             callback_data="PrivacyData",
         ),
-        InlineButton(
-            text=i18n["buttons"]["back"],
-            callback_data="StartBack"
-        )
     )
     if isinstance(union, Message):
         await union.reply(
@@ -42,6 +38,12 @@ async def privacyPolicy(c: PyMouse, union: Union[Message, CallbackQuery], i18n):
             reply_markup=keyboard,
         )
     elif isinstance(union, CallbackQuery):
+        keyboard.row(
+            InlineButton(
+                text=i18n["buttons"]["back"],
+                callback_data="StartBack"
+            )
+        )
         await union.edit_message_text(
             text=privacypolicyText,
             reply_markup=keyboard,
