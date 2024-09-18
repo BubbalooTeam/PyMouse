@@ -149,10 +149,6 @@ async def download_handler(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
                 i18n=i18n,
             )
 
-            await c.delete_messages(
-                chat_id=chat_id,
-                message_ids=cb.message.id,
-            )
             DownloadPaths().Delete_FileName(filename=thumb)
             rmtree(tempdir)
     except MessageNotModified:
