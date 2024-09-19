@@ -1,0 +1,10 @@
+{
+    "users": [
+        {
+            "age": 1000,
+            "city": "Sorocaba",
+            "name": "Alice",
+            "parents": "John"
+        }
+    ]
+}

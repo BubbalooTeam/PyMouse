@@ -1,0 +1,4 @@
+github.com/fasthttp/router v1.5.0/go.mod h1:FddcKNXFZg1imHcy+uKB0oo/o6yE9zD3wNguqlhWDak=
+github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
+github.com/mymmrac/telego v0.29.3-0.20240416071312-2735ffa835d8/go.mod h1:qOVAfWPakrL4F7oY8Mc89/mrL/8gWHAWsa+7HIZK7XU=
+github.com/valyala/fasthttp v1.52.0/go.mod h1:hf5C4QnVMkNXMspnsUlfM3WitlgYflyhHYoKol/szxQ=
