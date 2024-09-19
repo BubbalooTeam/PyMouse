@@ -56,24 +56,23 @@ func SaveDB() {
 	}
 }
 
-// Collection represents a database collection.
 type Collection struct {
 	name string
 }
 
-// NewCollection creates a new Collection and loads the database.
 func NewCollection(name string) *Collection {
-	LoadDB() // Carregar a base de dados ao criar a coleção
+	LoadDB()
 	return &Collection{name: name}
 }
 
-// FindOne searches for a single item in the collection that matches the filter.
-func (c *Collection) FindOne(filter map[string]interface{}) map[string]interface{} {
+func (c *Collection) FindMatches(filter map[string]interface{}) []map[string]interface{} {
 	collectionData := db[c.name]
+	var results []map[string]interface{}
+
 	if len(filter) == 0 {
-		fmt.Println("[database/modules]: No filter provided for findOne.")
-		return nil
+		return collectionData
 	}
+
 	for _, item := range collectionData {
 		matches := true
 		for k, v := range filter {
@@ -83,13 +82,12 @@ func (c *Collection) FindOne(filter map[string]interface{}) map[string]interface
 			}
 		}
 		if matches {
-			return item
+			results = append(results, item)
 		}
 	}
-	return nil
+	return results
 }
 
-// InsertOrUpdate inserts a new item or updates an existing one based on the filter.
 func (c *Collection) InsertOrUpdate(filter, info map[string]interface{}) bool {
 	if len(info) == 0 {
 		fmt.Println("[database/modules]: No information provided for insertOrUpdate.")
@@ -110,17 +108,16 @@ func (c *Collection) InsertOrUpdate(filter, info map[string]interface{}) bool {
 					item[k] = v
 				}
 				collectionData[i] = item
-				SaveDB() // Save after update
+				SaveDB()
 				return true
 			}
 		}
 	}
 	db[c.name] = append(collectionData, info)
-	SaveDB() // Save after insert
+	SaveDB()
 	return true
 }
 
-// Delete removes items from the collection based on the filter.
 func (c *Collection) Delete(filter map[string]interface{}) bool {
 	collectionData := db[c.name]
 	deleted := false
@@ -136,13 +133,13 @@ func (c *Collection) Delete(filter map[string]interface{}) bool {
 			if matches {
 				collectionData = append(collectionData[:i], collectionData[i+1:]...)
 				deleted = true
-				i-- // adjust index after removal
+				i--
 			}
 		}
 	} else {
 		db[c.name] = []map[string]interface{}{}
 		deleted = true
 	}
-	SaveDB() // Save after delete
+	SaveDB()
 	return deleted
 }
