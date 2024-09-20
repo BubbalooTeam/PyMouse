@@ -118,7 +118,7 @@ func (c *Collection) InsertOrUpdate(filter, info map[string]interface{}) bool {
 	return true
 }
 
-func (c *Collection) Delete(filter map[string]interface{}) bool {
+func (c *Collection) DeleteMatches(filter map[string]interface{}) bool {
 	collectionData := db[c.name]
 	deleted := false
 	if filter != nil {
