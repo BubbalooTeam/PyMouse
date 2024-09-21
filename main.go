@@ -14,6 +14,7 @@ import (
 )
 
 func main() {
+	fmt.Println("\033[0;34mCreating Bot Client...\033")
 	botClient, err := client.CreateBot(config.BotToken)
 	if err != nil {
 		log.Fatalf("Error in creating bot Client: %v", err)
@@ -23,34 +24,37 @@ func main() {
 	signal.Notify(chanSignal, syscall.SIGINT, syscall.SIGTERM)
 	botSignal := make(chan struct{}, 1)
 
+	fmt.Println("\033[0;34mBot Created, Starting Get Updates of Long Polling...\033")
 	updates, err := client.GetUpdates(botClient)
 	if err != nil {
 		log.Fatalf("Error in get Updates of TelegramBot: %v", err)
 	}
+	fmt.Println("\033[0;34mGetUpdates Started With Successfully, Creating Bot Handler...\033")
 	botHandler, err := th.NewBotHandler(botClient, updates)
 	if err != nil {
-		log.Fatalf("Error in create NewBotHandler: %v", err)
+		log.Fatalf("Error in Create NewBotHandler: %v", err)
 	}
+	fmt.Println("\033[0;33mBot Handler Created, Registering Handlers...\033")
 	handlerClass := pymouse.NewHandler(botClient, botHandler)
 	handlerClass.Register()
+	fmt.Println("\033[0;33mHandler Registered, PyMouse is almost starting...\033")
 
 	botUser, err := botClient.GetMe()
 	if err != nil {
 		log.Fatal(err)
 	}
 	go func() {
-		// Wait for stop signal
 		<-chanSignal
-		fmt.Println("\033[0;31mStopping...\033[0m")
+		fmt.Println("\033[0;31mStopping PyMouse...\033[0m")
 
 		botClient.StopLongPolling()
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println("Long polling stopped")
+		fmt.Println("Long polling stopped.")
 
 		botHandler.Stop()
-		fmt.Println("Bot handler stopped")
+		fmt.Println("Bot handler stopped.")
 
 		botSignal <- struct{}{}
 	}()

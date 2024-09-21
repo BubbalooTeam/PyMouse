@@ -12,13 +12,13 @@ type BotStruct struct {
 	Handler *th.BotHandler
 }
 
-func NewHandler(bot *telego.Bot, bh *th.BotHandler) *BotStruct {
+func NewHandler(bot *telego.Bot, botHandler *th.BotHandler) *BotStruct {
 	return &BotStruct{
 		Client:  bot,
-		Handler: bh,
+		Handler: botHandler,
 	}
 }
 
-func (h *BotStruct) Register() {
-	h.Handler.Handle(modules.Start, th.CommandEqual("start"))
+func (bS *BotStruct) Register() {
+	bS.Handler.Handle(modules.Start, th.CommandEqual("start"))
 }
