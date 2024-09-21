@@ -4,17 +4,19 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
+	"pymouse/pymouse/config"
 	"time"
 )
 
-var dbFile = "pymouse/database/files/database.json"
+var dbFile = config.DatabaseFile
 var db = make(map[string][]map[string]interface{})
 
 func LoadDB() {
 	data, err := os.ReadFile(dbFile)
 	if err != nil {
 		if os.IsNotExist(err) {
-			err = os.MkdirAll("pymouse/database/files", os.ModePerm)
+			err = os.MkdirAll(filepath.Dir(dbFile), os.ModePerm)
 			if err != nil {
 				fmt.Printf("Error in Making a Directory: %v\n", err)
 				return
@@ -44,7 +46,7 @@ func SaveDB() {
 		return
 	}
 
-	err = os.MkdirAll("pymouse/database/files", os.ModePerm)
+	err = os.MkdirAll(filepath.Dir(dbFile), os.ModePerm)
 	if err != nil {
 		fmt.Printf("Error in making a database directory: %v\n", err)
 		return
