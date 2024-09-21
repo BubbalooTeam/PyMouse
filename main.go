@@ -19,9 +19,9 @@ func main() {
 		log.Fatalf("Error in creating bot Client: %v", err)
 	}
 
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	done := make(chan struct{}, 1)
+	chanSignal := make(chan os.Signal, 1)
+	signal.Notify(chanSignal, syscall.SIGINT, syscall.SIGTERM)
+	botSignal := make(chan struct{}, 1)
 
 	updates, err := client.GetUpdates(botClient)
 	if err != nil {
@@ -40,7 +40,7 @@ func main() {
 	}
 	go func() {
 		// Wait for stop signal
-		<-sigs
+		<-chanSignal
 		fmt.Println("\033[0;31mStopping...\033[0m")
 
 		botClient.StopLongPolling()
@@ -52,13 +52,13 @@ func main() {
 		botHandler.Stop()
 		fmt.Println("Bot handler stopped")
 
-		done <- struct{}{}
+		botSignal <- struct{}{}
 	}()
 
 	go botHandler.Start()
 	fmt.Println("\033[0;32m\U0001F680 Bot Started\033[0m")
 	fmt.Printf("\033[0;36mBot Info:\033[0m %v - @%v\n", botUser.FirstName, botUser.Username)
 
-	<-done
+	<-botSignal
 	fmt.Println("Done!")
 }
