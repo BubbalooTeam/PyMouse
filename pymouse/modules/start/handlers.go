@@ -1,4 +1,4 @@
-package modules
+package start
 
 import (
 	"github.com/mymmrac/telego"
