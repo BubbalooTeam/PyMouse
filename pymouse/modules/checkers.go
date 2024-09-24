@@ -27,7 +27,7 @@ func SaveUsers(bot *telego.Bot, update telego.Update, next th.Handler) {
 	if message.SenderChat != nil {
 		return
 	}
-	UserID := strconv.FormatInt(message.From.ID, 10)
+	UserID := message.From.ID
 	UserFirstName := message.From.FirstName
 	userLanguage := message.From.LanguageCode
 	if message.From.Username != "" {
@@ -35,10 +35,9 @@ func SaveUsers(bot *telego.Bot, update telego.Update, next th.Handler) {
 	}
 
 	usersCollection := database.NewCollection("users")
-	userFilter := map[string]interface{}{"UserID": UserID}
+	userFilter := map[string]interface{}{"UserID": strconv.FormatInt(UserID, 10)}
 	findUser := func() bool {
 		UserInfoList := usersCollection.FindMatches(userFilter)
-		fmt.Println(UserInfoList)
 		if len(UserInfoList) > 0 {
 			UserInfoByte, err := json.Marshal(UserInfoList[0])
 			if err != nil {
@@ -69,15 +68,15 @@ func SaveUsers(bot *telego.Bot, update telego.Update, next th.Handler) {
 		UserNeedUpdate := findUser()
 		if UserNeedUpdate {
 			userData := map[string]interface{}{
-				"UserID":       UserID,
+				"UserID":       strconv.FormatInt(UserID, 10),
 				"FirstName":    UserFirstName,
 				"UserName":     UserUserName,
 				"UserLanguage": userLanguage,
 			}
 			usersCollection.InsertOrUpdate(userFilter, userData)
-			fmt.Printf("\033[0;36mInserted/Updated User %s[%s] successfully!\033[0m", UserFirstName, UserID)
+			fmt.Printf("\033[0;36mInserted/Updated User %s[%s] successfully!\033[0m", UserFirstName, strconv.FormatInt(UserID, 10))
 		}
 	}
-	updateUser()
+	go updateUser()
 	next(bot, update)
 }

@@ -2,7 +2,6 @@ package afk
 
 import (
 	"regexp"
-	"strconv"
 	"time"
 
 	"github.com/mymmrac/telego"
@@ -11,7 +10,11 @@ import (
 
 func SetAFK(bot *telego.Bot, update telego.Update) {
 	reason := extractReason(update.Message.Text)
-	SetupAFK(strconv.FormatInt(update.Message.From.ID, 10), time.Now(), reason)
+	SetupAFK(
+		update.Message.From.ID,
+		time.Now(),
+		reason,
+	)
 	bot.SendMessage(&telego.SendMessageParams{
 		ChatID: telegoutil.ID(update.Message.Chat.ID),
 		Text:   "is now AFK!",
