@@ -11,9 +11,9 @@
 
 
 from hydrogram.types import Message
-from pymouse import PyMouse, Decorators
+from pymouse import PyMouse, Decorators, Groups
 
-@PyMouse.on_message(group=1)
+@PyMouse.on_message(group=Groups().getGroup())
 @Decorators().SaveUsers()
 @Decorators().SaveChats()
 async def bot_utilities(c: PyMouse, m: Message): # type: ignore

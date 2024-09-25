@@ -9,7 +9,10 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+GroupNumber = 0
 
 class Groups:
-    def __init__(self):
-        pass
+    @staticmethod
+    def getGroup():
+        GroupNumber + 1
+        return GroupNumber
