@@ -7,7 +7,7 @@
             "native-language": "<b>Este é o idioma nativo do bot. Está <code>100% traduzido.</code></b>",
             "missing-translations": "<b>Ainda há traduções faltando! Apenas <code>{strings_percentage}%</code> do bot foi traduzido!</b>",
             "language-info": "\n\n<b>Informações do idioma:</b>",
-            "language-total-strings": "\n\n\\n\\n- <b>Total de cordas:</b> <code>{total_strings}</code>",
+            "language-total-strings": "\n\n- <b>Total de cordas:</b> <code>{total_strings}</code>",
             "language-translated": "\n- <b>Cordas traduzidas:</b> <code>{translated_strings}</code>",
             "language-untranslated": "\n- <b>Cordas sem tradução:</b> <code>{untranslated_strings}</code>"
         },
@@ -54,7 +54,7 @@
         "start-group": "<b>Olá! Meu nome é {bot}!</b>",
         "privacy-policy": "<b>{bot} Política de Privacidade:</b>\n\n<i>Este bot foi projetado e criado para garantir sua segurança e privacidade.\nObrigado pela sua confiança, nossa organização valoriza a proteção dos seus dados, além disso, valorizamos qualidade.\n\nA política de privacidade atual pode ser atualizada a qualquer momento, mas essa mudança será comunicada com dias de antecedência no canal de notícias.</i>",
         "privacy-policyRead": "Clique no botão abaixo para ler e abrir a Política de Privacidade do <b>{bot}</b>.",
-        "help-below": "Click the button below to open the documentation and get help of the <b>{bot}</b>."
+        "help-below": "Clique no botão abaixo para abrir a documentação e obter ajuda do <b>{bot}</b>."
     },
     "weather": {
         "humidity": "Umidade: {humidity} %",
