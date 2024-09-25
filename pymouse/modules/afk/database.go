@@ -2,6 +2,7 @@ package afk
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"pymouse/pymouse/database"
 	"strconv"
@@ -65,36 +66,31 @@ func UnsetupAFK(
 	updateAFK(UserID, false, time.Time{}, "")
 }
 
-func GetAFK(UserID int64) (map[string]interface{}, error) {
+func GetAFK(UserID int64) map[string]interface{} {
 	usersCollection := database.NewCollection("users")
-	AFKch := make(chan map[string]interface{})
-	AFKerrCh := make(chan error)
 
-	go func() {
-		AFKresponse := usersCollection.FindMatches(map[string]interface{}{"UserID": strconv.FormatInt(UserID, 10)})
-		if len(AFKresponse) > 0 {
-			AFKByte, err := json.Marshal(AFKresponse[0])
-			if err != nil {
-				AFKerrCh <- err
-				return
-			}
-			err = json.Unmarshal(AFKByte, &GetAFKJSON)
-			if err != nil {
-				AFKerrCh <- err
-				return
-			}
-
-			afkData := GetAFKJSON["AFK"].(map[string]interface{})
-			AFKch <- afkData
-		} else {
-			AFKch <- nil
+	AFKresponse := usersCollection.FindMatches(map[string]interface{}{"UserID": strconv.FormatInt(UserID, 10)})
+	if len(AFKresponse) > 0 {
+		AFKByte, err := json.Marshal(AFKresponse[0])
+		if err != nil {
+			log.Fatalf("Error marshalling AFK response: %v", err)
+			return nil // Return an empty map if there's an error
 		}
-	}()
 
-	select {
-	case afkData := <-AFKch:
-		return afkData, nil
-	case err := <-AFKerrCh:
-		return nil, err
+		err = json.Unmarshal(AFKByte, &GetAFKJSON)
+		if err != nil {
+			fmt.Println("Error unmarshalling AFK response:", err)
+			return nil // Return an empty map if there's an error
+		}
+
+		afkData := GetAFKJSON["AFK"]
+		if afkData != nil {
+			return afkData.(map[string]interface{})
+		} else {
+			return nil
+		}
+	} else {
+		fmt.Println("User Not Found for AFK function.")
+		return nil
 	}
 }

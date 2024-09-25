@@ -25,4 +25,5 @@ func (bS *BotStruct) Register() {
 	bS.Handler.Use(modules.SaveUsers)
 	bS.Handler.Handle(start.Start, th.CommandEqual("start"))
 	bS.Handler.Handle(afk.SetAFK, th.CommandEqual("afk"))
+	bS.Handler.Handle(afk.AFKtest, th.CommandEqual("tcafk"))
 }
