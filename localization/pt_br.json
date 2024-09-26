@@ -19,9 +19,17 @@
         "is-now-unavalaible": "<b>{user} agora está indisponível!</b>",
         "is-back": "<b>{user} voltou!</b>"
     },
+    "enums": {
+        "chatType": {
+            "OnlyPrivate": "This only works in private, not in groups.",
+            "OnlyGroup": "This only works in groups, not in private."
+        }
+    },
     "generic-strings": {
         "last-seen": "\n<b>Visto por último há:</b> <code>{formattedtime}</code>",
-        "reason": "\n<b>Motivo:</b> <code>{reason}</code>"
+        "reason": "\n<b>Motivo:</b> <code>{reason}</code>",
+        "not-admin": "<b>You're not administrator!</b>",
+        "admin-need-permissions": "<b>You do not have the following administrator permissions to perform this action:</b> <code>{permissions}</code>"
     },
     "gsmarena": {
         "phoneFormatter": {

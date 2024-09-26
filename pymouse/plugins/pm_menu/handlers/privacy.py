@@ -13,10 +13,11 @@ from io import BytesIO
 from typing import Union
 
 from hydrogram import filters
-from hydrogram.types import Message, CallbackQuery
+from hydrogram.types import Message, CallbackQuery, ChatPrivileges
+from hydrogram.enums import ChatType
 from hydrokeyboard import InlineKeyboard, InlineButton
 
-from pymouse import PyMouse, Decorators, usersmodel_db, router
+from pymouse import PyMouse, Decorators, usersmodel_db, chatsmodel_db, router
 
 @router.message(filters.command("privacy"))
 @router.callback(filters.regex(r"^PrivacyPolicy$"))
@@ -72,21 +73,30 @@ async def privacyPolicyRead(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
     )
 
 @router.callback(filters.regex(r"^YourDataCollected$"))
-@Decorators().Locale()
-async def ReadYourData(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
-    user_id = cb.from_user.id
+@Decorators().CheckAdminRight(
+    permissions=ChatPrivileges(can_change_info=True),
+    accept_in_private=True
+)
+async def ReadYourData(c: PyMouse, cb: CallbackQuery): # type: ignore
+    data = {}
+    TGid=cb.from_user.id if cb.message.chat.type == ChatType.PRIVATE else cb.message.chat.id
     # GET data in the DataBase.
-    data = usersmodel_db.users_db.getuser_dict(
-        user_id=user_id,
-    )
+    if cb.message.chat.type == ChatType.PRIVATE:
+        data = usersmodel_db.users_db.getuser_dict(
+            user_id=TGid,
+        )
+    else:
+        data = chatsmodel_db.chats_db.get_chat_dict(
+            chat_id=TGid,
+        )
     # Make document with informations.
     file = BytesIO(str.encode(str(data)))
-    file.name = "{user_id}_dataInfos.txt".format(
-        user_id=user_id,
+    file.name = "{TGid}_dataInfos.txt".format(
+        TGid=TGid,
     )
-    await cb.edit_message_text("Sending your data...")
+    await cb.edit_message_text("Sending chat data...")
     await c.send_document(
-        chat_id=user_id,
+        chat_id=cb.from_user.id,
         document=file,
     )
-    await cb.edit_message_text("Your details have been sent to you, check your messages in PyMouse profile.")
+    await cb.edit_message_text("Your details have been sent to you, check your messages in your chat with me.")

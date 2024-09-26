@@ -12,8 +12,10 @@
 from asyncio import get_event_loop
 from typing import Union, Optional, Callable
 from functools import partial, wraps
-from hydrogram.types import Message, CallbackQuery, InlineQuery
-from hydrogram.enums import ChatType
+from re import sub as subs
+
+from hydrogram.types import Message, CallbackQuery, InlineQuery, ChatPrivileges
+from hydrogram.enums import ChatType, ChatMemberStatus
 
 from pymouse import PyMouse, Config, db, usersmodel_db, chatsmodel_db, localization
 
@@ -81,6 +83,72 @@ class Decorators:
                 return await func(c, m, *args, **kwargs)
             return wrapper
         return decorator
+
+    def CheckAdminRight(
+        self,
+        permissions: ChatPrivileges | None = None,
+        accept_in_private: bool = False,
+        complain_missing_permissions: bool = True
+    ):
+        def decorator(func: Callable) -> Callable:
+            @wraps(func)
+            async def wrapper(c: PyMouse, union: Union[Message, CallbackQuery], *args, **kwargs): # type: ignore
+                patternSender = r"<(b|code|i|a.*?>)(.*?)</\1>"
+                language = localization.get_localization_of_chat(union)
+                i18n = localization.strings.get(language, {})
+                m = union if isinstance(union, Message) else union.message
+                MessageSender = union.reply_text if isinstance(union, Message) else partial(union.answer, show_alert=True)
+
+                if m.chat.type == ChatType.PRIVATE:
+                    if accept_in_private:
+                        return await func(c, union, *args, **kwargs)
+                    SenderText = i18n["enums"]["chatType"]["OnlyGroups"]
+                    if isinstance(union, CallbackQuery):
+                        SenderText = subs(patternSender, r"\2", SenderText)
+                    return await MessageSender(SenderText)
+                elif m.chat.type == ChatType.CHANNEL:
+                    return await func(c, union, *args, **kwargs)
+
+                user = await m.chat.get_member(union.from_user.id)
+                if (
+                    user.status == ChatMemberStatus.OWNER
+                    or not permissions
+                    and user.status == ChatMemberStatus.ADMINISTRATOR
+                ):
+                    return await func(c, union, *args, **kwargs)
+                if user.status != ChatMemberStatus.ADMINISTRATOR:
+                    if complain_missing_permissions:
+                        SenderText = i18n["generic-strings"]["not-admin"]
+                        if isinstance(union, CallbackQuery):
+                            SenderText = subs(patternSender, r"\2", SenderText)
+                        return await MessageSender(SenderText)
+                    return None
+
+                missing_permissions = [
+                    permissions
+                    for permissions, value in permissions.__dict__.items()
+                    if value and not getattr(user.privileges, permissions)
+                ]
+
+                if not missing_permissions:
+                    return await func(c, union, *args, **kwargs)
+
+                if complain_missing_permissions:
+                    SenderText = i18n["generic-strings"]["admin-need-permissions"].format(
+                        permissions=(
+                            ", ".join(missing_permissions[:-1])
+                            + " and " + missing_permissions[-1]
+                            if len(missing_permissions) > 1
+                            else missing_permissions[0]
+                            if missing_permissions else ""
+                        )
+                    )
+                    if isinstance(union, CallbackQuery):
+                        SenderText = subs(patternSender, r"\2", SenderText)
+                    return await MessageSender(SenderText)
+            return wrapper
+        return decorator
+
 
     def Locale(self):
         """Get strings from chat localization"""

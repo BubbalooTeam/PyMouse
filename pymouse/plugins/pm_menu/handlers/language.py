@@ -12,13 +12,17 @@
 from typing import Union
 
 from hydrogram import filters
-from hydrogram.types import Message, CallbackQuery
+from hydrogram.types import Message, CallbackQuery, ChatPrivileges
 
 from pymouse import PyMouse, Decorators, router
 from pymouse.plugins.pm_menu.utilities.localization import LocalizationInfo
 
 @router.message(filters.command(["setlang", "lang"]))
 @router.callback(filters.regex(r"^LangMenu\|(.*)$"))
+@Decorators().CheckAdminRight(
+    permissions=ChatPrivileges(can_change_info=True),
+    accept_in_private=True
+)
 @Decorators().Locale()
 async def ChangeLanguageMenu(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
     sender = union.edit_message_text if isinstance(union, CallbackQuery) else union.reply
@@ -46,6 +50,10 @@ async def ChangeLanguageMenu(c: PyMouse, union: Union[Message, CallbackQuery], i
     )
 
 @router.callback(filters.regex(r"ChangeLanguage\|(.*)$"))
+@Decorators().CheckAdminRight(
+    permissions=ChatPrivileges(can_change_info=True),
+    accept_in_private=True
+)
 @Decorators().Locale()
 async def SelectLanguageMenu(_, cb: CallbackQuery, i18n): # type: ignore
     inf = cb.data.split("|")
@@ -66,6 +74,10 @@ async def SelectLanguageMenu(_, cb: CallbackQuery, i18n): # type: ignore
     )
 
 @router.callback(filters.regex(r"SwitchLang\|(.*)$"))
+@Decorators().CheckAdminRight(
+    permissions=ChatPrivileges(can_change_info=True),
+    accept_in_private=True
+)
 @Decorators().Locale()
 async def SwitchLanguage(_, cb: CallbackQuery, i18n):
     inf = cb.data.split("|")
