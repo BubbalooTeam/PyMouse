@@ -9,6 +9,8 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import sentry_sdk
+
 from asyncio import get_event_loop
 from typing import Union, Optional, Callable
 from functools import partial, wraps
@@ -175,6 +177,7 @@ class Decorators:
                 except (StopTransmission, StopPropagation):
                     pass
                 except Exception as e:
+                    sentry_sdk.capture_exception(e)
                     SenderText = i18n["generic-strings"]["error-occurred"].format(
                         error=f"{e.__class__.__name__}: {e}\n-> Line: {e.__traceback__.tb_lineno}\n-> File: {e.__traceback__.tb_frame.f_code.co_filename}"
                     )
