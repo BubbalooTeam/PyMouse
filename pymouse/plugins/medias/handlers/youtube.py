@@ -71,6 +71,7 @@ async def ytdl_handler(_, m: Message, i18n): # type: ignore
         await m.reply_photo(photo=img, caption=caption, reply_markup=markup)
 
 @router.callback(filters.regex(r"ytdl_scroll\|(.*)$"))
+@Decorators().CatchError()
 @Decorators().Locale()
 async def ytdl_scroll_callback(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
     inf = cb.data.split("|")
@@ -107,6 +108,7 @@ async def ytdl_scroll_callback(c: PyMouse, cb: CallbackQuery, i18n): # type: ign
         )
 
 @router.callback(filters.regex(r"yt_(gen|dl)\|(.*)$"))
+@Decorators().CatchError()
 @Decorators().Locale()
 async def download_handler(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
     inf = cb.data.split("|")
