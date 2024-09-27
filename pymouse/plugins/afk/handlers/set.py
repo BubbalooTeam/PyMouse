@@ -19,6 +19,7 @@ from pymouse.utils import HandleText
 from ..utilities.afk import afk_utils
 
 @router.message(filters.command("afk") | filters.regex(r"^(?i:brb)(\s(.+))?"))
+@Decorators().CatchError()
 @Decorators().Locale()
 async def setupAFK(_, m: Message, i18n): # type: ignore
     user = m.from_user

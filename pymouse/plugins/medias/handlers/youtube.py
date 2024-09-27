@@ -33,6 +33,7 @@ YOUTUBE_REGEX = comp(
 YT_VAR = {}
 
 @router.message(filters.command("ytdl"))
+@Decorators().CatchError()
 @Decorators().Locale()
 async def ytdl_handler(_, m: Message, i18n): # type: ignore
     query = HandleText().input_str(union=m)

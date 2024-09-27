@@ -21,6 +21,7 @@ from pymouse import PyMouse, Decorators, usersmodel_db, chatsmodel_db, router
 
 @router.message(filters.command("privacy"))
 @router.callback(filters.regex(r"^PrivacyPolicy$"))
+@Decorators().CatchError()
 @Decorators().Locale()
 async def privacyPolicy(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
     privacypolicyText = i18n["pm-menu"]["privacy-policy"].format(
@@ -51,6 +52,7 @@ async def privacyPolicy(c: PyMouse, union: Union[Message, CallbackQuery], i18n):
         )
 
 @router.callback(filters.regex("^PrivacyData$"))
+@Decorators().CatchError()
 @Decorators().Locale()
 async def privacyPolicyRead(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
     privacypolicyReadText = i18n["pm-menu"]["privacy-policyRead"].format(
@@ -73,6 +75,7 @@ async def privacyPolicyRead(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
     )
 
 @router.callback(filters.regex(r"^YourDataCollected$"))
+@Decorators().CatchError()
 @Decorators().CheckAdminRight(
     permissions=ChatPrivileges(can_change_info=True),
     accept_in_private=True

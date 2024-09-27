@@ -19,6 +19,7 @@ from pymouse.plugins.pm_menu.utilities.localization import LocalizationInfo
 
 @router.message(filters.command(["setlang", "lang"]))
 @router.callback(filters.regex(r"^LangMenu\|(.*)$"))
+@Decorators().CatchError()
 @Decorators().CheckAdminRight(
     permissions=ChatPrivileges(can_change_info=True),
     accept_in_private=True
@@ -50,6 +51,7 @@ async def ChangeLanguageMenu(c: PyMouse, union: Union[Message, CallbackQuery], i
     )
 
 @router.callback(filters.regex(r"ChangeLanguage\|(.*)$"))
+@Decorators().CatchError()
 @Decorators().CheckAdminRight(
     permissions=ChatPrivileges(can_change_info=True),
     accept_in_private=True
@@ -74,6 +76,7 @@ async def SelectLanguageMenu(_, cb: CallbackQuery, i18n): # type: ignore
     )
 
 @router.callback(filters.regex(r"SwitchLang\|(.*)$"))
+@Decorators().CatchError()
 @Decorators().CheckAdminRight(
     permissions=ChatPrivileges(can_change_info=True),
     accept_in_private=True

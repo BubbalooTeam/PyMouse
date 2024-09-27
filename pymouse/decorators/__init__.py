@@ -14,8 +14,10 @@ from typing import Union, Optional, Callable
 from functools import partial, wraps
 from re import sub as subs
 
+from hydrogram import StopPropagation, StopTransmission
 from hydrogram.types import Message, CallbackQuery, InlineQuery, ChatPrivileges
 from hydrogram.enums import ChatType, ChatMemberStatus
+from hydrogram.errors import ChatWriteForbidden
 
 from pymouse import PyMouse, Config, db, usersmodel_db, chatsmodel_db, localization
 
@@ -38,6 +40,7 @@ class Decorators:
         return decorator
 
     def require_dev(self, only_owner: Optional[bool] = False):
+        "Check if user, is a developer or owner of PyMouse."
         def decorator(func) -> Callable:
             @wraps(func)
             async def wrapper(c: PyMouse, m: Message, *args, **kwargs): # type: ignore
@@ -56,6 +59,7 @@ class Decorators:
         return decorator
 
     def SaveUsers(self):
+        "Save and Update a user in DataBase."
         def decorator(func) -> Callable:
             @wraps(func)
             async def wrapper(c: PyMouse, m: Message, *args, **kwargs): # type: ignore
@@ -71,6 +75,7 @@ class Decorators:
         return decorator
 
     def SaveChats(self):
+        "Save and Update a chat in DataBase."
         def decorator(func) -> Callable:
             @wraps(func)
             async def wrapper(c: PyMouse, m: Message, *args, **kwargs): # type: ignore
@@ -90,6 +95,7 @@ class Decorators:
         accept_in_private: bool = False,
         complain_missing_permissions: bool = True
     ):
+        "Check if the user is Administrator of the chat."
         def decorator(func: Callable) -> Callable:
             @wraps(func)
             async def wrapper(c: PyMouse, union: Union[Message, CallbackQuery], *args, **kwargs): # type: ignore
@@ -149,6 +155,34 @@ class Decorators:
             return wrapper
         return decorator
 
+    def CatchError(self):
+        """Captures the Error, Creates a Report and Sends it to the User."""
+        def decorator(func) -> Callable:
+            @wraps(func)
+            async def wrapper(c: PyMouse, union: Union[Message, CallbackQuery], *args, **kwargs): # type: ignore
+                language = localization.get_localization_of_chat(union)
+                i18n = localization.strings.get(language, {})
+                m = union if isinstance(union, Message) else union.message
+                patternSender = r"<(b|code|i|a.*?>)(.*?)</\1>"
+                MessageSender = union.reply_text if isinstance(union, Message) else partial(union.answer, show_alert=True)
+
+                try:
+                    return await func(c, union, *args, **kwargs)
+                except ChatWriteForbidden:
+                    return await PyMouse.leave_chat(
+                        chat_id=m.chat.id
+                    )
+                except (StopTransmission, StopPropagation):
+                    pass
+                except Exception as e:
+                    SenderText = i18n["generic-strings"]["error-occurred"].format(
+                        error=f"{e.__class__.__name__}: {e}\n-> Line: {e.__traceback__.tb_lineno}\n-> File: {e.__traceback__.tb_frame.f_code.co_filename}"
+                    )
+                    if isinstance(union, CallbackQuery):
+                        SenderText = subs(patternSender, r"\2", SenderText)
+                    return await MessageSender(SenderText)
+            return wrapper
+        return decorator
 
     def Locale(self):
         """Get strings from chat localization"""

@@ -20,6 +20,7 @@ from pymouse import PyMouse, Decorators, router
 
 @router.message(filters.command("start"))
 @router.callback(filters.regex(r"^StartBack$"))
+@Decorators().CatchError()
 @Decorators().Locale()
 async def start_(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
     keyboard = InlineKeyboard()

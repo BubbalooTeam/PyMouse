@@ -8,6 +8,7 @@ from ..utilities.gsmarena import HandleGSMarena
 
 @router.message(filters.command(["d", "specs"]))
 @router.callback(filters.regex(r"device\|(.*)$"))
+@Decorators().CatchError()
 @Decorators().Locale()
 async def GSMarenaHandle(_, union: Union[Message, CallbackQuery], i18n):
      # Run GSMarena with Handle

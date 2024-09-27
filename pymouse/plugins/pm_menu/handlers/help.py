@@ -8,6 +8,7 @@ from pymouse import PyMouse, Decorators, router
 
 @router.message(filters.command("help"))
 @router.callback(filters.regex(r"HelpMenu$"))
+@Decorators().CatchError()
 @Decorators().Locale()
 async def HelpMenu(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
     HelpText = i18n["pm-menu"]["help-below"].format(

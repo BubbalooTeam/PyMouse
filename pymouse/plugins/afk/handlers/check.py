@@ -5,6 +5,7 @@ from pymouse import PyMouse, Decorators, afkmodel_db, router
 from ..utilities.afk import afk_utils
 
 @router.message(~filters.private & ~filters.bot & filters.all, group=2)
+@Decorators().CatchError()
 @Decorators().Locale()
 async def handleAFK(c: PyMouse, m: Message, i18n): # type: ignore
     user = m.from_user

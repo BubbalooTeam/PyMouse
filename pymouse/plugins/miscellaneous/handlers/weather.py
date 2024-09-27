@@ -16,6 +16,7 @@ from pymouse import Decorators, router
 from ..utilities.weather import HandleWeather
 
 @router.message(filters.command("weather"))
+@Decorators().CatchError()
 @Decorators().Locale()
 async def weatherHandle(_, m: Message, i18n):
     # Run Weather Information's with Handle

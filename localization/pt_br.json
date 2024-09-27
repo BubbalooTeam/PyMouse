@@ -29,7 +29,8 @@
         "last-seen": "\n<b>Visto por último há:</b> <code>{formattedtime}</code>",
         "reason": "\n<b>Motivo:</b> <code>{reason}</code>",
         "not-admin": "<b>You're not administrator!</b>",
-        "admin-need-permissions": "<b>You do not have the following administrator permissions to perform this action:</b> <code>{permissions}</code>"
+        "admin-need-permissions": "<b>You do not have the following administrator permissions to perform this action:</b> <code>{permissions}</code>",
+        "error-occurred": "Dear user, unfortunately a surprise error occurred: <blockquote>{error}</blockquote>.\n\n<b>You can help us resolve it by submitting an issue on GitHub (https://github.com/BubbalooTeam/PyMouse/issues).</b>"
     },
     "gsmarena": {
         "phoneFormatter": {
