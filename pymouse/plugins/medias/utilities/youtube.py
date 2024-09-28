@@ -27,6 +27,7 @@ class YouTubeUtils:
     ):
         # Download and GET infos of the video from YouTube
         yt = await YT_DLP().downloader_method(
+            c=PyMouse,
             cb=cb,
             vid=vid,
             filepath=filepath,

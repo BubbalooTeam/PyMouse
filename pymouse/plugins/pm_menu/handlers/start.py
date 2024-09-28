@@ -13,7 +13,7 @@ from typing import Union
 
 from hydrogram import filters
 from hydrogram.types import Message, CallbackQuery
-from hydrogram.enums import ChatType
+from hydrogram.enums import ChatType, ChatAction
 from hydrokeyboard import InlineKeyboard, InlineButton
 
 from pymouse import PyMouse, Decorators, router
@@ -25,6 +25,12 @@ from pymouse import PyMouse, Decorators, router
 async def start_(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
     keyboard = InlineKeyboard()
 
+    chat = union.chat if isinstance(union, Message) else union.message.chat
+
+    await c.send_chat_action(
+        chat_id=chat.id,
+        action=ChatAction.TYPING,
+    )
     # Row button's for start message
     keyboard.row(
         InlineButton(

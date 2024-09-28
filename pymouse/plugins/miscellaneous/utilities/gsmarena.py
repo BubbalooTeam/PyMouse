@@ -2,9 +2,10 @@ from re import sub as subs
 from typing import Union
 
 from hydrogram.types import Message, CallbackQuery
+from hydrogram.enums import ChatAction
 from hydrokeyboard import InlineKeyboard, InlineButton
 
-from pymouse import GSMarena, GSMarenaDeviceBaseResult, GSMarenaSearchResults, log
+from pymouse import PyMouse, GSMarena, GSMarenaDeviceBaseResult, GSMarenaSearchResults, log
 from pymouse.utils import HandleText
 from pymouse.utils.tools.gsm_arena.exceptions import GSMarenaDeviceNotFound
 
@@ -68,15 +69,23 @@ def GSMarenaCreateKeyboard(search: GSMarenaSearchResults, user_id: int):
     return keyboard
 
 
-async def HandleGSMarena(union: Union[Message, CallbackQuery], i18n: dict):
+async def HandleGSMarena(c: PyMouse, union: Union[Message, CallbackQuery], i18n: dict): # type: ignore
+    chat = union.chat if isinstance(union,Message) else union.message.chat
     sender = union.reply if isinstance(union, Message) else union.edit_message_text
-    async def GSMarenaBuildMessage(deviceID: str, i18n: dict):
+
+    async def GSMarenaBuildMessage(c: PyMouse, deviceID: str, i18n: dict): # type: ignore
+        await c.send_chat_action(
+            chat_id=chat.id,
+            action=ChatAction.TYPING,
+        )
         fetchDevice = await gsm_arena.fetch_device(device=deviceID)
+
         formatedMessage = formatGSMarenaMessage(gsmarenaBaseResult=fetchDevice, i18n=i18n)
         return await sender(
             text=formatedMessage,
             disable_web_page_preview=False,
         )
+
     if isinstance(union, Message):
         query = HandleText().input_str(union=union)
         if query:
@@ -84,17 +93,29 @@ async def HandleGSMarena(union: Union[Message, CallbackQuery], i18n: dict):
                 getDevice = await gsm_arena.search_device(query=query)
                 if len(getDevice.results) >= 2:
                     keyboard = GSMarenaCreateKeyboard(search=getDevice, user_id=union.from_user.id)
-                    return await union.reply(
+                    await c.send_chat_action(
+                        chat_id=chat.id,
+                        action=ChatAction.TYPING,
+                    )
+                    return await sender(
                         text=i18n["gsmarena"]["reason"]["deviceLister"].format(
                             query=query,
                         ),
                         reply_markup=keyboard,
                     )
-                await GSMarenaBuildMessage(deviceID=getDevice.results[0].id, i18n=i18n)
+                await GSMarenaBuildMessage(c=c, deviceID=getDevice.results[0].id, i18n=i18n)
             except GSMarenaDeviceNotFound as err:
-                await union.reply(i18n["gsmarena"]["reason"]["deviceNotFound"])
+                await c.send_chat_action(
+                    chat_id=chat.id,
+                    action=ChatAction.TYPING,
+                )
+                await sender(i18n["gsmarena"]["reason"]["deviceNotFound"])
                 log.warning("%s: %s", err, query)
         else:
+            await c.send_chat_action(
+                chat_id=chat.id,
+                action=ChatAction.TYPING,
+            )
             await union.reply(i18n["gsmarena"]["reason"]["deviceNotProvided"])
     elif isinstance(union, CallbackQuery):
         inf = union.data.split("|")
@@ -103,4 +124,4 @@ async def HandleGSMarena(union: Union[Message, CallbackQuery], i18n: dict):
 
         if union.from_user.id != int(userID):
             return await union.answer(i18n["gsmarena"]["checkers"]["notforYou"], show_alert=True)
-        await GSMarenaBuildMessage(deviceID=deviceID, i18n=i18n)
+        await GSMarenaBuildMessage(c=c, deviceID=deviceID, i18n=i18n)

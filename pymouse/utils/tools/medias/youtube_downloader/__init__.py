@@ -337,6 +337,7 @@ class YT_DLP:
 
     async def downloader_method(
         self,
+        c: PyMouse, # type: ignore
         cb: CallbackQuery,
         vid: str,
         filepath: str,
@@ -345,6 +346,10 @@ class YT_DLP:
         i18n: dict
     ) -> YouTubeDownloaderInfo:
         if media_type == "video":
+            await c.send_chat_action(
+                chat_id=cb.message.chat.id,
+                action=ChatAction.RECORD_AUDIO
+            )
             opts = dict(
                 addmetadata=True,
                 geo_bypass=True,
@@ -358,6 +363,10 @@ class YT_DLP:
                 logtostderr=True
             )
         elif media_type == "audio":
+            await c.send_chat_action(
+                chat_id=cb.message.chat.id,
+                action=ChatAction.RECORD_AUDIO
+            )
             opts = dict(
                 outtmpl=path.join(filepath, "%(title)s-%(format)s.%(ext)s"),
                 logger=log,
@@ -382,6 +391,7 @@ class YT_DLP:
         url = "https://www.youtube.com/watch?v={vid_key}".format(
             vid_key=vid,
         )
+
         await cb.edit_message_caption(
             caption=i18n["youtube-dl"]["downloading"],
         )

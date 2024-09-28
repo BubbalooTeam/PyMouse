@@ -21,7 +21,7 @@ async def handleAFK(c: PyMouse, m: Message, i18n): # type: ignore
 
     is_afk = afkmodel_db.afk_db.getAFK(user.id).get("is_afk", False)
     if is_afk:
-        await afk_utils.stop_afk(m, i18n)
+        await afk_utils.stop_afk(c, m, i18n)
         return
 
     await afk_utils.check_afk(c, m, i18n)

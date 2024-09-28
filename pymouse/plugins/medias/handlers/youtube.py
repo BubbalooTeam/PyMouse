@@ -19,6 +19,7 @@ from traceback import format_exc
 
 from hydrogram import filters
 from hydrogram.types import Message, CallbackQuery, InputMediaPhoto
+from hydrogram.enums import ChatAction
 from hydrogram.errors import MessageNotModified
 from hydrokeyboard import InlineKeyboard, InlineButton
 
@@ -35,10 +36,14 @@ YT_VAR = {}
 @router.message(filters.command("ytdl"))
 @Decorators().CatchError()
 @Decorators().Locale()
-async def ytdl_handler(_, m: Message, i18n): # type: ignore
+async def ytdl_handler(c: PyMouse, m: Message, i18n): # type: ignore
     query = HandleText().input_str(union=m)
     keyboard = InlineKeyboard()
     # //
+    await c.send_chat_action(
+        chat_id=m.chat.id,
+        action=ChatAction.TYPING,
+    )
     if not query:
         return await m.reply(i18n["youtube-dl"]["checkers"]["noArgs"])
     match = YOUTUBE_REGEX.match(query)
@@ -61,6 +66,10 @@ async def ytdl_handler(_, m: Message, i18n): # type: ignore
         img = await YT_DLP().get_ytthumb(i["id"])
         caption = out
         markup = keyboard
+        await c.send_chat_action(
+            chat_id=m.chat.id,
+            action=ChatAction.UPLOAD_PHOTO,
+        )
         await m.reply_photo(photo=img, caption=caption, reply_markup=markup)
     else:
         key = match.group("id")
@@ -68,6 +77,10 @@ async def ytdl_handler(_, m: Message, i18n): # type: ignore
         img = await YT_DLP().get_ytthumb(key)
         caption = deatils.caption
         markup = deatils.buttons
+        await c.send_chat_action(
+            chat_id=m.chat.id,
+            action=ChatAction.UPLOAD_PHOTO,
+        )
         await m.reply_photo(photo=img, caption=caption, reply_markup=markup)
 
 @router.callback(filters.regex(r"ytdl_scroll\|(.*)$"))
@@ -80,6 +93,10 @@ async def ytdl_scroll_callback(c: PyMouse, cb: CallbackQuery, i18n): # type: ign
     user_id = int(inf[3])
     keyboard = InlineKeyboard()
     # //
+    await c.send_chat_action(
+        chat_id=cb.message.chat.id,
+        action=ChatAction.TYPING,
+    )
     if not cb.from_user.id == user_id:
         return await cb.answer(i18n["youtube-dl"]["checkers"]["notforYou"], show_alert=True)
     try:
@@ -99,6 +116,10 @@ async def ytdl_scroll_callback(c: PyMouse, cb: CallbackQuery, i18n): # type: ign
             if len(search["result"]) == 1:
                 return await cb.answer("That's the end of list", show_alert=True)
 
+        await c.send_chat_action(
+            chat_id=cb.message.chat.id,
+            action=ChatAction.UPLOAD_PHOTO,
+        )
         await cb.edit_message_media(
             InputMediaPhoto(await YT_DLP().get_ytthumb(i["id"]), caption=out), reply_markup=keyboard
         )
@@ -123,6 +144,10 @@ async def download_handler(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
         return await cb.answer(i18n["youtube-dl"]["checkers"]["notforYou"], show_alert=True)
     try:
         if inf[0] == "yt_gen":
+            await c.send_chat_action(
+                chat_id=cb.message.chat.id,
+                action=ChatAction.TYPING,
+            )
             x = (await YT_DLP().get_download_button(
                 yt_id=key,
                 user_id=user_id

@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from typing import Union, Optional, Pattern
 
 from hydrogram.types import Message, CallbackQuery
+from hydrogram.enums import ChatAction
 from hydrokeyboard import InlineKeyboard, InlineButton
 
 from pymouse import PyMouse, Decorators, localization
@@ -148,11 +149,15 @@ class LocalizationInfo:
     @staticmethod
     @Decorators().Locale()
     async def send_switchedlang_text_and_buttons(
-        _,
+        c: PyMouse, # type: ignore
         cb: CallbackQuery,
         changemenu_back: Optional[Union[str, Pattern]] = None,
         i18n: Optional[Union[dict, str]] = None,
     ):
+        await c.send_chat_action(
+            chat_id=cb.message.chat.id,
+            action=ChatAction.TYPING,
+        )
         keyboard = InlineKeyboard()
         keyboard.add(
             InlineButton(

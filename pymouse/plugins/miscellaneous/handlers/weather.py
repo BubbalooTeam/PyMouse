@@ -12,7 +12,7 @@
 from hydrogram import filters
 from hydrogram.types import Message
 
-from pymouse import Decorators, router
+from pymouse import PyMouse, Decorators, router
 from ..utilities.weather import HandleWeather
 
 @router.message(filters.command("weather"))
@@ -21,6 +21,7 @@ from ..utilities.weather import HandleWeather
 async def weatherHandle(_, m: Message, i18n):
     # Run Weather Information's with Handle
     await HandleWeather(
+        c=PyMouse,
         m=m,
         i18n=i18n
     )

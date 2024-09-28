@@ -14,7 +14,7 @@ from typing import Union
 
 from hydrogram import filters
 from hydrogram.types import Message, CallbackQuery, ChatPrivileges
-from hydrogram.enums import ChatType
+from hydrogram.enums import ChatType, ChatAction
 from hydrokeyboard import InlineKeyboard, InlineButton
 
 from pymouse import PyMouse, Decorators, usersmodel_db, chatsmodel_db, router
@@ -24,8 +24,14 @@ from pymouse import PyMouse, Decorators, usersmodel_db, chatsmodel_db, router
 @Decorators().CatchError()
 @Decorators().Locale()
 async def privacyPolicy(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
+    chat = union.chat if isinstance(union, Message) else union.message.chat
+
     privacypolicyText = i18n["pm-menu"]["privacy-policy"].format(
         bot=c.me.first_name,
+    )
+    await c.send_chat_action(
+        chat_id=chat.id,
+        action=ChatAction.TYPING,
     )
     keyboard = InlineKeyboard(row_width=1)
     keyboard.add(
@@ -55,6 +61,10 @@ async def privacyPolicy(c: PyMouse, union: Union[Message, CallbackQuery], i18n):
 @Decorators().CatchError()
 @Decorators().Locale()
 async def privacyPolicyRead(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
+    await c.send_chat_action(
+        chat_id=cb.message.chat.id,
+        action=ChatAction.TYPING,
+    )
     privacypolicyReadText = i18n["pm-menu"]["privacy-policyRead"].format(
         bot=c.me.first_name,
     )
@@ -97,9 +107,21 @@ async def ReadYourData(c: PyMouse, cb: CallbackQuery): # type: ignore
     file.name = "{TGid}_dataInfos.txt".format(
         TGid=TGid,
     )
+    await c.send_chat_action(
+        chat_id=cb.message.chat.id,
+        action=ChatAction.TYPING,
+    )
     await cb.edit_message_text("Sending chat data...")
+    await c.send_chat_action(
+        chat_id=TGid,
+        action=ChatAction.UPLOAD_DOCUMENT,
+    )
     await c.send_document(
         chat_id=cb.from_user.id,
         document=file,
+    )
+    await c.send_chat_action(
+        chat_id=cb.message.chat.id,
+        action=ChatAction.TYPING,
     )
     await cb.edit_message_text("Your details have been sent to you, check your messages in your chat with me.")

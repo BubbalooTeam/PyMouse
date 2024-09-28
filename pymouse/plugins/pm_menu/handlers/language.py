@@ -12,6 +12,7 @@
 from typing import Union
 
 from hydrogram import filters
+from hydrogram.enums import ChatAction
 from hydrogram.types import Message, CallbackQuery, ChatPrivileges
 
 from pymouse import PyMouse, Decorators, router
@@ -26,6 +27,7 @@ from pymouse.plugins.pm_menu.utilities.localization import LocalizationInfo
 )
 @Decorators().Locale()
 async def ChangeLanguageMenu(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
+    chat = union.chat if isinstance(union, Message) else union.message.chat
     sender = union.edit_message_text if isinstance(union, CallbackQuery) else union.reply
     if isinstance(union, CallbackQuery):
         inf = union.data.split("|")
@@ -35,6 +37,10 @@ async def ChangeLanguageMenu(c: PyMouse, union: Union[Message, CallbackQuery], i
         changemenu_back = "StartBack"
         changelang_back = "LangMenu"
 
+    await c.send_chat_action(
+        chat_id=chat.id,
+        action=ChatAction.TYPING,
+    )
     text_and_buttons = await LocalizationInfo().get_changelang_text_and_buttons(
         c=c,
         union=union,
@@ -57,11 +63,15 @@ async def ChangeLanguageMenu(c: PyMouse, union: Union[Message, CallbackQuery], i
     accept_in_private=True
 )
 @Decorators().Locale()
-async def SelectLanguageMenu(_, cb: CallbackQuery, i18n): # type: ignore
+async def SelectLanguageMenu(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
     inf = cb.data.split("|")
     changemenu_back = inf[1]
     changelang_back = inf[2]
 
+    await c.send_chat_action(
+        chat_id=cb.message.chat.id,
+        action=ChatAction.TYPING,
+    )
     text_and_buttons = await LocalizationInfo().get_switchlang_text_and_buttons(
         i18n=i18n,
         changemenu_back=changemenu_back,
@@ -82,7 +92,7 @@ async def SelectLanguageMenu(_, cb: CallbackQuery, i18n): # type: ignore
     accept_in_private=True
 )
 @Decorators().Locale()
-async def SwitchLanguage(_, cb: CallbackQuery, i18n):
+async def SwitchLanguage(c: PyMouse, cb: CallbackQuery, i18n): # type: ignore
     inf = cb.data.split("|")
     language = inf[1]
     changemenu_back = inf[2]
@@ -95,4 +105,4 @@ async def SwitchLanguage(_, cb: CallbackQuery, i18n):
     )
 
     # === #
-    await LocalizationInfo().send_switchedlang_text_and_buttons(_, cb, changemenu_back)
+    await LocalizationInfo().send_switchedlang_text_and_buttons(c, cb, changemenu_back)

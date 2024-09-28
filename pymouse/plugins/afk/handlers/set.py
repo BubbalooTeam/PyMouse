@@ -13,15 +13,16 @@ from datetime import datetime
 
 from hydrogram import filters
 from hydrogram.types import Message
+from hydrogram.enums import ChatAction
 
-from pymouse import Decorators, afkmodel_db, router
+from pymouse import PyMouse, Decorators, afkmodel_db, router
 from pymouse.utils import HandleText
 from ..utilities.afk import afk_utils
 
 @router.message(filters.command("afk") | filters.regex(r"^(?i:brb)(\s(.+))?"))
 @Decorators().CatchError()
 @Decorators().Locale()
-async def setupAFK(_, m: Message, i18n): # type: ignore
+async def setupAFK(c: PyMouse, m: Message, i18n): # type: ignore
     user = m.from_user
     avreason = True
     if not user:
@@ -29,7 +30,7 @@ async def setupAFK(_, m: Message, i18n): # type: ignore
 
     is_afk = afkmodel_db.afk_db.getAFK(user.id).get("is_afk", False)
     if is_afk:
-        await afk_utils.stop_afk(m, i18n)
+        await afk_utils.stop_afk(c, m, i18n)
         return
     # // Get informations for Toggling AFK to ON
     reason = HandleText().input_str(m)
@@ -40,6 +41,11 @@ async def setupAFK(_, m: Message, i18n): # type: ignore
     time = datetime.now().timestamp()
     # // Setting AFK in DataBase
     afkmodel_db.afk_db.setAFK(user.id, time, reason)
+
+    await PyMouse.send_chat_action(
+        chat_id=m.chat.id,
+        action=ChatAction.TYPING,
+    )
     afktext = i18n["afk"]["is-now-unavalaible"].format(user=user.mention)
     if avreason:
         afktext += i18n["generic-strings"]["reason"].format(reason=reason)

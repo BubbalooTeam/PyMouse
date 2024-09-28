@@ -10,14 +10,19 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from hydrogram.types import Message
+from hydrogram.enums import ChatAction
 
-from pymouse import Weather, DownloadPaths, log
+from pymouse import PyMouse, Weather, DownloadPaths, log
 from pymouse.utils.tools.weather.exceptions import (
     WeatherLocationNotFound,
     WeatherLocationNotProvidedError
 )
 
-async def HandleWeather(m: Message, i18n: dict):
+async def HandleWeather(c: PyMouse, m: Message, i18n: dict): # type: ignore
+    await c.send_chat_action(
+        chat_id=m.chat.id,
+        action=ChatAction.TYPING,
+    )
     try:
         location = await Weather().GetCoordsLocalization(
             union=m,
@@ -42,6 +47,10 @@ async def HandleWeather(m: Message, i18n: dict):
         forecast_class=forecast_weather,
     )
     ### Make graphic interface
+    await c.send_chat_action(
+        chat_id=m.chat.id,
+        action=ChatAction.UPLOAD_PHOTO,
+    )
     graphic = Weather().MakeWeatherInterface(
         weather=AllClassinOne,
         i18n=i18n,

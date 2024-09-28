@@ -13,7 +13,7 @@
 from datetime import datetime
 
 from hydrogram.types import Message, MessageEntity, User
-from hydrogram.enums import MessageEntityType
+from hydrogram.enums import MessageEntityType, ChatAction
 
 from pymouse import PyMouse, afkmodel_db
 from pymouse.utils import UsersError, UtilsTimer
@@ -50,12 +50,17 @@ class AFKUtils:
             return None
 
     @staticmethod
-    async def sender_afk(user: User, m: Message, i18n: dict) -> None:
+    async def sender_afk(c: PyMouse, user: User, m: Message, i18n: dict) -> None: # type: ignore
         afktxt = ""
         gr: str | None = None
         gt: str | None = None
         afk = afkmodel_db.afk_db.getAFK(user.id)
         if afk.get("is_afk", False) != False:
+            await c.send_chat_action(
+                chat_id=m.chat.id,
+                action=ChatAction.TYPING,
+            )
+
             afktxt += i18n["afk"]["is-unavalaible"].format(user=user.mention)
             gr = afk.get("reason")
             gt = afk.get("time")
@@ -70,18 +75,23 @@ class AFKUtils:
     async def check_afk(self, c: PyMouse, m: Message, i18n: dict): # type: ignore
         user = await self.getMentioned(c, m)
         if user is not None:
-            await self.sender_afk(user, m, i18n)
+            await self.sender_afk(c, user, m, i18n)
         user = self.getReplied(m)
         if user is not None:
-            await self.sender_afk(user, m, i18n)
+            await self.sender_afk(c, user, m, i18n)
         return
 
     @staticmethod
-    async def stop_afk(m: Message, i18n: dict):
+    async def stop_afk(c: PyMouse, m: Message, i18n: dict): # type: ignore
         user = m.from_user
         if not user:
             return
         afkmodel_db.afk_db.unsetAFK(user.id)
+
+        await c.send_chat_action(
+            chat_id=m.chat.id,
+            action=ChatAction.TYPING,
+        )
         return await m.reply(i18n["afk"]["is-back"].format(user=user.mention))
 
 afk_utils = AFKUtils()
