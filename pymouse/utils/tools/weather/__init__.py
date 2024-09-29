@@ -482,50 +482,53 @@ class Weather:
         XStart = 180
         XSpacing = 450
         for ForecastDaily in weather.daily_forecast.forecast:
-            XIcon = XStart
-            YIcon = YForecast
-            XText = XStart
-            YText = YForecast + 240
-            ForecastDailyIcon = self.GetIconImage(ForecastDaily.overview.iconCode)
-            # === #
-            gradient.paste(
-                im=ForecastDailyIcon,
-                box=(XIcon, YIcon),
-                mask=ForecastDailyIcon,
-            )
-            draw.text(
-                xy=(XText, YText),
-                text=ForecastDaily.day[:3],
-                font=MediumFont,
-                fill="white",
-            )
-            draw.text(
-                xy=(XText, YText + 80),
-                text="Max: {i18n_type}".format(
-                    i18n_type=i18n["weather"]["temperature"].format(
-                        temperature=ForecastDaily.max_temperature,
+            try:
+                XIcon = XStart
+                YIcon = YForecast
+                XText = XStart
+                YText = YForecast + 240
+                ForecastDailyIcon = self.GetIconImage(ForecastDaily.overview.iconCode)
+                # === #
+                gradient.paste(
+                    im=ForecastDailyIcon,
+                    box=(XIcon, YIcon),
+                    mask=ForecastDailyIcon,
+                )
+                draw.text(
+                    xy=(XText, YText),
+                    text=ForecastDaily.day[:3],
+                    font=MediumFont,
+                    fill="white",
+                )
+                draw.text(
+                    xy=(XText, YText + 80),
+                    text="Max: {i18n_type}".format(
+                        i18n_type=i18n["weather"]["temperature"].format(
+                            temperature=ForecastDaily.max_temperature,
+                        ),
                     ),
-                ),
-                font=MediumFont,
-                fill="white"
-            )
-            draw.text(
-                xy=(XText, YText + 160),
-                text="Min: {i18n_type}".format(
-                    i18n_type=i18n["weather"]["temperature"].format(
-                        temperature=ForecastDaily.min_temperature,
+                    font=MediumFont,
+                    fill="white"
+                )
+                draw.text(
+                    xy=(XText, YText + 160),
+                    text="Min: {i18n_type}".format(
+                        i18n_type=i18n["weather"]["temperature"].format(
+                            temperature=ForecastDaily.min_temperature,
+                        ),
                     ),
-                ),
-                font=MediumFont,
-                fill="white"
-            )
-            draw.text(
-                xy=(XText, YText + 240),
-                text=ForecastDaily.overview.shortcast[:18] + "..." if len(ForecastDaily.overview.shortcast) >= 18 else ForecastDaily.overview.shortcast,
-                font=SmallFont,
-                fill="yellow"
-            )
-            XStart += XSpacing
+                    font=MediumFont,
+                    fill="white"
+                )
+                draw.text(
+                    xy=(XText, YText + 240),
+                    text=ForecastDaily.overview.shortcast[:18] + "..." if len(ForecastDaily.overview.shortcast) >= 18 else ForecastDaily.overview.shortcast,
+                    font=SmallFont,
+                    fill="yellow"
+                )
+                XStart += XSpacing
+            except Exception:
+                pass
 
         gradient.save(filename)
         return os.path.abspath(filename)
