@@ -50,7 +50,7 @@ class GSMarenaBaseFormatResult:
 
 class GSMarena:
     def __init__(self):
-        self.GSMarenaByPassURL: str = "https://cors-bypass.amano.workers.dev/https://www.gsmarena.com/{url}"
+        self.GSMarenaByPassURL: str = "https://www.gsmarena.com/{url}"
         self.Headers: dict = {
             "accept-language": "en-US,en;q=0.9",
             "cache-control": "max-age=0",
