@@ -393,8 +393,13 @@ class Weather:
 
         # Make Background Color
         for y in range(height):
-            color = (60, 8, 95 + int(80 * (y / height)))
+            color = (
+                (60, 8, 95 + int(80 * (y / height)))
+                if self.GetKeyDayorNight(get_coords=weather.location) == "night"
+                else (30 - int(30 * (y / height)), 144 - int(144 * (y / height)), 255 - int(116 * (y / height)))
+            )
             draw.line([(0, y), (width, y)], fill=color)
+
 
         # Get the Text Font
         ArialFont = AllFonts.ARIAL
