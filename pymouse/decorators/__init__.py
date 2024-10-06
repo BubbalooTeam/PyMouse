@@ -21,7 +21,7 @@ from hydrogram.types import Message, CallbackQuery, InlineQuery, ChatPrivileges
 from hydrogram.enums import ChatType, ChatMemberStatus
 from hydrogram.errors import ChatWriteForbidden
 
-from pymouse import PyMouse, Config, db, usersmodel_db, chatsmodel_db, localization
+from pymouse import PyMouse, Config, db, usersmodel_db, chatsmodel_db, localization, FMT
 
 class Decorators:
     def __init__(self):
@@ -143,12 +143,9 @@ class Decorators:
 
                 if complain_missing_permissions:
                     SenderText = i18n["generic-strings"]["admin-need-permissions"].format(
-                        permissions=(
-                            ", ".join(missing_permissions[:-1])
-                            + " and " + missing_permissions[-1]
-                            if len(missing_permissions) > 1
-                            else missing_permissions[0]
-                            if missing_permissions else ""
+                        permissions=FMT().FormatListtoString(
+                            RelativeList=list(missing_permissions),
+                            i18n=i18n
                         )
                     )
                     if isinstance(union, CallbackQuery):

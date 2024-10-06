@@ -50,7 +50,7 @@ class GSMarenaBaseFormatResult:
 
 class GSMarena:
     def __init__(self):
-        self.GSMarenaByPassURL: str = "https://www.gsmarena.com/{url}"
+        self.GSMarenaURL: str = "https://www.gsmarena.com/{url}"
         self.Headers: dict = {
             "accept-language": "en-US,en;q=0.9",
             "cache-control": "max-age=0",
@@ -60,7 +60,7 @@ class GSMarena:
         }
 
     async def getDataFromURL(self, url: str) -> str:
-        base_url = self.GSMarenaByPassURL.format(
+        base_url = self.GSMarenaURL.format(
             url=url
         )
         r = await http.get(
