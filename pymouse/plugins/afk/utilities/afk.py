@@ -26,7 +26,7 @@ class AFKUtils:
         user = m.text[entoffset : entoffset + entlength]
         try:
             ent = await c.get_users(user)
-        except UsersError:
+        except (UsersError, IndexError):
             return None
         return ent
 
