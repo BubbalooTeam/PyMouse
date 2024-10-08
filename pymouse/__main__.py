@@ -9,19 +9,55 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
+import json
 import asyncio
 import sentry_sdk
 import time
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from datetime import datetime
+from functools import partial
+from io import BytesIO
+
 from hydrogram import idle
+from hydrogram.enums import ChatAction
 from hydrogram.errors import FloodWait, Unauthorized
 from HydroPatch import PatchManager
 
-from pymouse import PyMouse, Config, log, localization, DownloadPaths, router
+from pymouse import PyMouse, Config, db, log, localization, DownloadPaths, router
 from pymouse.utils import http
 
+sheduler = AsyncIOScheduler()
 patcher = PatchManager(client=PyMouse)
+
+async def BackupDB(c: PyMouse): # type: ignore
+    log.info("Backing Up PyMouse DataBase...")
+    dbData = db.db
+    if dbData:
+        dumpData = json.dumps(obj=dbData)
+        file = BytesIO(dumpData.encode())
+        file.name = "dbBackup.json"
+
+        await c.send_chat_action(
+            chat_id=Config.LOG_CHANNEL,
+            action=ChatAction.UPLOAD_DOCUMENT
+        )
+        await c.send_document(
+            chat_id=Config.LOG_CHANNEL,
+            document=file,
+            caption=(
+                "<b>#DATABASE #PyMOUSE #BACKUP</b>\n\n"
+                + "<b>Hour:</b> <code>{hour}</code>\n".format(
+                    hour=datetime.now().strftime("%H:%M:%S")
+                )
+                + "<b>Date:</b> <code>{date}</code>".format(
+                    date=datetime.now().strftime("%d/%m/%Y")
+                )
+            )
+        )
+        log.info("The DB database has been backed up.")
+    else:
+        log.info("Not data in Local DataBase...")
 
 def RestartClean():
     Ddown_path = DownloadPaths().Delete_DownloadPath()
@@ -47,6 +83,20 @@ async def run_mouse():
     )
     patcher.include_router(router=router)
     await PyMouse.start()
+    await BackupDB(
+        c=PyMouse
+    )
+    sheduler.add_job(
+        func=partial(
+            BackupDB,
+            c=PyMouse
+        ),
+        trigger="cron",
+        hour=0,
+        minute=0,
+        id="Backup Local DataBase."
+    )
+    sheduler.start()
     await idle()
     await PyMouse.stop()
     await http.aclose()
