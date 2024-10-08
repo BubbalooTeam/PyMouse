@@ -34,7 +34,7 @@ async def BackupDB(c: PyMouse): # type: ignore
     log.info("Backing Up PyMouse DataBase...")
     dbData = db.db
     if dbData:
-        dumpData = json.dumps(obj=dbData)
+        dumpData = json.dumps(obj=dbData, indent=4)
         file = BytesIO(dumpData.encode())
         file.name = "dbBackup.json"
 
