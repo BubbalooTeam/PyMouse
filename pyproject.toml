@@ -19,7 +19,7 @@ dependencies = [
     "tgcrypto>=1.2.5",
     "wget==3.2",
     "youtube-search-python==1.6.6",
-    "yt_dlp==2024.9.27",
+    "yt_dlp==2024.10.7",
 ]
 
 
