@@ -46,7 +46,7 @@ async def BackupDB(c: PyMouse): # type: ignore
             chat_id=Config.LOG_CHANNEL,
             document=file,
             caption=(
-                "<b>#DATABASE #PyMOUSE #BACKUP</b>\n\n"
+                "<b>#DATABASE #PYMOUSE #BACKUP</b>\n\n"
                 + "<b>Hour:</b> <code>{hour}</code>\n".format(
                     hour=datetime.now().strftime("%H:%M:%S")
                 )
