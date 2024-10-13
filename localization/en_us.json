@@ -89,6 +89,12 @@
             "noArgs": "What is the video title, channel name or video URL to download?",
             "excededLimit": "You have exceeded my maximum download limit, in this case 1GB of video/music. You can choose to download in a lower resolution, or purchase one of our plans to be able to download up to 2GB of video/music.",
             "notforYou": "This YouTube Dowloader button is not directed at you."
+        },
+        "formatter": {
+            "publishedTime": "\n\n<b>❯ Published:</b> <code>{publishedTime}</code>",
+            "durationTime": "\n<b>❯ Duration:</b> <code>{durationTime}</code>",
+            "viewsMedia": "\n<b>❯ Views:</b> <code>{viewsMedia}</code>",
+            "creatorOfContent": "\n<b>❯ Creator of Content:</b> <b>{creatorOfContent}</b>"
         }
     },
     "buttons": {

@@ -54,13 +54,18 @@ async def ytdl_handler(c: PyMouse, m: Message, i18n): # type: ignore
         if search["result"] == []:
             return await m.reply(f"No result found for `{query}`")
         i = search["result"][0]
-        out = f"<b><a href={i['link']}>{i['title']}</a></b>"
-        out += f"\nPublished {i['publishedTime']}\n"
-        out += f"\n<b>❯ Duration:</b> {i['duration']}"
-        out += f"\n<b>❯ Views:</b> {i['viewCount']['short']}"
-        out += f"\n<b>❯ Uploader:</b> <a href={i['channel']['link']}>{i['channel']['name']}</a>\n\n"
+        out = yt_utils.YouTubeMakeTextWithInfos(
+            Vidurl=i.get("link"),
+            Vidtitle=i.get("title"),
+            Vidduration=i.get("duration"),
+            Vidviews=i.get("viewCount", {}).get("short"),
+            publishedTime=i.get("publishedTime"),
+            CreatorofContentUrl=i.get("channel", {}).get("link"),
+            CreatorofContentName=i.get("channel", {}).get("name"),
+            i18n=i18n
+        )
         # //
-        keyboard.paginate(len(search["result"])-1, 1, f"ytdl_scroll|{search_key}" + "|{number}|" + f"{m.from_user.id}")
+        keyboard.paginate(len(search["result"]), 1, f"ytdl_scroll|{search_key}" + "|{number}|" + f"{m.from_user.id}")
         keyboard.row(InlineButton("Download", f"yt_gen|{i['id']}|{None}|{m.from_user.id}"))
         # //
         img = await YT_DLP().get_ytthumb(i["id"])
@@ -103,13 +108,18 @@ async def ytdl_scroll_callback(c: PyMouse, cb: CallbackQuery, i18n): # type: ign
         query = YT_VAR[search_key]
         search = await VideosSearch(query).next()
         i = search["result"][page]
-        out = f"<b><a href={i['link']}>{i['title']}</a></b>"
-        out += f"\nPublished {i['publishedTime']}\n"
-        out += f"\n<b>❯ Duration:</b> {i['duration']}"
-        out += f"\n<b>❯ Views:</b> {i['viewCount']['short']}"
-        out += f"\n<b>❯ Uploader:</b> <a href={i['channel']['link']}>{i['channel']['name']}</a>\n\n"
+        out = yt_utils.YouTubeMakeTextWithInfos(
+            Vidurl=i.get("link"),
+            Vidtitle=i.get("title"),
+            Vidduration=i.get("duration"),
+            Vidviews=i.get("viewCount", {}).get("short"),
+            publishedTime=i.get("publishedTime"),
+            CreatorofContentUrl=i.get("channel", {}).get("link"),
+            CreatorofContentName=i.get("channel", {}).get("name"),
+            i18n=i18n
+        )
         # //
-        keyboard.paginate(len(search["result"])-1, page, f"ytdl_scroll|{search_key}" + "|{number}|" + f"{user_id}")
+        keyboard.paginate(len(search["result"]), page, f"ytdl_scroll|{search_key}" + "|{number}|" + f"{user_id}")
         keyboard.row(InlineButton("Download", f"yt_gen|{i['id']}|{None}|{user_id}"))
 
         if page == 0:

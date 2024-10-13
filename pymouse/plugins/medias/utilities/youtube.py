@@ -14,6 +14,39 @@ from pymouse import PyMouse, YT_DLP
 
 class YouTubeUtils:
     @staticmethod
+    def YouTubeMakeTextWithInfos(
+        Vidurl: str,
+        Vidtitle: str,
+        Vidduration: str,
+        Vidviews: str,
+        publishedTime: str,
+        CreatorofContentUrl: str,
+        CreatorofContentName: str,
+        i18n: dict,
+    ):
+        headInfo = "<b><a href={vidURL}>{vidTitle}</a></b>".format(
+            vidURL=Vidurl,
+            vidTitle=Vidtitle
+        )
+        out = i18n["youtube-dl"]["formatter"]["publishedTime"].format(
+            publishedTime=publishedTime
+        )
+        out += i18n["youtube-dl"]["formatter"]["durationTime"].format(
+            durationTime=Vidduration
+        )
+        out += i18n["youtube-dl"]["formatter"]["viewsMedia"].format(
+            viewsMedia=Vidviews
+        )
+        CreatorOfContent = "<a href={channelURL}>{channelName}</a>".format(
+            channelURL=CreatorofContentUrl,
+            channelName=CreatorofContentName
+        )
+        out += i18n["youtube-dl"]["formatter"]["creatorOfContent"].format(
+            creatorOfContent=CreatorOfContent
+        )
+        return str(headInfo + out)
+
+    @staticmethod
     async def YouTubeDownloadAndSendMedia(
         c: PyMouse, # type: ignore
         cb: CallbackQuery,
