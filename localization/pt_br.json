@@ -88,6 +88,12 @@
             "noArgs": "Qual é o título do vídeo, nome do canal ou o URL do vídeo a ser baixado?",
             "excededLimit": "Você excedeu meu limite de download máximo, neste caso, 1GB de vídeo/música. Você pode optar por downloads em resoluções mais baixas, ou assinar um dos nossos planos para ser capaz de realizar o download de até 2GB de vídeo/música.",
             "notforYou": "Esse botão do downloader do YouTube não é para você."
+        },
+        "formatter": {
+            "publishedTime": "\n\n<b>❯ Published:</b> <code>{publishedTime}</code>",
+            "durationTime": "\n<b>❯ Duration:</b> <code>{durationTime}</code>",
+            "viewsMedia": "\n<b>❯ Views:</b> <code>{viewsMedia}</code>",
+            "creatorOfContent": "\n<b>❯ Creator of Content:</b> <b>{creatorOfContent}</b>"
         }
     },
     "buttons": {
