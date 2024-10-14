@@ -13,15 +13,15 @@ from hydrogram import filters
 from hydrogram.types import Message
 
 from pymouse import PyMouse, Decorators, router
-from ..utilities.weather import HandleWeather
+from ..utilities.weather import weather_utils
 
 @router.message(filters.command("weather"))
 @Decorators().CatchError()
 @Decorators().Locale()
-async def weatherHandle(_, m: Message, i18n):
+async def weatherHandle(c: PyMouse, m: Message, i18n): # type: ignore
     # Run Weather Information's with Handle
-    await HandleWeather(
-        c=PyMouse,
+    await weather_utils.HandleWeather(
+        c=c,
         m=m,
         i18n=i18n
     )

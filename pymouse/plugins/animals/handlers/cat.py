@@ -9,22 +9,16 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Union
-
 from hydrogram import filters
-from hydrogram.types import Message, CallbackQuery
+from hydrogram.types import Message
 
 from pymouse import PyMouse, Decorators, router
-from ..utilities.gsmarena import gsm_arena_utils
+from ..utilities.cat import cat_utils
 
-@router.message(filters.command(["d", "specs"]))
-@router.callback(filters.regex(r"device\|(.*)$"))
+@router.message(filters.command("cat"))
 @Decorators().CatchError()
-@Decorators().Locale()
-async def GSMarenaHandle(c: PyMouse, union: Union[Message, CallbackQuery], i18n): # type: ignore
-     # Run GSMarena with Handle
-    await gsm_arena_utils.HandleGSMarena(
+async def CatImage(c: PyMouse, m: Message): # type: ignore
+    await cat_utils.HandleCat(
         c=c,
-        union=union,
-        i18n=i18n,
+        m=m
     )
