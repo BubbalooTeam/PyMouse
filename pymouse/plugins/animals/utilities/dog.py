@@ -18,20 +18,20 @@ from pymouse import PyMouse
 from pymouse.utils import http
 
 @dataclass(frozen=True, slots=True)
-class TheCatImgResponse:
+class TheDogImgResponse:
     image_url: str | None
 
-class CatUtils:
+class DogUtils:
     @staticmethod
-    async def getCatImage():
-        r = await http.get("https://api.thecatapi.com/v1/images/search")
+    async def getDogImage():
+        r = await http.get("https://api.thedogapi.com/v1/images/search")
         r = r.json()
-        return TheCatImgResponse(
+        return TheDogImgResponse(
             image_url=r[0].get("url")
         )
 
-    async def HandleCat(self, c: PyMouse, m: Message): # type: ignore
-        r = await self.getCatImage()
+    async def HandleDog(self, c: PyMouse, m: Message): # type: ignore
+        r = await self.getDogImage()
         img = r.image_url
         if img is not None:
             await c.send_chat_action(
@@ -40,7 +40,7 @@ class CatUtils:
             )
             return await m.reply_photo(
                 photo=img,
-                caption="🐱"
+                caption="🐶"
             )
         else:
             await c.send_chat_action(
@@ -48,7 +48,7 @@ class CatUtils:
                 action=ChatAction.TYPING
             )
             return await m.reply(
-                "🐱🐱"
+                "🐶"
             )
 
-cat_utils = CatUtils()
+dog_utils = DogUtils()
