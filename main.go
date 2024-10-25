@@ -12,6 +12,7 @@ import (
 	"syscall"
 
 	th "github.com/mymmrac/telego/telegohandler"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type User struct {
@@ -44,7 +45,13 @@ func main() {
 	handlerClass.Register()
 	fmt.Println("\033[0;33mHandler Registered, PyMouse is almost starting...\033")
 
+	userR := &User{
+		UserId: "Div",
+	}
 	database.InitDB()
+	devCollection := database.NewMongoCollection("dev")
+	devCollection.UpdateOne(bson.M{"user_id": "Div"}, userR)
+	fmt.Println(devCollection.FindAll(bson.M{}))
 
 	botUser, err := botClient.GetMe()
 	if err != nil {
