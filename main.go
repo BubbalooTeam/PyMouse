@@ -8,10 +8,15 @@ import (
 	"pymouse/pymouse"
 	"pymouse/pymouse/client"
 	"pymouse/pymouse/config"
+	"pymouse/pymouse/database"
 	"syscall"
 
 	th "github.com/mymmrac/telego/telegohandler"
 )
+
+type User struct {
+	UserId string `bson:"user_id" json:"user_id"`
+}
 
 func main() {
 	fmt.Println("\033[0;34mCreating Bot Client...\033")
@@ -38,6 +43,8 @@ func main() {
 	handlerClass := pymouse.NewHandler(botClient, botHandler)
 	handlerClass.Register()
 	fmt.Println("\033[0;33mHandler Registered, PyMouse is almost starting...\033")
+
+	database.InitDB()
 
 	botUser, err := botClient.GetMe()
 	if err != nil {

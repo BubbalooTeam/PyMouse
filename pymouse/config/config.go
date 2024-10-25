@@ -3,14 +3,13 @@ package config
 import (
 	"log"
 	"os"
-	"path/filepath"
 
 	"github.com/joho/godotenv"
 )
 
 var (
-	BotToken     string
-	DatabaseFile string
+	BotToken    string
+	DatabaseURI string
 )
 
 func init() {
@@ -22,8 +21,8 @@ func init() {
 		log.Fatalf(`In order to initialize this bot, you must insert the "BOT_TOKEN" in the .env file.`)
 	}
 
-	DatabaseFile = os.Getenv("DATABASE_FILE")
-	if DatabaseFile == "" {
-		DatabaseFile = filepath.Join(".", "pymouse", "database", "files", "database.json")
+	DatabaseURI = os.Getenv("DATABASE_URI")
+	if DatabaseURI == "" {
+		log.Fatalf(`In order to initialize this bot, you must insert the "DATABASE_URI" in the .env file.`)
 	}
 }
