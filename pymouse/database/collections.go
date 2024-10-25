@@ -29,8 +29,8 @@ func (mc *MongoCollection) UpdateOne(filter bson.M, data interface{}) (err error
 }
 
 // FindOne finds a document
-func (mc *MongoCollection) FindOne(filter bson.M) (res *mongo.SingleResult) {
-	res = mc.Collection.FindOne(tdContext, filter)
+func (mc *MongoCollection) FindOne(filter bson.M) (response *mongo.SingleResult) {
+	response = mc.Collection.FindOne(tdContext, filter)
 	return
 }
 

@@ -38,6 +38,6 @@ func InitDB() {
 	}
 
 	MongoClient = client
-	Database = client.Database("PyMouse")
+	Database = MongoClient.Database("PyMouse")
 	log.Println("Connected to MongoDB successfully!")
 }
