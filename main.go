@@ -15,6 +15,8 @@ import (
 )
 
 func main() {
+	database.InitDB()
+
 	fmt.Println("\033[0;34mCreating Bot Client...\033")
 	botClient, err := client.CreateBot(config.BotToken)
 	if err != nil {
@@ -30,9 +32,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error in get Updates of TelegramBot: %v", err)
 	}
-	fmt.Println("\033[0;34mGetUpdates Started With Successfully, Creating Database and Bot Handler...\033")
+	fmt.Println("\033[0;34mGetUpdates Started With Successfully, Creating Bot Handler...\033")
 
-	database.InitDB()
 	botHandler, err := th.NewBotHandler(botClient, updates)
 	if err != nil {
 		log.Fatalf("Error in Create NewBotHandler: %v", err)
