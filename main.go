@@ -30,7 +30,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error in get Updates of TelegramBot: %v", err)
 	}
-	fmt.Println("\033[0;34mGetUpdates Started With Successfully, Creating Bot Handler...\033")
+	fmt.Println("\033[0;34mGetUpdates Started With Successfully, Creating Database and Bot Handler...\033")
+
+	database.InitDB()
 	botHandler, err := th.NewBotHandler(botClient, updates)
 	if err != nil {
 		log.Fatalf("Error in Create NewBotHandler: %v", err)
@@ -39,8 +41,6 @@ func main() {
 	handlerClass := pymouse.NewHandler(botClient, botHandler)
 	handlerClass.Register()
 	fmt.Println("\033[0;33mHandler Registered, PyMouse is almost starting...\033")
-
-	database.InitDB()
 
 	botUser, err := botClient.GetMe()
 	if err != nil {
