@@ -15,9 +15,8 @@ type UsersInformations struct {
 	Language  string `bson:"language" json:"language" default:"en_us"`
 }
 
-var UsersCollection = database.NewMongoCollection("users")
-
 func FindUser(UserID int64) (UI *UsersInformations) {
+	UsersCollection := database.NewMongoCollection("users")
 	dftUser := &UsersInformations{
 		UserID: UserID,
 	}
@@ -32,6 +31,7 @@ func FindUser(UserID int64) (UI *UsersInformations) {
 }
 
 func UpdateUser(UserID int64, UserName string, FirstName string) {
+	UsersCollection := database.NewMongoCollection("users")
 	UI := FindUser(UserID)
 
 	if UI != nil {
