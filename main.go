@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -17,31 +16,33 @@ import (
 func main() {
 	database.InitDB()
 
-	fmt.Println("\033[0;34mCreating Bot Client...\033")
+	log.Println("\033[0;33mCreating Bot Client...\033[0m")
 	botClient, err := client.CreateBot(config.BotToken)
 	if err != nil {
-		log.Fatalf("Error in creating bot Client: %v", err)
+		log.Fatalf("\033[0;31mError in creating bot Client: %v\033[0m", err)
 	}
 
 	chanSignal := make(chan os.Signal, 1)
 	signal.Notify(chanSignal, syscall.SIGINT, syscall.SIGTERM)
 	botSignal := make(chan struct{}, 1)
 
-	fmt.Println("\033[0;34mBot Created, Starting Get Updates of Long Polling...\033")
+	log.Println("\033[0;32mBot Created, Starting Get Updates of Long Polling...\033[0m")
 	updates, err := client.GetUpdates(botClient)
 	if err != nil {
-		log.Fatalf("Error in get Updates of TelegramBot: %v", err)
+		log.Fatalf("\033[0;31mError in get Updates of TelegramBot: %v\033[0m", err)
 	}
-	fmt.Println("\033[0;34mGetUpdates Started With Successfully, Creating Bot Handler...\033")
+	log.Println("\033[0;32mGetUpdates Started With Successfully, Creating Bot Handler...\033[0m")
 
 	botHandler, err := th.NewBotHandler(botClient, updates)
 	if err != nil {
-		log.Fatalf("Error in Create NewBotHandler: %v", err)
+		log.Fatalf("\033[0;31mError in Create NewBotHandler: %v\033[0m", err)
 	}
-	fmt.Println("\033[0;33mBot Handler Created, Registering Handlers...\033")
+	log.Println("\033[0;32mBot Handler Created, Registering Handlers...\033[0m")
+
 	handlerClass := pymouse.NewHandler(botClient, botHandler)
 	handlerClass.Register()
-	fmt.Println("\033[0;33mHandler Registered, PyMouse is almost starting...\033")
+
+	log.Println("\033[0;33mHandler Registered, PyMouse is almost starting...\033[0m")
 
 	botUser, err := botClient.GetMe()
 	if err != nil {
@@ -49,24 +50,24 @@ func main() {
 	}
 	go func() {
 		<-chanSignal
-		fmt.Println("\033[0;31mStopping PyMouse...\033[0m")
+		log.Println("\033[0;31mStopping PyMouse...\033[0m")
 
 		botClient.StopLongPolling()
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println("Long polling stopped.")
+		log.Println("\033[0;32mLong polling stopped.\033[0m")
 
 		botHandler.Stop()
-		fmt.Println("Bot handler stopped.")
+		log.Println("\033[0;32mBot handler stopped.\033[0m")
 
 		botSignal <- struct{}{}
 	}()
 
 	go botHandler.Start()
-	fmt.Println("\033[0;32m\U0001F680 Bot Started\033[0m")
-	fmt.Printf("\033[0;36mBot Info:\033[0m %v - @%v\n", botUser.FirstName, botUser.Username)
+	log.Println("\033[0;32m\U0001F680 Bot Started\033[0m")
+	log.Printf("\033[0;36mBot Info:\033[0m %v - @%v\n", botUser.FirstName, botUser.Username)
 
 	<-botSignal
-	fmt.Println("Done!")
+	log.Println("\033[0;34mDone!\033[0m")
 }

@@ -43,8 +43,8 @@ func UpdateUser(UserID int64, UserName string, FirstName string) {
 	}
 	err := UsersCollection.UpdateOne(bson.M{"user_id": UserID}, UI)
 	if err != nil {
-		log.Printf("[MongoDB][users/UpdateUser][Error]: %v - %d", err, UserID)
+		log.Printf("[MongoDB][Users/UpdateUser][Error]: %v - %d", err, UserID)
 		return
 	}
-	log.Printf("[MongoDB][users/UpdateUser]: %d - %s, Updated with successfully!", UserID, FirstName)
+	log.Printf("[MongoDB][Users/UpdateUser]: %d - %s, Updated with successfully!", UserID, FirstName)
 }
