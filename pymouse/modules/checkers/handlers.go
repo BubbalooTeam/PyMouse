@@ -1,7 +1,7 @@
 package checkers
 
 import (
-	utilsdb "pymouse/pymouse/database/utilsDB"
+	"pymouse/pymouse/database/utilsdb"
 
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
