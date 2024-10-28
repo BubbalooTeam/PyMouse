@@ -34,3 +34,34 @@ func SaveUsers(bot *telego.Bot, update telego.Update, next th.Handler) {
 	// Pass to next handler
 	next(bot, update)
 }
+
+func SaveChats(bot *telego.Bot, update telego.Update, next th.Handler) {
+	var UserName string
+
+	message := update.Message
+	if message == nil {
+		if update.CallbackQuery == nil {
+			return
+		}
+		message = update.CallbackQuery.Message.(*telego.Message)
+	}
+	if message.Chat.Type == "private" {
+		return
+	}
+	if message.SenderChat != nil {
+		return
+	}
+
+	// Telegram Chat Informations
+	ChatID := message.Chat.ID
+	ChatTitle := message.Chat.Title
+	if message.Chat.Username != "" {
+		UserName = fmt.Sprintf("@%s", message.Chat.Username)
+	}
+
+	// Update or Insert Chat Informations
+	utilitiesdb.UpdateChat(ChatID, UserName, ChatTitle)
+
+	// Pass to next handler
+	next(bot, update)
+}
