@@ -61,6 +61,8 @@ func main() {
 		botHandler.Stop()
 		log.Println("\033[0;32mBot handler stopped.\033[0m")
 
+		defer database.CloseDB()
+
 		botSignal <- struct{}{}
 	}()
 

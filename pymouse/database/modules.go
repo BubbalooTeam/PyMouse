@@ -41,3 +41,9 @@ func InitDB() {
 	Database = MongoClient.Database("PyMouse")
 	log.Println("\033[0;32mConnected to MongoDB successfully!\033[0m")
 }
+
+func CloseDB() {
+	log.Println("\033[0;33mClosing MongoDB...\033[0m")
+	MongoClient.Disconnect(bgContext)
+	log.Println("\033[0;32mClosed MongoDB with successfully!\033[0m")
+}
