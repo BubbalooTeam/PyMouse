@@ -43,10 +43,8 @@ func InitDB() {
 }
 
 func CloseDB() {
-	log.Println("\033[0;33mClosing MongoDB...\033[0m")
 	if err := MongoClient.Disconnect(bgContext); err != nil {
 		log.Printf("\033[0;31mFailed to close MongoDB: %v\033[0m\n", err)
 		return
 	}
-	log.Println("\033[0;32mClosed MongoDB successfully!\033[0m")
 }
