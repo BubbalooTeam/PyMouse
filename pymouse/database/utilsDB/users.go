@@ -1,17 +1,17 @@
-package utilsdb
+package utilsDB
 
 import (
 	"log"
 	"pymouse/pymouse/database"
-	"pymouse/pymouse/database/typesdb"
+	"pymouse/pymouse/database/typesDB"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func FindUser(UserID int64) (UI *typesdb.UsersInformations) {
+func FindUser(UserID int64) (UI *typesDB.UsersInformations) {
 	UsersCollection := database.NewMongoCollection("users")
-	dftUser := &typesdb.UsersInformations{
+	dftUser := &typesDB.UsersInformations{
 		UserID: UserID,
 	}
 	err := UsersCollection.FindOne(bson.M{"user_id": UserID}).Decode(&UI)
@@ -35,7 +35,7 @@ func UpdateUser(UserID int64, UserName string, FirstName string) {
 		UI.FirstName = FirstName
 		UI.UserName = UserName
 	} else {
-		UI = &typesdb.UsersInformations{
+		UI = &typesDB.UsersInformations{
 			UserID:    UserID,
 			UserName:  UserName,
 			FirstName: FirstName,

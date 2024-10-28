@@ -2,7 +2,7 @@ package checkers
 
 import (
 	"fmt"
-	utilsdb "pymouse/pymouse/database/utilsDB"
+	"pymouse/pymouse/database/utilsDB"
 
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
@@ -29,7 +29,7 @@ func SaveUsers(bot *telego.Bot, update telego.Update, next th.Handler) {
 	}
 
 	// Update or Insert User Informations
-	utilsdb.UpdateUser(UserID, UserName, FirstName)
+	utilsDB.UpdateUser(UserID, UserName, FirstName)
 
 	// Pass to next handler
 	next(bot, update)
