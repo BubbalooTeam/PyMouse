@@ -2,7 +2,7 @@ package checkers
 
 import (
 	"fmt"
-	"pymouse/pymouse/database/utilsdb"
+	utilsdb "pymouse/pymouse/database/utilsDB"
 
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
