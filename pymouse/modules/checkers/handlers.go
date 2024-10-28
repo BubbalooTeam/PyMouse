@@ -1,6 +1,7 @@
 package checkers
 
 import (
+	"fmt"
 	"pymouse/pymouse/database/utilsdb"
 
 	"github.com/mymmrac/telego"
@@ -24,7 +25,7 @@ func SaveUsers(bot *telego.Bot, update telego.Update, next th.Handler) {
 	UserID := message.From.ID
 	FirstName := message.From.FirstName
 	if message.From.Username != "" {
-		UserName = message.From.Username
+		UserName = fmt.Sprintf("@%s", message.From.Username)
 	}
 
 	// Update or Insert User Informations
