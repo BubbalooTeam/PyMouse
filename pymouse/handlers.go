@@ -1,6 +1,7 @@
 package pymouse
 
 import (
+	"pymouse/pymouse/modules/afk"
 	"pymouse/pymouse/modules/checkers"
 	"pymouse/pymouse/modules/start"
 
@@ -26,5 +27,6 @@ func (bS *BotStruct) Register() {
 	bS.Handler.Use(checkers.SaveChats)
 
 	// Bot Commands, comming soon, add a dinamic commands loader.
+	bS.Handler.Handle(afk.SetAway, th.CommandEqual("afk"))
 	bS.Handler.Handle(start.Start, th.CommandEqual("start"))
 }
