@@ -9,6 +9,6 @@ import (
 func GetArgs(update telego.Update) string {
 	MsgText := update.Message.Text
 	SplitedText := strings.Split(MsgText, " ")
-	Args := strings.Join(SplitedText[:1], " ")
+	Args := strings.Join(SplitedText[1:], " ")
 	return Args
 }
