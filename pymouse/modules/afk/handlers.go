@@ -73,7 +73,8 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 	}
 	if message.From != nil && utilitiesdb.GetAway(message.From.ID).IsAway {
 		StopAway(bot, update)
-		return
+		next(bot, update)
 	}
 	CaSAway(bot, update)
+	next(bot, update)
 }
