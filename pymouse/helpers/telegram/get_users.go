@@ -52,7 +52,9 @@ func GetUserMentioned(bot *telego.Bot, update telego.Update) (UI *modeldb.UsersI
 func GetUserReplied(bot *telego.Bot, update telego.Update) (UI *modeldb.UsersInformations) {
 	var UserID int64
 
-	if update.Message != nil && update.Message.ReplyToMessage.From != nil {
+	if update.Message != nil ||
+		update.Message.ReplyToMessage != nil ||
+		update.Message.ReplyToMessage.From != nil {
 		UserID = update.Message.ReplyToMessage.From.ID
 	} else {
 		return nil
