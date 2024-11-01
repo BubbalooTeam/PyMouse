@@ -1,7 +1,6 @@
 package telegram
 
 import (
-	"fmt"
 	"pymouse/pymouse/database/modeldb"
 	"pymouse/pymouse/database/utilitiesdb"
 
@@ -16,7 +15,7 @@ func GetUserViaEntities(bot *telego.Bot, update telego.Update, entities telego.M
 
 	// Gets the message entity, and gets a user.
 	UserEntity := message.Text[EntOffset : EntOffset+EntLenght]
-	UI = utilitiesdb.FindUser(0, fmt.Sprintf("@%s", UserEntity))
+	UI = utilitiesdb.FindUser(0, UserEntity)
 	return UI
 }
 

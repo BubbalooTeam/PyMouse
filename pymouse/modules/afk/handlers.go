@@ -68,7 +68,7 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 	if message == nil ||
 		message.From == nil ||
 		!strings.Contains(message.Chat.Type, "group") ||
-		regexp.MustCompile(`^(\/afk|brb)\b`).MatchString(message.Text) {
+		regexp.MustCompile(`^/\bafk\b|^\bbrb\b`).MatchString(message.Text) {
 		next(bot, update)
 	}
 	if message.From != nil && utilitiesdb.GetAway(message.From.ID).IsAway {
