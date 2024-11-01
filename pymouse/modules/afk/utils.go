@@ -2,7 +2,11 @@ package afk
 
 import (
 	"fmt"
+	"pymouse/pymouse/database/modeldb"
 	"pymouse/pymouse/database/utilitiesdb"
+	"pymouse/pymouse/helpers/telegram"
+	"pymouse/pymouse/helpers/utils"
+	"time"
 
 	"github.com/mymmrac/telego"
 	"github.com/mymmrac/telego/telegoutil"
@@ -30,4 +34,47 @@ func StopAway(bot *telego.Bot, update telego.Update) {
 			},
 		},
 	)
+}
+
+func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformations) {
+	var AwayText string
+
+	Away := utilitiesdb.GetAway(UI.UserID)
+
+	if Away.IsAway {
+		bot.SendChatAction(
+			&telego.SendChatActionParams{
+				ChatID: telegoutil.ID(update.Message.Chat.ID),
+				Action: "typing",
+			},
+		)
+		AwayText += fmt.Sprintf("<b>%s is unavalaible!</b>", UI.FirstName)
+		if Away.AwayReason != "" {
+			AwayText += fmt.Sprintf("\n<b>Reason:</b> <code>%s</code>", Away.AwayReason)
+		}
+		if !Away.AwayTime.IsZero() {
+			AwayText += fmt.Sprintf("\n<b>Last seen:</b> <code>%s</code>", utils.TimeFormatter(time.Now().UTC().Sub(Away.AwayTime).Seconds()))
+		}
+		bot.SendMessage(
+			&telego.SendMessageParams{
+				ChatID:    telegoutil.ID(update.Message.Chat.ID),
+				Text:      AwayText,
+				ParseMode: "HTML",
+				ReplyParameters: &telego.ReplyParameters{
+					MessageID: update.Message.MessageID,
+				},
+			},
+		)
+	}
+}
+
+func CaSAway(bot *telego.Bot, update telego.Update) {
+	UI := telegram.GetUserMentioned(bot, update)
+	if UI != nil {
+		SenderAway(bot, update, UI)
+	}
+	UI = telegram.GetUserReplied(bot, update)
+	if UI != nil {
+		SenderAway(bot, update, UI)
+	}
 }

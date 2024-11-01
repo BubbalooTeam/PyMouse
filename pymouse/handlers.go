@@ -25,6 +25,8 @@ func (bS *BotStruct) Register() {
 	// Checkers of DataBase and Utilities of BOT on bot_incoming.
 	bS.Handler.Use(checkers.SaveUsers)
 	bS.Handler.Use(checkers.SaveChats)
+	// Checkers of Database of Utilities
+	bS.Handler.Use(afk.CheckAway)
 
 	// Bot Commands, comming soon, add a dinamic commands loader.
 	bS.Handler.Handle(afk.SetAway, th.CommandEqual("afk"))

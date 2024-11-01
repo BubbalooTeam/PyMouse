@@ -9,24 +9,38 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func FindUser(UserID int64) (UI *modeldb.UsersInformations) {
-	UsersCollection := database.NewMongoCollection("users")
+func FindUser(UserID int64, UserName string) (UI *modeldb.UsersInformations) {
+	var Filter bson.M
+
 	dftUser := &modeldb.UsersInformations{
-		UserID: UserID,
+		UserID:   UserID,
+		UserName: UserName,
 	}
-	err := UsersCollection.FindOne(bson.M{"user_id": UserID}).Decode(&UI)
+
+	UsersCollection := database.NewMongoCollection("users")
+
+	if UserID != 0 {
+		Filter = bson.M{"user_id": UserID}
+	} else if UserName != "" {
+		Filter = bson.M{"username": UserName}
+	} else {
+		return nil
+	}
+
+	err := UsersCollection.FindOne(Filter).Decode(&UI)
 	if err == mongo.ErrNoDocuments {
 		UI = nil
 	} else if err != nil {
 		log.Printf("[MongoDB][Users/FindUser][Error]: %v", err)
 		UI = dftUser
 	}
+
 	return UI
 }
 
 func UpdateUser(UserID int64, UserName string, FirstName string) {
 	UsersCollection := database.NewMongoCollection("users")
-	UI := FindUser(UserID)
+	UI := FindUser(UserID, "")
 
 	if UI != nil {
 		if UI.FirstName == FirstName && UI.UserName == UserName {

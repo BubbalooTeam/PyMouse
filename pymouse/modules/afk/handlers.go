@@ -4,16 +4,19 @@ import (
 	"fmt"
 	"pymouse/pymouse/database/utilitiesdb"
 	"pymouse/pymouse/helpers/utils"
+	"regexp"
+	"strings"
 	"time"
 
 	"github.com/mymmrac/telego"
+	th "github.com/mymmrac/telego/telegohandler"
 	"github.com/mymmrac/telego/telegoutil"
 )
 
 func SetAway(bot *telego.Bot, update telego.Update) {
 	User := update.Message.From
-	IsAway := utilitiesdb.GetAway(User.ID).IsAway
-	if IsAway {
+	Away := utilitiesdb.GetAway(User.ID)
+	if Away.IsAway {
 		StopAway(bot, update)
 		return
 	}
@@ -38,7 +41,7 @@ func SetAway(bot *telego.Bot, update telego.Update) {
 		bot.SendMessage(
 			&telego.SendMessageParams{
 				ChatID:    telegoutil.ID(update.Message.Chat.ID),
-				Text:      fmt.Sprintf("<b>%s is now AFK!</b>\n<b>Reason:</b> %s", update.Message.From.FirstName, AwayReason),
+				Text:      fmt.Sprintf("<b>%s is now unavalaible!</b>\n<b>Reason:</b> %s", update.Message.From.FirstName, AwayReason),
 				ParseMode: "HTML",
 				ReplyParameters: &telego.ReplyParameters{
 					MessageID: update.Message.MessageID,
@@ -50,11 +53,27 @@ func SetAway(bot *telego.Bot, update telego.Update) {
 	bot.SendMessage(
 		&telego.SendMessageParams{
 			ChatID:    telegoutil.ID(update.Message.Chat.ID),
-			Text:      fmt.Sprintf("<b>%s is now AFK!</b>", update.Message.From.FirstName),
+			Text:      fmt.Sprintf("<b>%s is now unavalaible!</b>", update.Message.From.FirstName),
 			ParseMode: "HTML",
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
 			},
 		},
 	)
+}
+
+func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
+	message := update.Message
+
+	if message == nil ||
+		message.From == nil ||
+		!strings.Contains(message.Chat.Type, "group") ||
+		regexp.MustCompile(`^(\/afk|brb)\b`).MatchString(message.Text) {
+		next(bot, update)
+	}
+	if message.From != nil && utilitiesdb.GetAway(message.From.ID).IsAway {
+		StopAway(bot, update)
+		return
+	}
+	CaSAway(bot, update)
 }

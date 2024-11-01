@@ -19,7 +19,7 @@ func UpdateAway(
 	UsersCollection := database.NewMongoCollection("users")
 
 	// Get user informations.
-	UI := FindUser(UserID)
+	UI := FindUser(UserID, "")
 
 	if UI != nil {
 		UI.Away.IsAway = AwayState
@@ -60,7 +60,7 @@ func UnSetAway(
 func GetAway(
 	UserID int64,
 ) (AI modeldb.AwayInformations) {
-	UI := FindUser(UserID)
+	UI := FindUser(UserID, "")
 	AI = UI.Away
 	return AI
 }
