@@ -78,17 +78,14 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 	// Get mentioned user and notify user who mentioned
 	UI = telegram.GetUserMentioned(bot, update)
 	switch {
-	case func() bool {
-		UI = telegram.GetUserMentioned(bot, update)
-		return UI != nil
-	}():
-		SenderAway(bot, update, UI)
-	case func() bool {
-		UI = telegram.GetUserReplied(bot, update)
-		return UI != nil
-	}():
+	case UI != nil:
 		SenderAway(bot, update, UI)
 	default:
-		next(bot, update)
+		UI = telegram.GetUserReplied(bot, update)
+		if UI != nil {
+			SenderAway(bot, update, UI)
+		} else {
+			next(bot, update)
+		}
 	}
 }
