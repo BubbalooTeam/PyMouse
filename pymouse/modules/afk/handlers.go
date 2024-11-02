@@ -5,7 +5,6 @@ import (
 	"pymouse/pymouse/database/utilitiesdb"
 	"pymouse/pymouse/helpers/utils"
 	"regexp"
-	"strings"
 	"time"
 
 	"github.com/mymmrac/telego"
@@ -58,21 +57,19 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 	re := regexp.MustCompile(`(?i)^\/?(afk|away|brb)\b`)
 
 	if message == nil ||
-		message.From == nil ||
+		message.SenderChat != nil ||
+		message.Chat.Type == "private" ||
 		re.MatchString(message.Text) {
 		return
 	}
 
-	if strings.Contains(message.Chat.Type, "private") {
-		return
-	}
+	UserAway := utilitiesdb.GetAway(message.From.ID)
 
-	if utilitiesdb.GetAway(message.From.ID).IsAway {
+	if UserAway.IsAway {
 		StopAway(bot, update)
 		return
 	}
 
 	CaSAway(bot, update)
-
 	next(bot, update)
 }
