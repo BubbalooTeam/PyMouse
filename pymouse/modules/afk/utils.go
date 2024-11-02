@@ -80,4 +80,5 @@ func CaSAway(bot *telego.Bot, update telego.Update) {
 	if UI != nil {
 		SenderAway(bot, update, UI)
 	}
+	return
 }
