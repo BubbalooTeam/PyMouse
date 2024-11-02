@@ -2,7 +2,9 @@ package afk
 
 import (
 	"fmt"
+	"pymouse/pymouse/database/modeldb"
 	"pymouse/pymouse/database/utilitiesdb"
+	"pymouse/pymouse/helpers/telegram"
 	"pymouse/pymouse/helpers/utils"
 	"regexp"
 	"time"
@@ -53,6 +55,8 @@ func SetAway(bot *telego.Bot, update telego.Update) {
 }
 
 func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
+	var UI *modeldb.UsersInformations
+
 	message := update.Message
 	re := regexp.MustCompile(`(?i)^\/?(afk|away|brb)\b`)
 
@@ -60,6 +64,7 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 		message.SenderChat != nil ||
 		message.Chat.Type == "private" ||
 		re.MatchString(message.Text) {
+		next(bot, update)
 		return
 	}
 
@@ -67,9 +72,23 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 
 	if UserAway.IsAway {
 		StopAway(bot, update)
+		next(bot, update)
 		return
 	}
-
-	CaSAway(bot, update)
-	next(bot, update)
+	// Get mentioned user and notify user who mentioned
+	UI = telegram.GetUserMentioned(bot, update)
+	switch {
+	case func() bool {
+		UI = telegram.GetUserMentioned(bot, update)
+		return UI != nil
+	}():
+		SenderAway(bot, update, UI)
+	case func() bool {
+		UI = telegram.GetUserReplied(bot, update)
+		return UI != nil
+	}():
+		SenderAway(bot, update, UI)
+	default:
+		next(bot, update)
+	}
 }

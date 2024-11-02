@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"pymouse/pymouse/database/modeldb"
 	"pymouse/pymouse/database/utilitiesdb"
-	"pymouse/pymouse/helpers/telegram"
 	"pymouse/pymouse/helpers/utils"
 	"time"
 
@@ -36,7 +35,7 @@ func StopAway(bot *telego.Bot, update telego.Update) {
 	)
 }
 
-func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformations) {
+func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformations) bool {
 	var AwayText string
 
 	Away := utilitiesdb.GetAway(UI.UserID)
@@ -65,20 +64,7 @@ func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformat
 				},
 			},
 		)
+		return true
 	}
-}
-
-func CaSAway(bot *telego.Bot, update telego.Update) {
-	var UI *modeldb.UsersInformations
-
-	UI = telegram.GetUserMentioned(bot, update)
-	if UI != nil {
-		SenderAway(bot, update, UI)
-	}
-
-	UI = telegram.GetUserReplied(bot, update)
-	if UI != nil {
-		SenderAway(bot, update, UI)
-	}
-	return
+	return false
 }
