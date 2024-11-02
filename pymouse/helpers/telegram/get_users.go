@@ -29,11 +29,13 @@ func GetUserMentioned(bot *telego.Bot, update telego.Update) (UI *modeldb.UsersI
 				UI = GetUserViaEntities(bot, update, y)
 				return UI
 			} else if y.Type == "text_mention" {
-				UserID = y.User.ID
+				if y.User != nil {
+					UserID = y.User.ID
 
-				// Get Absolute User from Database
-				UI = utilitiesdb.FindUser(UserID, "")
-				return UI
+					// Get Absolute User from Database
+					UI = utilitiesdb.FindUser(UserID, "")
+					return UI
+				}
 			}
 		}
 	}
@@ -50,17 +52,12 @@ func GetUserMentioned(bot *telego.Bot, update telego.Update) (UI *modeldb.UsersI
 }
 
 func GetUserReplied(bot *telego.Bot, update telego.Update) (UI *modeldb.UsersInformations) {
-	var UserID int64
+	if update.Message != nil && update.Message.ReplyToMessage != nil && update.Message.ReplyToMessage.From != nil {
+		UserID := update.Message.ReplyToMessage.From.ID
 
-	if update.Message != nil ||
-		update.Message.ReplyToMessage != nil ||
-		update.Message.ReplyToMessage.From != nil {
-		UserID = update.Message.ReplyToMessage.From.ID
-	} else {
-		return nil
+		// Get Absolute User from Database
+		UI = utilitiesdb.FindUser(UserID, "")
+		return UI
 	}
-
-	// Get Absolute User from Database
-	UI = utilitiesdb.FindUser(UserID, "")
-	return UI
+	return nil
 }

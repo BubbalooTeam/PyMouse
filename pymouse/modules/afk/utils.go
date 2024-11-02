@@ -69,10 +69,13 @@ func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformat
 }
 
 func CaSAway(bot *telego.Bot, update telego.Update) {
-	UI := telegram.GetUserMentioned(bot, update)
+	var UI *modeldb.UsersInformations
+
+	UI = telegram.GetUserMentioned(bot, update)
 	if UI != nil {
 		SenderAway(bot, update, UI)
 	}
+
 	UI = telegram.GetUserReplied(bot, update)
 	if UI != nil {
 		SenderAway(bot, update, UI)
