@@ -61,6 +61,7 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 	re := regexp.MustCompile(`(?i)^\/?(afk|away|brb)\b`)
 
 	if message == nil || message.SenderChat != nil || re.MatchString(message.Text) {
+		next(bot, update)
 		return
 	}
 
@@ -69,26 +70,14 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 
 		if UserAway.IsAway {
 			StopAway(bot, update)
-			return
 		}
 
 		// Get mentioned user and notify user who mentioned
 		UI = telegram.GetUserMentioned(bot, update)
 		if UI != nil {
 			SenderAway(bot, update, UI)
-			return
 		}
 
-		UI = telegram.GetUserReplied(bot, update)
-		if UI != nil {
-			SenderAway(bot, update, UI)
-			return
-		}
-
-		UI = telegram.GetUserMentioned(bot, update)
-		if UI != nil {
-			SenderAway(bot, update, UI)
-		}
 		UI = telegram.GetUserReplied(bot, update)
 		if UI != nil {
 			SenderAway(bot, update, UI)
