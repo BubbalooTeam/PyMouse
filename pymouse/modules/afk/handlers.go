@@ -64,12 +64,11 @@ func SetAway(bot *telego.Bot, update telego.Update) {
 
 func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 	message := update.Message
+	re := regexp.MustCompile(`(?i)\/(afk|away)|\bbrb\b`)
 
-	if message == nil ||
-		message.From == nil ||
-		!strings.Contains(message.Chat.Type, "group") ||
-		regexp.MustCompile(`(?i)\/(afk|away)|\bbrb\b`).MatchString(message.Text) {
+	if message == nil || message.From == nil || !strings.Contains(message.Chat.Type, "group") || re.MatchString(message.Text) {
 		next(bot, update)
+		return
 	}
 	if message.From != nil && utilitiesdb.GetAway(message.From.ID).IsAway {
 		StopAway(bot, update)

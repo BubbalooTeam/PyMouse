@@ -40,7 +40,6 @@ func UpdateAway(
 		log.Printf("[MongoDB][Afk/UpdateAway][Error]: %v - %d", err, UserID)
 		return
 	}
-	log.Printf("[MongoDB][Afk/UpdateAway]: %d, Updated with successfully to state: %t!", UserID, AwayState)
 }
 
 func SetAway(
