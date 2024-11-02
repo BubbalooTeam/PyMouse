@@ -59,18 +59,20 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 
 	if message == nil ||
 		message.From == nil ||
-		!strings.Contains(message.Chat.Type, "group") ||
 		re.MatchString(message.Text) {
-		next(bot, update)
+		return
+	}
+
+	if strings.Contains(message.Chat.Type, "private") {
 		return
 	}
 
 	if utilitiesdb.GetAway(message.From.ID).IsAway {
 		StopAway(bot, update)
-		next(bot, update)
 		return
 	}
 
 	CaSAway(bot, update)
+
 	next(bot, update)
 }
