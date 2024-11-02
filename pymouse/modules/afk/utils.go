@@ -35,7 +35,7 @@ func StopAway(bot *telego.Bot, update telego.Update) {
 	)
 }
 
-func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformations) bool {
+func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformations) {
 	var AwayText string
 
 	Away := utilitiesdb.GetAway(UI.UserID)
@@ -64,7 +64,5 @@ func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformat
 				},
 			},
 		)
-		return true
 	}
-	return false
 }

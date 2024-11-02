@@ -64,7 +64,6 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 		message.SenderChat != nil ||
 		message.Chat.Type == "private" ||
 		re.MatchString(message.Text) {
-		next(bot, update)
 		return
 	}
 
