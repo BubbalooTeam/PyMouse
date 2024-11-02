@@ -60,27 +60,39 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 	message := update.Message
 	re := regexp.MustCompile(`(?i)^\/?(afk|away|brb)\b`)
 
-	if message == nil ||
-		message.SenderChat != nil ||
-		message.Chat.Type == "private" ||
-		re.MatchString(message.Text) {
+	if message == nil || message.SenderChat != nil || re.MatchString(message.Text) {
 		return
 	}
 
-	UserAway := utilitiesdb.GetAway(message.From.ID)
+	if message.Chat.Type != "private" {
+		UserAway := utilitiesdb.GetAway(message.From.ID)
 
-	if UserAway.IsAway {
-		StopAway(bot, update)
-		next(bot, update)
-	}
-	// Get mentioned user and notify user who mentioned
-	UI = telegram.GetUserMentioned(bot, update)
-	if UI != nil {
-		SenderAway(bot, update, UI)
-	}
-	UI = telegram.GetUserReplied(bot, update)
-	if UI != nil {
-		SenderAway(bot, update, UI)
+		if UserAway.IsAway {
+			StopAway(bot, update)
+			return
+		}
+
+		// Get mentioned user and notify user who mentioned
+		UI = telegram.GetUserMentioned(bot, update)
+		if UI != nil {
+			SenderAway(bot, update, UI)
+			return
+		}
+
+		UI = telegram.GetUserReplied(bot, update)
+		if UI != nil {
+			SenderAway(bot, update, UI)
+			return
+		}
+
+		UI = telegram.GetUserMentioned(bot, update)
+		if UI != nil {
+			SenderAway(bot, update, UI)
+		}
+		UI = telegram.GetUserReplied(bot, update)
+		if UI != nil {
+			SenderAway(bot, update, UI)
+		}
 	}
 	next(bot, update)
 }
