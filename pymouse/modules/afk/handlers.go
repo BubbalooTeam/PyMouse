@@ -23,48 +23,39 @@ func SetAway(bot *telego.Bot, update telego.Update) {
 	AwayReason := utils.GetArgs(update)
 
 	// Set User to Away From Keyboard (AFK)
-	utilitiesdb.SetAway(
-		User.ID,
-		time.Now().UTC(),
-		AwayReason,
-	)
+	utilitiesdb.SetAway(User.ID, time.Now().UTC(), AwayReason)
+
 	// Send ChatAction via Telegram
-	bot.SendChatAction(
-		&telego.SendChatActionParams{
-			ChatID: telegoutil.ID(update.Message.Chat.ID),
-			Action: "typing",
-		},
-	)
+	bot.SendChatAction(&telego.SendChatActionParams{
+		ChatID: telegoutil.ID(update.Message.Chat.ID),
+		Action: "typing",
+	})
 
 	// Send a notification to notify AFK
 	if AwayReason != "" {
-		bot.SendMessage(
-			&telego.SendMessageParams{
-				ChatID:    telegoutil.ID(update.Message.Chat.ID),
-				Text:      fmt.Sprintf("<b>%s is now unavalaible!</b>\n<b>Reason:</b> %s", update.Message.From.FirstName, AwayReason),
-				ParseMode: "HTML",
-				ReplyParameters: &telego.ReplyParameters{
-					MessageID: update.Message.MessageID,
-				},
-			},
-		)
-		return
-	}
-	bot.SendMessage(
-		&telego.SendMessageParams{
+		bot.SendMessage(&telego.SendMessageParams{
 			ChatID:    telegoutil.ID(update.Message.Chat.ID),
-			Text:      fmt.Sprintf("<b>%s is now unavalaible!</b>", update.Message.From.FirstName),
+			Text:      fmt.Sprintf("<b>%s is now unavailable!</b>\n<b>Reason:</b> %s", update.Message.From.FirstName, AwayReason),
 			ParseMode: "HTML",
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
 			},
+		})
+		return
+	}
+	bot.SendMessage(&telego.SendMessageParams{
+		ChatID:    telegoutil.ID(update.Message.Chat.ID),
+		Text:      fmt.Sprintf("<b>%s is now unavailable!</b>", update.Message.From.FirstName),
+		ParseMode: "HTML",
+		ReplyParameters: &telego.ReplyParameters{
+			MessageID: update.Message.MessageID,
 		},
-	)
+	})
 }
 
 func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 	message := update.Message
-	re := regexp.MustCompile(`(?i)^\b(afk|brb)\b`)
+	re := regexp.MustCompile(`(?i)^\/?(afk|away|brb)\b`)
 
 	if message == nil ||
 		message.From == nil ||
