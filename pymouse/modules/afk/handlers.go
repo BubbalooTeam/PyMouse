@@ -69,7 +69,7 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 		}
 
 		// Get mentioned user and notify user who mentioned
-		CasAway(bot, update)
+		CaSAway(bot, update)
 	}
 	next(bot, update)
 }

@@ -68,7 +68,7 @@ func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformat
 	}
 }
 
-func CasAway(bot *telego.Bot, update telego.Update) {
+func CaSAway(bot *telego.Bot, update telego.Update) {
 	var UI *modeldb.UsersInformations
 	// Get mentioned user and notify user who mentioned
 	UI = telegram.GetUserMentioned(bot, update)
