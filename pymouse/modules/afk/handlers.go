@@ -76,12 +76,17 @@ func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
 		UI = telegram.GetUserMentioned(bot, update)
 		if UI != nil {
 			SenderAway(bot, update, UI)
+			next(bot, update)
+			return
 		}
 
 		UI = telegram.GetUserReplied(bot, update)
 		if UI != nil {
 			SenderAway(bot, update, UI)
+			next(bot, update)
+			return
 		}
+		next(bot, update)
 	}
 	next(bot, update)
 }
