@@ -29,6 +29,6 @@ func (bS *BotStruct) Register() {
 	bS.Handler.Use(afk.CheckAway)
 
 	// Bot Commands, comming soon, add a dinamic commands loader.
-	bS.Handler.Handle(afk.SetAway, th.CommandEqual("afk"))
 	bS.Handler.Handle(start.Start, th.CommandEqual("start"))
+	bS.Handler.Handle(afk.SetAway, th.CommandEqual("afk"))
 }

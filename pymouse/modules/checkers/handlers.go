@@ -14,11 +14,13 @@ func SaveUsers(bot *telego.Bot, update telego.Update, next th.Handler) {
 	message := update.Message
 	if message == nil {
 		if update.CallbackQuery == nil {
+			next(bot, update)
 			return
 		}
 		message = update.CallbackQuery.Message.(*telego.Message)
 	}
 	if message.SenderChat != nil {
+		next(bot, update)
 		return
 	}
 	// Telegram user informations
@@ -41,14 +43,13 @@ func SaveChats(bot *telego.Bot, update telego.Update, next th.Handler) {
 	message := update.Message
 	if message == nil {
 		if update.CallbackQuery == nil {
+			next(bot, update)
 			return
 		}
 		message = update.CallbackQuery.Message.(*telego.Message)
 	}
-	if message.Chat.Type == "private" {
-		return
-	}
-	if message.SenderChat != nil {
+	if message.Chat.Type == "private" || message.SenderChat != nil {
+		next(bot, update)
 		return
 	}
 
