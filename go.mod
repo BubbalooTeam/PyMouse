@@ -5,8 +5,10 @@ go 1.23
 toolchain go1.23.1
 
 require (
+	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
-	github.com/mymmrac/telego v0.31.3
+	github.com/mymmrac/telego v0.31.4
+	github.com/raitonoberu/ytsearch v0.2.0
 	go.mongodb.org/mongo-driver v1.17.1
 )
 
@@ -21,11 +23,12 @@ require (
 	github.com/grbit/go-json v0.11.0 // indirect
 	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
+	github.com/knz/go-libedit v1.10.1 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/savsgio/gotils v0.0.0-20240704082632-aef3928b8a38 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.56.0 // indirect
+	github.com/valyala/fasthttp v1.57.0 // indirect
 	github.com/valyala/fastjson v1.6.4 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect

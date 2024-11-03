@@ -3,6 +3,7 @@ package pymouse
 import (
 	"pymouse/pymouse/modules/afk"
 	"pymouse/pymouse/modules/checkers"
+	"pymouse/pymouse/modules/medias/youtube"
 	"pymouse/pymouse/modules/start"
 
 	"github.com/mymmrac/telego"
@@ -31,4 +32,5 @@ func (bS *BotStruct) Register() {
 	// Bot Commands, comming soon, add a dinamic commands loader.
 	bS.Handler.Handle(start.Start, th.CommandEqual("start"))
 	bS.Handler.Handle(afk.SetAway, th.CommandEqual("afk"))
+	bS.Handler.Handle(youtube.GetYoutubeMedias, th.CommandEqual("ytdl"))
 }
