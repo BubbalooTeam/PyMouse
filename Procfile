@@ -1,1 +1,0 @@
-pymouse: go run main.go
