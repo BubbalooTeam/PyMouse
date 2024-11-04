@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/mymmrac/telego"
@@ -41,25 +42,21 @@ func TimeFormatter(seconds float64) string {
 	return strings.Join(parts, ", ")
 }
 
-func FormatInteger(number int, thousandSeparator string) string {
-	reverse := func(s string) string {
-		runes := []rune(s)
-		for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-			runes[i], runes[j] = runes[j], runes[i]
-		}
-		return string(runes)
+func FormatInteger(number int) string {
+	switch {
+	case number >= 1000000000000000000:
+		return fmt.Sprintf("%.1fQn", float64(number)/1000000000000000000)
+	case number >= 1000000000000000:
+		return fmt.Sprintf("%.1fQd", float64(number)/1000000000000000)
+	case number >= 1000000000000:
+		return fmt.Sprintf("%.1fT", float64(number)/1000000000000)
+	case number >= 1000000000:
+		return fmt.Sprintf("%.1fB", float64(number)/1000000000)
+	case number >= 1000000:
+		return fmt.Sprintf("%.1fM", float64(number)/1000000)
+	case number >= 1000:
+		return fmt.Sprintf("%.1fK", float64(number)/1000)
+	default:
+		return strconv.Itoa(number)
 	}
-
-	s := reverse(fmt.Sprintf("%d", number))
-	count := 0
-	result := ""
-	for _, char := range s {
-		count++
-		if count%3 == 0 && count != len(s) {
-			result = string(char) + thousandSeparator + result
-		} else {
-			result = string(char) + result
-		}
-	}
-	return result
 }
