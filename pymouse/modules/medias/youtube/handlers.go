@@ -87,7 +87,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 			VideoPage.URL,
 			VideoPage.Title,
 			utils.TimeFormatter(float64(VideoPage.Duration)),
-			VideoPage.ViewCount,
+			utils.FormatInteger(VideoPage.ViewCount, ","),
 			VideoPage.PublishedTime,
 			VideoPage.Channel.URL,
 			VideoPage.Channel.Title,

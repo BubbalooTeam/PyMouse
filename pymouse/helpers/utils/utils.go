@@ -41,7 +41,7 @@ func TimeFormatter(seconds float64) string {
 	return strings.Join(parts, ", ")
 }
 
-func formatInteger(number int, thousandSeparator string) string {
+func FormatInteger(number int, thousandSeparator string) string {
 	reverse := func(s string) string {
 		runes := []rune(s)
 		for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {

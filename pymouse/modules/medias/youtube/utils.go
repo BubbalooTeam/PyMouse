@@ -16,7 +16,7 @@ func YouTubeMakeTextWithInfos(
 	Vidurl string,
 	Vidtitle string,
 	Vidduration string,
-	Vidviews int,
+	Vidviews string,
 	publishedTime string,
 	CreatorofContentUrl string,
 	CreatorofContentName string,
@@ -25,7 +25,7 @@ func YouTubeMakeTextWithInfos(
 
 	out := fmt.Sprintf("<b>Published:</b> %s\n", publishedTime)
 	out += fmt.Sprintf("<b>Duration:</b> %s\n", Vidduration)
-	out += fmt.Sprintf("<b>Views:</b> %d\n", Vidviews)
+	out += fmt.Sprintf("<b>Views:</b> %s\n", Vidviews)
 
 	CreatorOfContent := fmt.Sprintf("<a href=\"%s\">%s</a>", CreatorofContentUrl, CreatorofContentName)
 	out += fmt.Sprintf("<b>Creator:</b> %s\n", CreatorOfContent)
