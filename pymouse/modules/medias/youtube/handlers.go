@@ -81,8 +81,8 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 				VidInformations: search.Videos,
 			},
 		)
-		CurrentlyYouTubeCache := YouTubeCaches[len(YouTubeCaches)-1]
-		VideoPage := CurrentlyYouTubeCache.VidInformations[0]
+		VideoCache := GetVideoByUUID(SearchKey)
+		VideoPage := VideoCache.VidInformations[0]
 		out := YouTubeMakeTextWithInfos(
 			VideoPage.URL,
 			VideoPage.Title,
@@ -99,6 +99,9 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 				ParseMode: "HTML",
 				ReplyParameters: &telego.ReplyParameters{
 					MessageID: update.Message.MessageID,
+				},
+				LinkPreviewOptions: &telego.LinkPreviewOptions{
+					IsDisabled: true,
 				},
 			},
 		)

@@ -32,3 +32,12 @@ func YouTubeMakeTextWithInfos(
 
 	return headInfo + out
 }
+
+func GetVideoByUUID(UUID string) *VidCache {
+	for _, CachedVideo := range YouTubeCaches {
+		if CachedVideo.UUID == UUID {
+			return &CachedVideo
+		}
+	}
+	return nil
+}
