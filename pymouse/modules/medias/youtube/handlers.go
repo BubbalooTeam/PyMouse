@@ -87,21 +87,22 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 			VideoPage.URL,
 			VideoPage.Title,
 			utils.TimeFormatter(float64(VideoPage.Duration)),
-			utils.FormatInteger(VideoPage.ViewCount, ","),
+			utils.FormatInteger(VideoPage.ViewCount),
 			VideoPage.PublishedTime,
 			VideoPage.Channel.URL,
 			VideoPage.Channel.Title,
 		)
-		bot.SendMessage(
-			&telego.SendMessageParams{
-				ChatID:    telegoutil.ID(update.Message.Chat.ID),
-				Text:      out,
+		ThumbnailURL := GetThumbURL(VideoPage.ID)
+		bot.SendPhoto(
+			&telego.SendPhotoParams{
+				ChatID: telegoutil.ID(update.Message.Chat.ID),
+				Photo: telego.InputFile{
+					URL: ThumbnailURL,
+				},
+				Caption:   out,
 				ParseMode: "HTML",
 				ReplyParameters: &telego.ReplyParameters{
 					MessageID: update.Message.MessageID,
-				},
-				LinkPreviewOptions: &telego.LinkPreviewOptions{
-					IsDisabled: true,
 				},
 			},
 		)

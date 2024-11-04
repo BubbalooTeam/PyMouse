@@ -1,4 +1,4 @@
-package http
+package rapidhttp
 
 import (
 	"fmt"
@@ -6,9 +6,13 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-func Request(options RequestOptions) (*fasthttp.Request, *fasthttp.Response, error) {
+// Request makes an HTTP request using fasthttp
+func Request(options RequestOptions) (*fasthttp.Response, error) {
 	AcRequest := fasthttp.AcquireRequest()
+	defer fasthttp.ReleaseRequest(AcRequest)
+
 	AcResponse := fasthttp.AcquireResponse()
+	defer fasthttp.ReleaseResponse(AcResponse)
 
 	AcRequest.SetRequestURI(options.URL)
 	AcRequest.Header.SetMethod(options.Method)
@@ -24,21 +28,21 @@ func Request(options RequestOptions) (*fasthttp.Request, *fasthttp.Response, err
 		QueryArgs.Set(key, value)
 	}
 
-	// Treat the "Body" if the POST method is used.
+	// Treat the "Body" if the POST method is used
 	if options.Method == "POST" {
 		AcRequest.SetBody(options.Body)
 	}
 
-	// Makes the Request according to the passed method.
-	if options.Method == "GET" ||
-		options.Method == "POST" ||
-		options.Method == "OPTIONS" {
+	// Makes the Request according to the passed method
+	switch options.Method {
+	case "GET", "POST", "OPTIONS":
 		err := fasthttp.Do(AcRequest, AcResponse)
 		if err != nil {
-			return nil, nil, err
+			return nil, err
 		}
-	} else {
-		return nil, nil, fmt.Errorf("[http/Request]: HTTP Method not Supported: %s", options.Method)
+	default:
+		return nil, fmt.Errorf("[http/Request]: HTTP Method not supported: %s", options.Method)
 	}
-	return AcRequest, AcResponse, nil
+
+	return AcResponse, nil
 }
