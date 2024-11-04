@@ -40,3 +40,26 @@ func TimeFormatter(seconds float64) string {
 
 	return strings.Join(parts, ", ")
 }
+
+func formatInteger(number int, thousandSeparator string) string {
+	reverse := func(s string) string {
+		runes := []rune(s)
+		for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+			runes[i], runes[j] = runes[j], runes[i]
+		}
+		return string(runes)
+	}
+
+	s := reverse(fmt.Sprintf("%d", number))
+	count := 0
+	result := ""
+	for _, char := range s {
+		count++
+		if count%3 == 0 && count != len(s) {
+			result = string(char) + thousandSeparator + result
+		} else {
+			result = string(char) + result
+		}
+	}
+	return result
+}
