@@ -8,8 +8,9 @@ import (
 )
 
 var (
-	BotToken    string
-	DatabaseURI string
+	BotToken       string
+	DatabaseURI    string
+	TelegramAPIURL string
 )
 
 func init() {
@@ -25,4 +26,6 @@ func init() {
 	if DatabaseURI == "" {
 		log.Fatalf(`In order to initialize this bot, you must insert the "DATABASE_URI" in the .env file.`)
 	}
+
+	TelegramAPIURL = os.Getenv("TELEGRAM_API_URL")
 }

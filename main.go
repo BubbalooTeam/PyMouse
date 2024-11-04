@@ -17,7 +17,7 @@ func main() {
 	database.InitDB()
 
 	log.Println("\033[0;33mCreating Bot Client...\033[0m")
-	botClient, err := client.CreateBot(config.BotToken)
+	botClient, err := client.CreateBot(config.BotToken, config.TelegramAPIURL)
 	if err != nil {
 		log.Fatalf("\033[0;31mError in creating bot Client: %v\033[0m", err)
 	}

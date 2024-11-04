@@ -5,12 +5,12 @@ import (
 )
 
 // CreateBot creates a new Telegram bot instance using telego.
-func CreateBot(token string) (*telego.Bot, error) {
+func CreateBot(token string, telegram_api string) (*telego.Bot, error) {
 	client, err := telego.NewBot(token)
-	if err != nil {
-		return nil, err
+	if telegram_api != "" {
+		client, err = telego.NewBot(token, telego.WithAPIServer(telegram_api))
 	}
-	return client, nil
+	return client, err
 }
 
 // GetUpdates retrieves updates from the Telegram server.
