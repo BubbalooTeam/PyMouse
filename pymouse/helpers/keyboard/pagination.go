@@ -31,7 +31,7 @@ func AddButton(Text string, CallbackPattern string) telego.InlineKeyboardButton 
 	}
 }
 
-func BuildPagination(TotalPages int, CurrentPage int, CallbackPattern string) *telego.InlineKeyboardMarkup {
+func Paginate(TotalPages int, CurrentPage int, CallbackPattern string) *telego.InlineKeyboardMarkup {
 	var IKB [][]telego.InlineKeyboardButton
 	if TotalPages <= 5 {
 		IKB = append(IKB, FullPagination(TotalPages, CurrentPage, CallbackPattern)...)
