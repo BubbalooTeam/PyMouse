@@ -3,6 +3,7 @@ package youtube
 import (
 	"fmt"
 	"log"
+	"pymouse/pymouse/helpers/keyboard"
 	"pymouse/pymouse/helpers/utils"
 	"regexp"
 
@@ -93,6 +94,17 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 			VideoPage.Channel.Title,
 		)
 		ThumbnailURL := GetThumbURL(VideoPage.ID)
+		// Get YouTube Buttons
+		YouTubeKeyboard := keyboard.Paginate(
+			len(VideoCache.VidInformations)-1,
+			1,
+			fmt.Sprintf(
+				"YouTubeScrool|%s|{number}|%d",
+				SearchKey,
+				update.Message.From.ID,
+			),
+		)
+		// Send YouTube informations
 		bot.SendPhoto(
 			&telego.SendPhotoParams{
 				ChatID: telegoutil.ID(update.Message.Chat.ID),
@@ -104,6 +116,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 				ReplyParameters: &telego.ReplyParameters{
 					MessageID: update.Message.MessageID,
 				},
+				ReplyMarkup: YouTubeKeyboard,
 			},
 		)
 		return
