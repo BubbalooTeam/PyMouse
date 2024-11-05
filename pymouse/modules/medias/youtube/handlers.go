@@ -3,7 +3,7 @@ package youtube
 import (
 	"fmt"
 	"log"
-	"pymouse/pymouse/helpers/keyboard"
+	"pymouse/pymouse/helpers/telegram"
 	"pymouse/pymouse/helpers/utils"
 	"regexp"
 
@@ -95,7 +95,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 		)
 		ThumbnailURL := GetThumbURL(VideoPage.ID)
 		// Get YouTube Buttons
-		YouTubeKeyboard := keyboard.Paginate(
+		YouTubeKeyboard := telegram.KeyboardPaginate(
 			len(VideoCache.VidInformations)-1,
 			1,
 			fmt.Sprintf(
