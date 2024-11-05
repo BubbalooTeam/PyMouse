@@ -25,13 +25,13 @@ var (
 func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 	query := utils.GetArgs(update)
 
-	bot.SendChatAction(
-		&telego.SendChatActionParams{
-			ChatID: telegoutil.ID(update.Message.Chat.ID),
-			Action: "typing",
-		},
-	)
 	if query == "" {
+		bot.SendChatAction(
+			&telego.SendChatActionParams{
+				ChatID: telegoutil.ID(update.Message.Chat.ID),
+				Action: "typing",
+			},
+		)
 		bot.SendMessage(
 			&telego.SendMessageParams{
 				ChatID:    telegoutil.ID(update.Message.Chat.ID),
@@ -49,6 +49,13 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 		search, err := BaseSearch.Next()
 		if err != nil {
 			log.Printf("There was an error when searching on YouTube: %v", err)
+
+			bot.SendChatAction(
+				&telego.SendChatActionParams{
+					ChatID: telegoutil.ID(update.Message.Chat.ID),
+					Action: "typing",
+				},
+			)
 			bot.SendMessage(
 				&telego.SendMessageParams{
 					ChatID:    telegoutil.ID(update.Message.Chat.ID),
@@ -63,6 +70,12 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 		}
 		SearchKey := RandYouTubeKey()
 		if len(search.Videos) == 0 {
+			bot.SendChatAction(
+				&telego.SendChatActionParams{
+					ChatID: telegoutil.ID(update.Message.Chat.ID),
+					Action: "typing",
+				},
+			)
 			bot.SendMessage(
 				&telego.SendMessageParams{
 					ChatID:    telegoutil.ID(update.Message.Chat.ID),
@@ -105,6 +118,12 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 			),
 		)
 		// Send YouTube informations
+		bot.SendChatAction(
+			&telego.SendChatActionParams{
+				ChatID: telegoutil.ID(update.Message.Chat.ID),
+				Action: "upload_photo",
+			},
+		)
 		bot.SendPhoto(
 			&telego.SendPhotoParams{
 				ChatID: telegoutil.ID(update.Message.Chat.ID),
