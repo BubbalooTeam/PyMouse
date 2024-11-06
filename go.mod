@@ -7,21 +7,26 @@ toolchain go1.23.1
 require (
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
+	github.com/kkdai/youtube/v2 v2.10.1
 	github.com/mymmrac/telego v0.31.4
 	github.com/raitonoberu/ytsearch v0.2.0
 	github.com/valyala/fasthttp v1.57.0
-	github.com/wader/goutubedl v0.0.0-20241104165005-d51f319f36dc
 	go.mongodb.org/mongo-driver v1.17.1
 )
 
 require (
 	github.com/andybalholm/brotli v1.1.1 // indirect
+	github.com/bitly/go-simplejson v0.5.1 // indirect
 	github.com/bytedance/sonic v1.12.4 // indirect
 	github.com/bytedance/sonic/loader v0.2.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
+	github.com/dlclark/regexp2 v1.11.0 // indirect
+	github.com/dop251/goja v0.0.0-20240220182346-e401ed450204 // indirect
 	github.com/fasthttp/router v1.5.2 // indirect
+	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/google/pprof v0.0.0-20240227163752-401108e1b7e7 // indirect
 	github.com/grbit/go-json v0.11.0 // indirect
 	github.com/klauspost/compress v1.17.11 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
