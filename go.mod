@@ -10,12 +10,13 @@ require (
 	github.com/mymmrac/telego v0.31.4
 	github.com/raitonoberu/ytsearch v0.2.0
 	github.com/valyala/fasthttp v1.57.0
+	github.com/wader/goutubedl v0.0.0-20241104165005-d51f319f36dc
 	go.mongodb.org/mongo-driver v1.17.1
 )
 
 require (
 	github.com/andybalholm/brotli v1.1.1 // indirect
-	github.com/bytedance/sonic v1.12.3 // indirect
+	github.com/bytedance/sonic v1.12.4 // indirect
 	github.com/bytedance/sonic/loader v0.2.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
 	github.com/cloudwego/iasm v0.2.0 // indirect
