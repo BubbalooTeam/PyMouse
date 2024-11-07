@@ -112,7 +112,7 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 		{
 			{
 				Text:         "🥇 BEST - 🎥 MP4",
-				CallbackData: fmt.Sprintf("yt_dl|%s|mp4+140|%d|v", videoID, userID),
+				CallbackData: fmt.Sprintf("yt|dl|%s|mp4+140|%d|v", videoID, userID),
 			},
 		},
 	}
@@ -163,7 +163,7 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 			if maxSize > 0 {
 				videoButtons = append(videoButtons, telego.InlineKeyboardButton{
 					Text:         fmt.Sprintf("🎥 %s (%s)", VidQuality, utils.HumanBytes(maxSize)),
-					CallbackData: fmt.Sprintf("yt_dl|%s|%s+140|%d|v", videoID, maxItag, userID),
+					CallbackData: fmt.Sprintf("yt|dl|%s|%s+140|%d|v", videoID, maxItag, userID),
 				})
 			}
 		}
@@ -178,7 +178,7 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 		[]telego.InlineKeyboardButton{
 			{
 				Text:         "🥇 BEST - 📀 320Kbps - MP3",
-				CallbackData: fmt.Sprintf("yt_dl|%s|mp3|%d|a", videoID, userID),
+				CallbackData: fmt.Sprintf("yt|dl|%s|mp3|%d|a", videoID, userID),
 			},
 		},
 	)
@@ -192,7 +192,7 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 	for _, bitrate := range bitrates {
 		audioBtns = append(audioBtns, telego.InlineKeyboardButton{
 			Text:         audioDict[bitrate],
-			CallbackData: fmt.Sprintf("yt_dl|%s|%d|%d|a", videoID, bitrate, userID),
+			CallbackData: fmt.Sprintf("yt|dl|%s|%d|%d|a", videoID, bitrate, userID),
 		})
 	}
 
