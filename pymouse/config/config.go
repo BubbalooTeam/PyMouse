@@ -10,6 +10,7 @@ import (
 var (
 	BotToken       string
 	DatabaseURI    string
+	Socks5Proxy    string
 	TelegramAPIURL string
 )
 
@@ -26,6 +27,8 @@ func init() {
 	if DatabaseURI == "" {
 		log.Fatalf(`In order to initialize this bot, you must insert the "DATABASE_URI" in the .env file.`)
 	}
+
+	Socks5Proxy = os.Getenv("SOCKS5_PROXY")
 
 	TelegramAPIURL = os.Getenv("TELEGRAM_API_URL")
 }
