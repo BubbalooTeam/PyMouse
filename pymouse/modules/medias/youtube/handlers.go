@@ -117,6 +117,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 				update.Message.From.ID,
 			),
 		)
+
 		// Send YouTube informations
 		bot.SendChatAction(
 			&telego.SendChatActionParams{

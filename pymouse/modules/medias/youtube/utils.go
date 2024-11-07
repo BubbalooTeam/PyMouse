@@ -10,6 +10,7 @@ import (
 	"pymouse/pymouse/helpers/rapidhttp"
 	"sort"
 	"strconv"
+	"strings"
 
 	"github.com/google/uuid"
 	yt_dl "github.com/kkdai/youtube/v2"
@@ -130,46 +131,45 @@ func SplitIntoRows(items []telego.InlineKeyboardButton, width int) [][]telego.In
 	return rows
 }
 
-func GetDownloadButtons(videoID string, userID int64) ([][]telego.InlineKeyboardButton, error) {
+func GetDownloadButtons(videoID string, userID int64) [][]telego.InlineKeyboardButton {
 	client := GetYouTubeClient()
 	video, err := client.GetVideo(videoID)
 	if err != nil {
-		return nil, fmt.Errorf("error fetching video info: %w", err)
+		log.Printf("[youtube/GetDownloadButtons]: Error in fetching video informations...")
+		return nil
 	}
 
-	// Primeiro botão: Melhor qualidade de vídeo
-	buttons := [][]telego.InlineKeyboardButton{
+	IKB := [][]telego.InlineKeyboardButton{
 		{
 			{
 				Text:         "🥇 BEST - 🎥 MP4",
 				CallbackData: fmt.Sprintf("yt_dl|%s|mp4+140|%d|v", videoID, userID),
 			},
 		},
-		{
-			{
-				Text:         "🥇 BEST - 📀 320Kbps - MP3",
-				CallbackData: fmt.Sprintf("yt_dl|%s|mp3|%d|a", videoID, userID),
-			},
-		},
 	}
 
-	qualList := []string{"1440p", "1080p", "720p", "480p", "360p", "240p", "144p"}
-	qualDict := make(map[string]map[string]int64)
+	VidQList := []string{"1080p60", "720p60", "1080p", "720p", "480p", "360p", "240p", "144p"}
+	vidQDict := make(map[string]map[string]int64)
+
+	for _, qual := range VidQList {
+		vidQDict[qual] = make(map[string]int64)
+	}
+
 	audioDict := make(map[int]string)
 
 	for _, format := range video.Formats {
-		if format.MimeType == "video/mp4" {
-			for _, qual := range qualList {
-				if format.QualityLabel == qual {
-					if qualDict[qual] == nil {
-						qualDict[qual] = make(map[string]int64)
-					}
-					qualDict[qual][strconv.Itoa(format.ItagNo)] = format.ContentLength
-				}
+		if strings.Contains(format.MimeType, "video/mp4") {
+			if format.ContentLength == 0 {
+				continue
 			}
-		}
 
-		if format.MimeType == "audio/mp4" && format.AudioChannels > 0 {
+			itagStr := strconv.Itoa(format.ItagNo)
+			qual := format.QualityLabel
+
+			if _, exists := vidQDict[qual]; exists {
+				vidQDict[qual][itagStr] = format.ContentLength
+			}
+		} else if strings.Contains(format.MimeType, "audio/mp4") && format.AudioChannels > 0 {
 			bitrate := int(math.Round(float64(format.Bitrate) / 1000))
 			audioDict[bitrate] = fmt.Sprintf("📀 %dKbps (%s)",
 				bitrate,
@@ -179,8 +179,9 @@ func GetDownloadButtons(videoID string, userID int64) ([][]telego.InlineKeyboard
 	}
 
 	var videoButtons []telego.InlineKeyboardButton
-	for _, qual := range qualList {
-		if formats, ok := qualDict[qual]; ok && len(formats) > 0 {
+	for _, qual := range VidQList {
+		formats := vidQDict[qual]
+		if len(formats) > 0 {
 			var maxItag string
 			var maxSize int64
 			for itag, size := range formats {
@@ -190,16 +191,28 @@ func GetDownloadButtons(videoID string, userID int64) ([][]telego.InlineKeyboard
 				}
 			}
 
-			videoButtons = append(videoButtons, telego.InlineKeyboardButton{
-				Text:         fmt.Sprintf("🎥 %s (%s)", qual, HumanBytes(maxSize)),
-				CallbackData: fmt.Sprintf("yt_dl|%s|%s+140|%d|v", videoID, maxItag, userID),
-			})
+			if maxSize > 0 {
+				videoButtons = append(videoButtons, telego.InlineKeyboardButton{
+					Text:         fmt.Sprintf("🎥 %s (%s)", qual, HumanBytes(maxSize)),
+					CallbackData: fmt.Sprintf("yt_dl|%s|%s+140|%d|v", videoID, maxItag, userID),
+				})
+			}
 		}
 	}
+
 	if len(videoButtons) > 0 {
-		buttons = append(buttons, SplitIntoRows(videoButtons, 2)...)
+		IKB = append(IKB, SplitIntoRows(videoButtons, 2)...)
 	}
 
+	IKB = append(
+		IKB,
+		[]telego.InlineKeyboardButton{
+			{
+				Text:         "🥇 BEST - 📀 320Kbps - MP3",
+				CallbackData: fmt.Sprintf("yt_dl|%s|mp3|%d|a", videoID, userID),
+			},
+		},
+	)
 	var audioBtns []telego.InlineKeyboardButton
 	var bitrates []int
 	for bitrate := range audioDict {
@@ -215,8 +228,8 @@ func GetDownloadButtons(videoID string, userID int64) ([][]telego.InlineKeyboard
 	}
 
 	if len(audioBtns) > 0 {
-		buttons = append(buttons, SplitIntoRows(audioBtns, 2)...)
+		IKB = append(IKB, SplitIntoRows(audioBtns, 2)...)
 	}
 
-	return buttons, nil
+	return IKB
 }
