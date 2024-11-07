@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"pymouse/pymouse/config"
 	"pymouse/pymouse/helpers/rapidhttp"
+	"pymouse/pymouse/helpers/utils"
 	"sort"
 	"strconv"
 	"strings"
@@ -99,38 +100,6 @@ func GetYouTubeClient() yt_dl.Client {
 	return yt_dl.Client{}
 }
 
-// HumanBytes converte bytes para formato legível
-func HumanBytes(size int64) string {
-	if size == 0 {
-		return ""
-	}
-
-	power := float64(1024)
-	units := []string{" ", "Ki", "Mi", "Gi", "Ti"}
-	i := 0
-	s := float64(size)
-
-	for s >= power && i < len(units)-1 {
-		s /= power
-		i++
-	}
-
-	return fmt.Sprintf("%.2f %sB", s, units[i])
-}
-
-// SplitIntoRows divide uma slice em múltiplas slices de tamanho fixo
-func SplitIntoRows(items []telego.InlineKeyboardButton, width int) [][]telego.InlineKeyboardButton {
-	var rows [][]telego.InlineKeyboardButton
-	for i := 0; i < len(items); i += width {
-		end := i + width
-		if end > len(items) {
-			end = len(items)
-		}
-		rows = append(rows, items[i:end])
-	}
-	return rows
-}
-
 func GetDownloadButtons(videoID string, userID int64) [][]telego.InlineKeyboardButton {
 	client := GetYouTubeClient()
 	video, err := client.GetVideo(videoID)
@@ -173,7 +142,7 @@ func GetDownloadButtons(videoID string, userID int64) [][]telego.InlineKeyboardB
 			bitrate := int(math.Round(float64(format.Bitrate) / 1000))
 			audioDict[bitrate] = fmt.Sprintf("📀 %dKbps (%s)",
 				bitrate,
-				HumanBytes(format.ContentLength),
+				utils.HumanBytes(format.ContentLength),
 			)
 		}
 	}
@@ -193,7 +162,7 @@ func GetDownloadButtons(videoID string, userID int64) [][]telego.InlineKeyboardB
 
 			if maxSize > 0 {
 				videoButtons = append(videoButtons, telego.InlineKeyboardButton{
-					Text:         fmt.Sprintf("🎥 %s (%s)", qual, HumanBytes(maxSize)),
+					Text:         fmt.Sprintf("🎥 %s (%s)", qual, utils.HumanBytes(maxSize)),
 					CallbackData: fmt.Sprintf("yt_dl|%s|%s+140|%d|v", videoID, maxItag, userID),
 				})
 			}
@@ -201,7 +170,7 @@ func GetDownloadButtons(videoID string, userID int64) [][]telego.InlineKeyboardB
 	}
 
 	if len(videoButtons) > 0 {
-		IKB = append(IKB, SplitIntoRows(videoButtons, 2)...)
+		IKB = append(IKB, utils.SplitIntoRows(videoButtons, 2)...)
 	}
 
 	IKB = append(
@@ -228,7 +197,7 @@ func GetDownloadButtons(videoID string, userID int64) [][]telego.InlineKeyboardB
 	}
 
 	if len(audioBtns) > 0 {
-		IKB = append(IKB, SplitIntoRows(audioBtns, 2)...)
+		IKB = append(IKB, utils.SplitIntoRows(audioBtns, 2)...)
 	}
 
 	return IKB
