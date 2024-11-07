@@ -35,12 +35,12 @@ func YouTubeMakeTextWithInfos(
 ) string {
 	headInfo := fmt.Sprintf("<b><a href=\"%s\">%s</a></b>\n\n", Vidurl, Vidtitle)
 
-	out := fmt.Sprintf("<b>❯ Published:</b> %s\n", publishedTime)
-	out += fmt.Sprintf("<b>❯ Duration:</b> %s\n", Vidduration)
-	out += fmt.Sprintf("<b>❯ Views:</b> %s\n", Vidviews)
+	out := fmt.Sprintf("<b>❯ Published:</b> <code>%s</code>\n", publishedTime)
+	out += fmt.Sprintf("<b>❯ Duration:</b> <code>%s</code>\n", Vidduration)
+	out += fmt.Sprintf("<b>❯ Views:</b> <code>%s</code>\n", Vidviews)
 
 	CreatorOfContent := fmt.Sprintf("<a href=\"%s\">%s</a>", CreatorofContentUrl, CreatorofContentName)
-	out += fmt.Sprintf("<b>❯ Creator:</b> %s\n", CreatorOfContent)
+	out += fmt.Sprintf("<b>❯ Creator:</b> <i>%s</i>\n", CreatorOfContent)
 
 	return headInfo + out
 }
@@ -100,7 +100,7 @@ func GetYouTubeClient() yt_dl.Client {
 	return yt_dl.Client{}
 }
 
-func GetDownloadButtons(videoID string, userID int64) [][]telego.InlineKeyboardButton {
+func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyboardButton) {
 	client := GetYouTubeClient()
 	video, err := client.GetVideo(videoID)
 	if err != nil {
@@ -108,7 +108,7 @@ func GetDownloadButtons(videoID string, userID int64) [][]telego.InlineKeyboardB
 		return nil
 	}
 
-	IKB := [][]telego.InlineKeyboardButton{
+	IKB = [][]telego.InlineKeyboardButton{
 		{
 			{
 				Text:         "🥇 BEST - 🎥 MP4",

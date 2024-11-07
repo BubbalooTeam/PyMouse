@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -88,4 +89,19 @@ func SplitIntoRows(items []telego.InlineKeyboardButton, width int) (IKB [][]tele
 		IKB = append(IKB, items[i:end])
 	}
 	return IKB
+}
+
+func MatchByGroup(RegexBase *regexp.Regexp, Text string, Group string) string {
+	SubMatch := RegexBase.FindStringSubmatch(Text)
+	if SubMatch == nil {
+		fmt.Printf("[utils/MatchbyGroup][Warning]: No match found.")
+		return ""
+	}
+	MatchResponse := make(map[string]string)
+	for i, name := range RegexBase.SubexpNames() {
+		if i != 0 && name != "" {
+			MatchResponse[name] = SubMatch[i]
+		}
+	}
+	return MatchResponse[Group]
 }

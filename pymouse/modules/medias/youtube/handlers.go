@@ -142,14 +142,31 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 		)
 		return
 	}
-	bot.SendMessage(
-		&telego.SendMessageParams{
-			ChatID:    telegoutil.ID(update.Message.Chat.ID),
-			Text:      query,
+	YouTubeClient := GetYouTubeClient()
+
+	VideoID := utils.MatchByGroup(YouTubeRegex_URL, query, "id")
+	YouTubeVideo, _ := YouTubeClient.GetVideo(VideoID)
+
+	VideoQualKeyboard := GetDownloadButtons(YouTubeVideo.ID, update.Message.From.ID)
+	ThumbnailURL := GetThumbURL(YouTubeVideo.ID)
+
+	out := fmt.Sprintf(
+		"<b><a href=\"%s\">%s</a></b>\n\n",
+		fmt.Sprintf("https://www.youtube.com/watch?v=%s", YouTubeVideo.ID),
+		YouTubeVideo.Title,
+	)
+	bot.SendPhoto(
+		&telego.SendPhotoParams{
+			ChatID: telegoutil.ID(update.Message.Chat.ID),
+			Photo: telego.InputFile{
+				URL: ThumbnailURL,
+			},
+			Caption:   out,
 			ParseMode: "HTML",
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
 			},
+			ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: VideoQualKeyboard},
 		},
 	)
 }
