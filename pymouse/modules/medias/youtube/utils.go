@@ -120,8 +120,8 @@ func GetDownloadButtons(videoID string, userID int64) [][]telego.InlineKeyboardB
 	VidQList := []string{"1080p60", "720p60", "1080p", "720p", "480p", "360p", "240p", "144p"}
 	vidQDict := make(map[string]map[string]int64)
 
-	for _, qual := range VidQList {
-		vidQDict[qual] = make(map[string]int64)
+	for _, VidQuality := range VidQList {
+		vidQDict[VidQuality] = make(map[string]int64)
 	}
 
 	audioDict := make(map[int]string)
@@ -133,23 +133,23 @@ func GetDownloadButtons(videoID string, userID int64) [][]telego.InlineKeyboardB
 			}
 
 			itagStr := strconv.Itoa(format.ItagNo)
-			qual := format.QualityLabel
+			VidQuality := format.QualityLabel
 
-			if _, exists := vidQDict[qual]; exists {
-				vidQDict[qual][itagStr] = format.ContentLength
+			if _, exists := vidQDict[VidQuality]; exists {
+				vidQDict[VidQuality][itagStr] = format.ContentLength
 			}
 		} else if strings.Contains(format.MimeType, "audio/mp4") && format.AudioChannels > 0 {
-			bitrate := int(math.Round(float64(format.Bitrate) / 1000))
-			audioDict[bitrate] = fmt.Sprintf("📀 %dKbps (%s)",
-				bitrate,
+			AudioBitrate := int(math.Round(float64(format.Bitrate) / 1000))
+			audioDict[AudioBitrate] = fmt.Sprintf("📀 %dKbps (%s)",
+				AudioBitrate,
 				utils.HumanBytes(format.ContentLength),
 			)
 		}
 	}
 
 	var videoButtons []telego.InlineKeyboardButton
-	for _, qual := range VidQList {
-		formats := vidQDict[qual]
+	for _, VidQuality := range VidQList {
+		formats := vidQDict[VidQuality]
 		if len(formats) > 0 {
 			var maxItag string
 			var maxSize int64
@@ -162,7 +162,7 @@ func GetDownloadButtons(videoID string, userID int64) [][]telego.InlineKeyboardB
 
 			if maxSize > 0 {
 				videoButtons = append(videoButtons, telego.InlineKeyboardButton{
-					Text:         fmt.Sprintf("🎥 %s (%s)", qual, utils.HumanBytes(maxSize)),
+					Text:         fmt.Sprintf("🎥 %s (%s)", VidQuality, utils.HumanBytes(maxSize)),
 					CallbackData: fmt.Sprintf("yt_dl|%s|%s+140|%d|v", videoID, maxItag, userID),
 				})
 			}
