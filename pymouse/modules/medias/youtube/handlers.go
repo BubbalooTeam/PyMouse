@@ -107,6 +107,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 			VideoPage.Channel.Title,
 		)
 		ThumbnailURL := GetThumbURL(VideoPage.ID)
+
 		// Get YouTube Buttons
 		YouTubeKeyboard := telegram.KeyboardPaginate(
 			len(VideoCache.VidInformations)-1,
