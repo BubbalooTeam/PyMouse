@@ -6,6 +6,8 @@ import (
 	"pymouse/pymouse/helpers/telegram"
 	"pymouse/pymouse/helpers/utils"
 	"regexp"
+	"strconv"
+	"strings"
 
 	"github.com/mymmrac/telego"
 	"github.com/mymmrac/telego/telegoutil"
@@ -113,7 +115,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 			len(VideoCache.VidInformations)-1,
 			1,
 			fmt.Sprintf(
-				"YouTubeScrool|%s|{number}|%d",
+				"YouTubeScroll|%s|{number}|%d",
 				SearchKey,
 				update.Message.From.ID,
 			),
@@ -155,6 +157,12 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 		fmt.Sprintf("https://www.youtube.com/watch?v=%s", YouTubeVideo.ID),
 		YouTubeVideo.Title,
 	)
+	bot.SendChatAction(
+		&telego.SendChatActionParams{
+			ChatID: telegoutil.ID(update.Message.Chat.ID),
+			Action: "upload_photo",
+		},
+	)
 	bot.SendPhoto(
 		&telego.SendPhotoParams{
 			ChatID: telegoutil.ID(update.Message.Chat.ID),
@@ -169,4 +177,88 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 			ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: VideoQualKeyboard},
 		},
 	)
+}
+
+func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
+	message := update.CallbackQuery.Message.(*telego.Message)
+	CallbackData := strings.Split(update.CallbackQuery.Data, "|")
+	// Get the utility information
+	SearchKey := CallbackData[1]
+	VidPageNumber, err := strconv.Atoi(CallbackData[2])
+	if err != nil {
+		log.Printf("[youtube/YouTubeScrollCallback][Error]: Error in get the utility information (VidPageNumber): %v", err)
+		return
+	}
+	UserID, err := strconv.Atoi(CallbackData[3])
+	if err != nil {
+		log.Printf("[youtube/YouTubeScrollCallback][Error]: Error in get the utility information (UserID): %v", err)
+		return
+	}
+
+	if update.CallbackQuery.From.ID != int64(UserID) {
+		bot.AnswerCallbackQuery(
+			&telego.AnswerCallbackQueryParams{
+				CallbackQueryID: update.CallbackQuery.ID,
+				Text:            "This YouTube Downloader/Scroll button is not directed at you!",
+				ShowAlert:       true,
+				CacheTime:       3,
+			},
+		)
+		return
+	}
+	VideoCache := GetVideoByUUID(SearchKey)
+	if VideoCache == nil {
+		bot.AnswerCallbackQuery(
+			&telego.AnswerCallbackQueryParams{
+				CallbackQueryID: update.CallbackQuery.ID,
+				Text:            "This Search is too old, please, perform a new search.",
+				ShowAlert:       true,
+				CacheTime:       3,
+			},
+		)
+		return
+	}
+
+	VideoPage := VideoCache.VidInformations[VidPageNumber]
+
+	out := YouTubeMakeTextWithInfos(
+		VideoPage.URL,
+		VideoPage.Title,
+		utils.TimeFormatter(float64(VideoPage.Duration)),
+		utils.FormatInteger(VideoPage.ViewCount),
+		VideoPage.PublishedTime,
+		VideoPage.Channel.URL,
+		VideoPage.Channel.Title,
+	)
+	ThumbnailURL := GetThumbURL(VideoPage.ID)
+
+	// Get YouTube Buttons
+	YouTubeKeyboard := telegram.KeyboardPaginate(
+		len(VideoCache.VidInformations)-1,
+		VidPageNumber,
+		fmt.Sprintf(
+			"YouTubeScroll|%s|{number}|%d",
+			SearchKey,
+			update.CallbackQuery.From.ID,
+		),
+	)
+	_, err = bot.EditMessageMedia(
+		&telego.EditMessageMediaParams{
+			ChatID:    telegoutil.ID(message.Chat.ID),
+			MessageID: update.CallbackQuery.Message.GetMessageID(),
+			Media: &telego.InputMediaPhoto{
+				Type: "photo",
+				Media: telego.InputFile{
+					URL: ThumbnailURL,
+				},
+				Caption:   out,
+				ParseMode: "HTML",
+			},
+			ReplyMarkup: YouTubeKeyboard,
+		},
+	)
+	if err != nil {
+		log.Println(err)
+	}
+
 }

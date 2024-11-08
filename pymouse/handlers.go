@@ -5,6 +5,7 @@ import (
 	"pymouse/pymouse/modules/checkers"
 	"pymouse/pymouse/modules/medias/youtube"
 	"pymouse/pymouse/modules/start"
+	"regexp"
 
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
@@ -33,4 +34,5 @@ func (bS *BotStruct) Register() {
 	bS.Handler.Handle(start.Start, th.CommandEqual("start"))
 	bS.Handler.Handle(afk.SetAway, th.CommandEqual("afk"))
 	bS.Handler.Handle(youtube.GetYoutubeMedias, th.CommandEqual("ytdl"))
+	bS.Handler.Handle(youtube.YouTubeScrollCallback, th.CallbackDataMatches(regexp.MustCompile(`YouTubeScroll\|(.*)$`)))
 }
