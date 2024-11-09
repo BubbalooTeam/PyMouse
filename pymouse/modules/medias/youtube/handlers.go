@@ -112,7 +112,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 
 		// Get YouTube Buttons
 		YouTubeKeyboard := telegram.KeyboardPaginate(
-			len(VideoCache.VidInformations)-1,
+			len(VideoCache.VidInformations),
 			1,
 			fmt.Sprintf(
 				"YouTubeScroll|%s|{number}|%d",
@@ -219,7 +219,7 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 		return
 	}
 
-	VideoPage := VideoCache.VidInformations[VidPageNumber]
+	VideoPage := VideoCache.VidInformations[VidPageNumber-1]
 
 	out := YouTubeMakeTextWithInfos(
 		VideoPage.URL,
@@ -234,7 +234,7 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 
 	// Get YouTube Buttons
 	YouTubeKeyboard := telegram.KeyboardPaginate(
-		len(VideoCache.VidInformations)-1,
+		len(VideoCache.VidInformations),
 		VidPageNumber,
 		fmt.Sprintf(
 			"YouTubeScroll|%s|{number}|%d",
