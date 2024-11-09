@@ -231,6 +231,17 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 		VideoPage.Channel.Title,
 	)
 	ThumbnailURL := GetThumbURL(VideoPage.ID)
+	if ThumbnailURL == "" {
+		bot.AnswerCallbackQuery(
+			&telego.AnswerCallbackQueryParams{
+				CallbackQueryID: update.CallbackQuery.ID,
+				Text:            "The thumbnail for this video is unavailable! Please go to the next video.",
+				ShowAlert:       true,
+				CacheTime:       3,
+			},
+		)
+		return
+	}
 
 	// Get YouTube Buttons
 	YouTubeKeyboard := telegram.KeyboardPaginate(
@@ -242,7 +253,7 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 			update.CallbackQuery.From.ID,
 		),
 	)
-	if VidPageNumber == 0 {
+	if VidPageNumber == 1 {
 		if len(VideoCache.VidInformations) == 1 {
 			bot.AnswerCallbackQuery(
 				&telego.AnswerCallbackQueryParams{
@@ -271,7 +282,13 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 		},
 	)
 	if err != nil {
-		log.Println(err)
+		bot.AnswerCallbackQuery(
+			&telego.AnswerCallbackQueryParams{
+				CallbackQueryID: update.CallbackQuery.ID,
+				Text:            fmt.Sprintf("Error in editing message media: %v\nThis may occur because YouTube returned an invalid value.", err),
+				ShowAlert:       true,
+				CacheTime:       3,
+			},
+		)
 	}
-
 }
