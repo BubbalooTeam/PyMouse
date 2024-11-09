@@ -67,23 +67,23 @@ func LeftPagination(CurrentPage int, TotalPages int, callbackPattern string) [][
 
 func MiddlePagination(CurrentPage int, TotalPages int, callbackPattern string) [][]telego.InlineKeyboardButton {
 	return [][]telego.InlineKeyboardButton{{
-		AddButton(fmt.Sprintf(SYMBOL_FIRST_PAGE, 1), callbackPattern),
-		AddButton(fmt.Sprintf(SYMBOL_PREVIOUS_PAGE, CurrentPage-1), callbackPattern),
-		AddButton(fmt.Sprintf(SYMBOL_CURRENT_PAGE, CurrentPage), callbackPattern),
-		AddButton(fmt.Sprintf(SYMBOL_NEXT_PAGE, CurrentPage+1), callbackPattern),
-		AddButton(fmt.Sprintf(SYMBOL_LAST_PAGE, TotalPages), callbackPattern),
+		AddButton(fmt.Sprintf(SYMBOL_FIRST_PAGE, 1), FormatCallbackPattern(callbackPattern, 1)),
+		AddButton(fmt.Sprintf(SYMBOL_PREVIOUS_PAGE, CurrentPage-1), FormatCallbackPattern(callbackPattern, CurrentPage-1)),
+		AddButton(fmt.Sprintf(SYMBOL_CURRENT_PAGE, CurrentPage), FormatCallbackPattern(callbackPattern, CurrentPage)),
+		AddButton(fmt.Sprintf(SYMBOL_NEXT_PAGE, CurrentPage+1), FormatCallbackPattern(callbackPattern, CurrentPage+1)),
+		AddButton(fmt.Sprintf(SYMBOL_LAST_PAGE, TotalPages), FormatCallbackPattern(callbackPattern, TotalPages)),
 	}}
 }
 
 func RightPagination(CurrentPage int, TotalPages int, callbackPattern string) [][]telego.InlineKeyboardButton {
 	var row []telego.InlineKeyboardButton
-	row = append(row, AddButton(fmt.Sprintf(SYMBOL_FIRST_PAGE, 1), callbackPattern))
-	row = append(row, AddButton(fmt.Sprintf(SYMBOL_PREVIOUS_PAGE, TotalPages-3), callbackPattern))
+	row = append(row, AddButton(fmt.Sprintf(SYMBOL_FIRST_PAGE, 1), FormatCallbackPattern(callbackPattern, 1)))
+	row = append(row, AddButton(fmt.Sprintf(SYMBOL_PREVIOUS_PAGE, TotalPages-3), FormatCallbackPattern(callbackPattern, TotalPages-3)))
 	for number := TotalPages - 2; number <= TotalPages; number++ {
 		if number == CurrentPage {
-			row = append(row, AddButton(fmt.Sprintf(SYMBOL_CURRENT_PAGE, number), callbackPattern))
+			row = append(row, AddButton(fmt.Sprintf(SYMBOL_CURRENT_PAGE, number), FormatCallbackPattern(callbackPattern, number)))
 		} else {
-			row = append(row, AddButton(strconv.Itoa(number), callbackPattern))
+			row = append(row, AddButton(strconv.Itoa(number), FormatCallbackPattern(callbackPattern, number)))
 		}
 	}
 	return [][]telego.InlineKeyboardButton{row}
@@ -93,9 +93,9 @@ func FullPagination(TotalPages int, CurrentPage int, callbackPattern string) [][
 	var row []telego.InlineKeyboardButton
 	for number := 1; number <= TotalPages; number++ {
 		if number != CurrentPage {
-			row = append(row, AddButton(strconv.Itoa(number), callbackPattern))
+			row = append(row, AddButton(strconv.Itoa(number), FormatCallbackPattern(callbackPattern, number)))
 		} else {
-			row = append(row, AddButton(fmt.Sprintf(SYMBOL_CURRENT_PAGE, number), callbackPattern))
+			row = append(row, AddButton(fmt.Sprintf(SYMBOL_CURRENT_PAGE, number), FormatCallbackPattern(callbackPattern, number)))
 		}
 	}
 	return [][]telego.InlineKeyboardButton{row}

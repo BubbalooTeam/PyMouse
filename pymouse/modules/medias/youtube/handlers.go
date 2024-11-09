@@ -211,7 +211,7 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 		bot.AnswerCallbackQuery(
 			&telego.AnswerCallbackQueryParams{
 				CallbackQueryID: update.CallbackQuery.ID,
-				Text:            "This Search is too old, please, perform a new search.",
+				Text:            "This Search is not avalaible in my variables, please, perform a new search.",
 				ShowAlert:       true,
 				CacheTime:       3,
 			},
@@ -242,6 +242,19 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 			update.CallbackQuery.From.ID,
 		),
 	)
+	if VidPageNumber == 0 {
+		if len(VideoCache.VidInformations) == 1 {
+			bot.AnswerCallbackQuery(
+				&telego.AnswerCallbackQueryParams{
+					CallbackQueryID: update.CallbackQuery.ID,
+					Text:            "That's the end of video list.",
+					ShowAlert:       true,
+					CacheTime:       3,
+				},
+			)
+			return
+		}
+	}
 	_, err = bot.EditMessageMedia(
 		&telego.EditMessageMediaParams{
 			ChatID:    telegoutil.ID(message.Chat.ID),
