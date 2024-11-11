@@ -69,6 +69,9 @@ func GetThumbURL(VideoID string) (ThumbURL string) {
 			rapidhttp.RequestOptions{
 				URL:    ThumbLink,
 				Method: "GET",
+				Headers: map[string]string{
+					"Accept": "image/*",
+				},
 			},
 		)
 		if err != nil {
