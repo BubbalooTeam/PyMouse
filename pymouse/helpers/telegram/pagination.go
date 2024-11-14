@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/mymmrac/telego"
-	"github.com/mymmrac/telego/telegoutil"
 )
 
 const (
@@ -31,8 +30,7 @@ func AddButton(Text string, CallbackPattern string) telego.InlineKeyboardButton 
 	}
 }
 
-func KeyboardPaginate(TotalPages int, CurrentPage int, CallbackPattern string) *telego.InlineKeyboardMarkup {
-	var IKB [][]telego.InlineKeyboardButton
+func KeyboardPaginate(TotalPages int, CurrentPage int, CallbackPattern string) (IKB [][]telego.InlineKeyboardButton) {
 	if TotalPages <= 5 {
 		IKB = append(IKB, FullPagination(TotalPages, CurrentPage, CallbackPattern)...)
 	} else {
@@ -45,7 +43,7 @@ func KeyboardPaginate(TotalPages int, CurrentPage int, CallbackPattern string) *
 		}
 	}
 
-	return telegoutil.InlineKeyboardGrid(IKB)
+	return IKB
 }
 
 func LeftPagination(CurrentPage int, TotalPages int, callbackPattern string) [][]telego.InlineKeyboardButton {

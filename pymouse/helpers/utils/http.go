@@ -56,5 +56,5 @@ func GetHTTPClient() *http.Client {
 		}
 		return HTTPClient
 	}
-	return nil
+	return &http.Client{}
 }

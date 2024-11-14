@@ -120,7 +120,13 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 				update.Message.From.ID,
 			),
 		)
-
+		DownloadYouTubeButton := []telego.InlineKeyboardButton{
+			{
+				Text:         "Download",
+				CallbackData: fmt.Sprintf("yt|gen|%s|%v|%d", VideoPage.ID, nil, update.Message.From.ID),
+			},
+		}
+		YouTubeKeyboard = append(YouTubeKeyboard, DownloadYouTubeButton)
 		// Send YouTube informations
 		bot.SendChatAction(
 			&telego.SendChatActionParams{
@@ -139,7 +145,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 				ReplyParameters: &telego.ReplyParameters{
 					MessageID: update.Message.MessageID,
 				},
-				ReplyMarkup: YouTubeKeyboard,
+				ReplyMarkup: telegoutil.InlineKeyboardGrid(YouTubeKeyboard),
 			},
 		)
 		return
@@ -253,6 +259,14 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 			update.CallbackQuery.From.ID,
 		),
 	)
+	DownloadYouTubeButton := []telego.InlineKeyboardButton{
+		{
+			Text:         "Download",
+			CallbackData: fmt.Sprintf("yt|gen|%s|%v|%d", VideoPage.ID, nil, update.Message.From.ID),
+		},
+	}
+	YouTubeKeyboard = append(YouTubeKeyboard, DownloadYouTubeButton)
+	// Edit message with YouTube informations.
 	if VidPageNumber == 1 {
 		if len(VideoCache.VidInformations) == 1 {
 			bot.AnswerCallbackQuery(
@@ -278,7 +292,7 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 				Caption:   out,
 				ParseMode: "HTML",
 			},
-			ReplyMarkup: YouTubeKeyboard,
+			ReplyMarkup: telegoutil.InlineKeyboardGrid(YouTubeKeyboard),
 		},
 	)
 	if err != nil {

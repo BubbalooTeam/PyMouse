@@ -84,7 +84,7 @@ func GetYouTubeClient() yt_dl.Client {
 	if config.Socks5Proxy != "" {
 		ParsedProxyURL, err := url.Parse(config.Socks5Proxy)
 		if err != nil {
-			log.Println("[youtube/GetYouTubeClient][Error]: Error in parse Socks5Proxy...")
+			log.Println("[youtube/GetYouTubeClient][Error]: Error in parse Socks5Proxy, please check the bot .env file...")
 			return yt_dl.Client{}
 		}
 		HTTPClient := http.Client{
