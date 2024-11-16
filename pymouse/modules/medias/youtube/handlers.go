@@ -262,7 +262,7 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 	DownloadYouTubeButton := []telego.InlineKeyboardButton{
 		{
 			Text:         "Download",
-			CallbackData: fmt.Sprintf("yt|gen|%s|%v|%d", VideoPage.ID, nil, update.Message.From.ID),
+			CallbackData: fmt.Sprintf("yt|gen|%s|%v|%d", VideoPage.ID, nil, update.CallbackQuery.From.ID),
 		},
 	}
 	YouTubeKeyboard = append(YouTubeKeyboard, DownloadYouTubeButton)

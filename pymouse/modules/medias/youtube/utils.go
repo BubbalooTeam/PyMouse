@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"pymouse/pymouse/config"
+	"pymouse/pymouse/helpers/rapidhttp"
 	"pymouse/pymouse/helpers/utils"
 	"sort"
 	"strconv"
@@ -54,7 +55,7 @@ func GetVideoByUUID(UUID string) *VidCache {
 }
 
 func GetThumbURL(VideoID string) (ThumbURL string) {
-	client := utils.GetHTTPClient()
+	client := rapidhttp.GetHTTPClient()
 	ThumbQuality := []string{
 		"maxresdefault.jpg", // Best quality
 		"hqdefault.jpg",
@@ -65,9 +66,16 @@ func GetThumbURL(VideoID string) (ThumbURL string) {
 	ThumbURL = "https://imgur.com/4LwPLai"
 	for _, Quality := range ThumbQuality {
 		ThumbLink := fmt.Sprintf("https://i.ytimg.com/vi/%s/%s", VideoID, Quality)
+		log.Println(ThumbLink)
 
 		// Getting Thumbnail Informations
-		response, err := client.Get(ThumbLink)
+		response, err := rapidhttp.Request(
+			client,
+			rapidhttp.HTTPStruct{
+				Method: "GET",
+				URL:    ThumbLink,
+			},
+		)
 		if err != nil {
 			log.Printf("[youtube/GetThumbURL]: An error occurred.\n\n- VideoID: %s\nQuality: %s\nError: %v", VideoID, Quality, err)
 			continue
