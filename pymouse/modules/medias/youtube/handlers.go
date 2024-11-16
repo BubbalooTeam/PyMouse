@@ -12,6 +12,7 @@ import (
 	"github.com/mymmrac/telego"
 	"github.com/mymmrac/telego/telegoutil"
 	"github.com/raitonoberu/ytsearch"
+	"github.com/sirupsen/logrus"
 )
 
 type VidCache struct {
@@ -155,8 +156,25 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 	VideoID := utils.MatchByGroup(YouTubeRegex_URL, query, "id")
 	YouTubeVideo, _ := YouTubeClient.GetVideo(VideoID)
 
-	VideoQualKeyboard := GetDownloadButtons(YouTubeVideo.ID, update.Message.From.ID)
 	ThumbnailURL := GetThumbURL(YouTubeVideo.ID)
+	VideoQualKeyboard := GetDownloadButtons(YouTubeVideo.ID, update.Message.From.ID)
+	if VideoQualKeyboard == nil {
+		logrus.Fatal("Failed to extract quality buttons! Check your Proxy or YouTube-Downloader.")
+		bot.SendPhoto(
+			&telego.SendPhotoParams{
+				ChatID: telegoutil.ID(update.Message.Chat.ID),
+				Photo: telego.InputFile{
+					URL: ThumbnailURL,
+				},
+				Caption:   "<b>Failed to extract quality buttons!</b>",
+				ParseMode: "HTML",
+				ReplyParameters: &telego.ReplyParameters{
+					MessageID: update.Message.MessageID,
+				},
+			},
+		)
+		return
+	}
 
 	out := fmt.Sprintf(
 		"<b><a href=\"%s\">%s</a></b>\n\n",
