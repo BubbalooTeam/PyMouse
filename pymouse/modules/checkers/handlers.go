@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"pymouse/pymouse/database/utilitiesdb"
 
+	"strings"
+
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 )
@@ -48,7 +50,7 @@ func SaveChats(bot *telego.Bot, update telego.Update, next th.Handler) {
 		}
 		message = update.CallbackQuery.Message.(*telego.Message)
 	}
-	if message.Chat.Type == "private" || message.SenderChat != nil {
+	if strings.Contains(update.Message.Chat.Type, "private") || message.SenderChat != nil {
 		next(bot, update)
 		return
 	}

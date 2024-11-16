@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"pymouse/pymouse/config"
+	"strings"
 
 	"golang.org/x/net/http2"
 )
@@ -69,7 +70,7 @@ func Request(Client *http.Client, HTTPParams HTTPStruct) (*http.Response, error)
 	}
 
 	parsedURL := HTTPParams.URL
-	if HTTPParams.Method == "GET" && HTTPParams.GETParams != nil {
+	if strings.Contains(HTTPParams.Method, "GET") && HTTPParams.GETParams != nil {
 		params := url.Values{}
 		for k, v := range HTTPParams.GETParams.Params {
 			params.Add(k, v)
@@ -79,7 +80,7 @@ func Request(Client *http.Client, HTTPParams HTTPStruct) (*http.Response, error)
 		}
 	}
 
-	if HTTPParams.Method == "POST" && HTTPParams.POSTParams != nil {
+	if strings.Contains(HTTPParams.Method, "POST") && HTTPParams.POSTParams != nil {
 		jsonData, err := json.Marshal(HTTPParams.POSTParams.Json)
 		if err != nil {
 			log.Printf("[utils/Request][Error]: Error in Marshaling POSTParams: %v", err)
