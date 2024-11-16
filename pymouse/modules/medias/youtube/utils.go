@@ -66,7 +66,6 @@ func GetThumbURL(VideoID string) (ThumbURL string) {
 	ThumbURL = "https://imgur.com/4LwPLai"
 	for _, Quality := range ThumbQuality {
 		ThumbLink := fmt.Sprintf("https://i.ytimg.com/vi/%s/%s", VideoID, Quality)
-		log.Println(ThumbLink)
 
 		// Getting Thumbnail Informations
 		response, err := rapidhttp.Request(
@@ -77,7 +76,7 @@ func GetThumbURL(VideoID string) (ThumbURL string) {
 			},
 		)
 		if err != nil {
-			log.Printf("[youtube/GetThumbURL]: An error occurred.\n\n- VideoID: %s\nQuality: %s\nError: %v", VideoID, Quality, err)
+			log.Printf("[youtube/GetThumbURL][Error]: An error occurred.\n\n- VideoID: %s\nQuality: %s\nError: %v", VideoID, Quality, err)
 			continue
 		}
 		if response.StatusCode == 200 {

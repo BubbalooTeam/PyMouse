@@ -82,10 +82,12 @@ func Request(Client *http.Client, HTTPParams HTTPStruct) (*http.Response, error)
 	if HTTPParams.Method == "POST" && HTTPParams.POSTParams != nil {
 		jsonData, err := json.Marshal(HTTPParams.POSTParams.Json)
 		if err != nil {
+			log.Printf("[utils/Request][Error]: Error in Marshaling POSTParams: %v", err)
 			return nil, err
 		}
 		request, err := http.NewRequest(HTTPParams.Method, parsedURL, bytes.NewBuffer(jsonData))
 		if err != nil {
+			log.Printf("[utils/Request][Error]: Error in creating a new request: %v", err)
 			return nil, err
 		}
 		if HTTPParams.Headers != nil {
@@ -99,6 +101,7 @@ func Request(Client *http.Client, HTTPParams HTTPStruct) (*http.Response, error)
 
 	request, err := http.NewRequest(HTTPParams.Method, parsedURL, nil)
 	if err != nil {
+		log.Printf("[utils/Request][Error]: Error in creating a new request: %v", err)
 		return nil, err
 	}
 
