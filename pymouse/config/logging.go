@@ -66,7 +66,7 @@ func (f *CustomFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 		log = fmt.Sprintf(
 			"%s | %s | %s:%d | %s | %s\n",
 			strings.ToUpper(entry.Level.String()),
-			entry.Time.Format("02/01/2006 15:04:05"),
+			entry.Time.Format(TimeLogFormatter),
 			entry.Caller.File,
 			entry.Caller.Line,
 			entry.Caller.Function,
