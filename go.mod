@@ -10,6 +10,7 @@ require (
 	github.com/kkdai/youtube/v2 v2.10.1
 	github.com/mymmrac/telego v0.31.4
 	github.com/raitonoberu/ytsearch v0.2.0
+	github.com/sirupsen/logrus v1.9.3
 	go.mongodb.org/mongo-driver v1.17.1
 	golang.org/x/net v0.31.0
 )

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 	"os/signal"
 	"pymouse/pymouse"
@@ -11,55 +10,56 @@ import (
 	"syscall"
 
 	th "github.com/mymmrac/telego/telegohandler"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	database.InitDB()
 
-	log.Println("\033[0;33mCreating Bot Client...\033[0m")
+	logrus.Info("Creating Bot Client...")
 	botClient, err := client.CreateBot(config.BotToken, config.TelegramAPIURL)
 	if err != nil {
-		log.Fatalf("\033[0;31mError in creating bot Client: %v\033[0m", err)
+		logrus.Errorf("Error in creating bot Client: %v", err)
 	}
 
 	chanSignal := make(chan os.Signal, 1)
 	signal.Notify(chanSignal, syscall.SIGINT, syscall.SIGTERM)
 	botSignal := make(chan struct{}, 1)
 
-	log.Println("\033[0;32mBot Created, Starting Get Updates of Long Polling...\033[0m")
+	logrus.Info("Bot Created, Starting Get Updates of Long Polling...")
 	updates, err := client.GetUpdates(botClient)
 	if err != nil {
-		log.Fatalf("\033[0;31mError in get Updates of TelegramBot: %v\033[0m", err)
+		logrus.Errorf("Error in get Updates of Telegram-Bot: %v", err)
 	}
-	log.Println("\033[0;32mGetUpdates Started With Successfully, Creating Bot Handler...\033[0m")
+	logrus.Info("GetUpdates Started With Successfully, Creating Bot Handler...")
 
 	botHandler, err := th.NewBotHandler(botClient, updates)
 	if err != nil {
-		log.Fatalf("\033[0;31mError in Create NewBotHandler: %v\033[0m", err)
+		logrus.Errorf("Error in Create NewBotHandler: %v", err)
 	}
-	log.Println("\033[0;32mBot Handler Created, Registering Handlers...\033[0m")
+	logrus.Info("Bot Handler Created, Registering Handlers...")
 
 	handlerClass := pymouse.NewHandler(botClient, botHandler)
 	handlerClass.Register()
 
-	log.Println("\033[0;33mHandler Registered, PyMouse is almost starting...\033[0m")
+	logrus.Info("Handler Registered, PyMouse is almost starting...")
 
 	botUser, err := botClient.GetMe()
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 	go func() {
 		<-chanSignal
-		log.Println("\033[0;31mStopping PyMouse...\033[0m")
+		logrus.Info("Stopping PyMouse...")
 
 		botClient.StopLongPolling()
 		if err != nil {
-			log.Fatal(err)
+			logrus.Fatal(err)
 		}
-		log.Println("\033[0;32mLong polling stopped.\033[0m")
+		logrus.Info("Long polling stopped.")
 
 		botHandler.Stop()
-		log.Println("\033[0;32mBot handler stopped.\033[0m")
+		logrus.Info("Bot handler stopped.")
 
 		defer database.CloseDB()
 
@@ -67,9 +67,9 @@ func main() {
 	}()
 
 	go botHandler.Start()
-	log.Println("\033[0;32m\U0001F680 Bot Started\033[0m")
-	log.Printf("\033[0;36mBot Info:\033[0m %v - @%v\n", botUser.FirstName, botUser.Username)
+	logrus.Info("\U0001F680 Bot Started!")
+	logrus.Infof("Bot Info: %v - @%v", botUser.FirstName, botUser.Username)
 
 	<-botSignal
-	log.Println("\033[0;34mDone!\033[0m")
+	logrus.Info("Done!")
 }

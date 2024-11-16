@@ -1,10 +1,10 @@
 package config
 
 import (
-	"log"
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -15,17 +15,21 @@ var (
 )
 
 func init() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+	err := ConfigureLogging()
+	if err != nil {
+		logrus.Errorf("Error in configuring your logger: %v", err)
+	}
+	if err = godotenv.Load(); err != nil {
+		logrus.Errorf("Error loading .env file: %v", err)
 	}
 	BotToken = os.Getenv("BOT_TOKEN")
 	if BotToken == "" {
-		log.Fatalf(`In order to initialize this bot, you must insert the "BOT_TOKEN" in the .env file.`)
+		logrus.Errorf(`In order to initialize this bot, you must insert the "BOT_TOKEN" in the .env file.`)
 	}
 
 	DatabaseURI = os.Getenv("DATABASE_URI")
 	if DatabaseURI == "" {
-		log.Fatalf(`In order to initialize this bot, you must insert the "DATABASE_URI" in the .env file.`)
+		logrus.Errorf(`In order to initialize this bot, you must insert the "DATABASE_URI" in the .env file.`)
 	}
 
 	Socks5Proxy = os.Getenv("SOCKS5_PROXY")
