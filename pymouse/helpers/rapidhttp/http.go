@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"pymouse/pymouse/config"
 	"strings"
+	"time"
 
 	"golang.org/x/net/http2"
 )
@@ -57,10 +58,13 @@ func GetHTTPClient() *http.Client {
 	if HTTPTransport != nil {
 		HTTPClient = &http.Client{
 			Transport: HTTPTransport,
+			Timeout:   time.Duration(15) * time.Second,
 		}
 		return HTTPClient
 	}
-	return &http.Client{}
+	return &http.Client{
+		Timeout: time.Duration(15) * time.Second,
+	}
 }
 
 func Request(Client *http.Client, HTTPParams HTTPStruct) (*http.Response, error) {
