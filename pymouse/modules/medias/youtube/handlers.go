@@ -165,7 +165,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 				Photo: telego.InputFile{
 					URL: ThumbnailURL,
 				},
-				Caption:   "<b>Failed to extract quality buttons!</b>",
+				Caption:   "<b>There was an error getting the video quality buttons!\nThis occurs due to several factors such as VPS blocked by YouTube, problematic Proxy or one that stopped working...</b>",
 				ParseMode: "HTML",
 				ReplyParameters: &telego.ReplyParameters{
 					MessageID: update.Message.MessageID,
@@ -254,17 +254,6 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 		VideoPage.Channel.Title,
 	)
 	ThumbnailURL := GetThumbURL(VideoPage.ID)
-	if ThumbnailURL == "" {
-		bot.AnswerCallbackQuery(
-			&telego.AnswerCallbackQueryParams{
-				CallbackQueryID: update.CallbackQuery.ID,
-				Text:            "The thumbnail for this video is unavailable! Please go to the next video.",
-				ShowAlert:       true,
-				CacheTime:       3,
-			},
-		)
-		return
-	}
 
 	// Get YouTube Buttons
 	YouTubeKeyboard := telegram.KeyboardPaginate(
