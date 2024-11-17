@@ -158,7 +158,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 	ThumbnailURL := GetThumbURL(YouTubeVideo.ID)
 	VideoQualKeyboard := GetDownloadButtons(YouTubeVideo.ID, update.Message.From.ID)
 	if VideoQualKeyboard == nil {
-		logrus.Fatal("Failed to extract quality buttons! Check your Proxy or YouTube-Downloader.")
+		logrus.Error("Failed to extract quality buttons! Check your Proxy or YouTube-Downloader.")
 		bot.SendPhoto(
 			&telego.SendPhotoParams{
 				ChatID: telegoutil.ID(update.Message.Chat.ID),
