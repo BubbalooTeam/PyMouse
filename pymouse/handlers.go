@@ -35,4 +35,5 @@ func (bS *BotStruct) Register() {
 	bS.Handler.Handle(afk.SetAway, th.CommandEqual("afk"))
 	bS.Handler.Handle(youtube.GetYoutubeMedias, th.CommandEqual("ytdl"))
 	bS.Handler.Handle(youtube.YouTubeScrollCallback, th.CallbackDataMatches(regexp.MustCompile(`YouTubeScroll\|(.*)$`)))
+	bS.Handler.Handle(youtube.YouTubeACallHandler, th.CallbackDataMatches(regexp.MustCompile(`yt\|(.*)$`)))
 }

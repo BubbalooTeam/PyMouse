@@ -153,7 +153,10 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 	YouTubeClient := GetYouTubeClient()
 
 	VideoID := utils.MatchByGroup(YouTubeRegex_URL, query, "id")
-	YouTubeVideo, _ := YouTubeClient.GetVideo(VideoID)
+	YouTubeVideo, yerr := YouTubeClient.GetVideo(VideoID)
+	if yerr != nil {
+		logrus.Errorf("Failed to Get Video in YouTube, please check your Proxy or YouTube-Downloader.")
+	}
 
 	ThumbnailURL := GetThumbURL(YouTubeVideo.ID)
 	VideoQualKeyboard := GetDownloadButtons(YouTubeVideo.ID, update.Message.From.ID)
@@ -310,5 +313,81 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 				CacheTime:       3,
 			},
 		)
+	}
+}
+
+func YouTubeACallHandler(bot *telego.Bot, update telego.Update) {
+	// Telegram informations
+	message := update.CallbackQuery.Message.(*telego.Message)
+	callbackData := strings.Split(update.CallbackQuery.Data, "|")
+	// YouTube Client
+	YouTubeClient := GetYouTubeClient()
+	// Get the utility information
+	VideoID := callbackData[2]
+	UserID, err := strconv.Atoi(callbackData[4])
+	if err != nil {
+		logrus.Errorf("Error in get the utility information (UserID): %v", err)
+		return
+	}
+	if update.CallbackQuery.From.ID != int64(UserID) {
+		bot.AnswerCallbackQuery(
+			&telego.AnswerCallbackQueryParams{
+				CallbackQueryID: update.CallbackQuery.ID,
+				Text:            "This YouTube Downloader/Scroll button is not directed at you!",
+				ShowAlert:       true,
+				CacheTime:       3,
+			},
+		)
+		return
+	}
+	ActionType := callbackData[1]
+	if strings.Contains(ActionType, "gen") {
+		YouTubeVideo, err := YouTubeClient.GetVideo(VideoID)
+		if err != nil {
+			logrus.Errorf("Failed to Get Video in YouTube, please check your Proxy or YouTube-Downloader.")
+		}
+
+		ThumbnailURL := GetThumbURL(YouTubeVideo.ID)
+		VideoQualKeyboard := GetDownloadButtons(YouTubeVideo.ID, update.CallbackQuery.From.ID)
+		if VideoQualKeyboard == nil {
+			logrus.Error("Failed to extract quality buttons! Check your Proxy or YouTube-Downloader.")
+			bot.EditMessageMedia(
+				&telego.EditMessageMediaParams{
+					ChatID:    telegoutil.ID(message.Chat.ID),
+					MessageID: update.CallbackQuery.Message.GetMessageID(),
+					Media: &telego.InputMediaPhoto{
+						Type: "photo",
+						Media: telego.InputFile{
+							URL: ThumbnailURL,
+						},
+						Caption:   "<b>There was an error getting the video quality buttons!\nThis occurs due to several factors such as VPS blocked by YouTube, problematic Proxy or one that stopped working...</b>",
+						ParseMode: "HTML",
+					},
+				},
+			)
+			return
+		}
+
+		out := fmt.Sprintf(
+			"<b><a href=\"%s\">%s</a></b>\n\n",
+			fmt.Sprintf("https://www.youtube.com/watch?v=%s", YouTubeVideo.ID),
+			YouTubeVideo.Title,
+		)
+		bot.EditMessageMedia(
+			&telego.EditMessageMediaParams{
+				ChatID:    telegoutil.ID(message.Chat.ID),
+				MessageID: update.CallbackQuery.Message.GetMessageID(),
+				Media: &telego.InputMediaPhoto{
+					Type: "photo",
+					Media: telego.InputFile{
+						URL: ThumbnailURL,
+					},
+					Caption:   out,
+					ParseMode: "HTML",
+				},
+				ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: VideoQualKeyboard},
+			},
+		)
+		return
 	}
 }
