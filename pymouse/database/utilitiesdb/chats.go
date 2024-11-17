@@ -46,5 +46,5 @@ func UpdateChat(ChatID int64, Username string, ChatTitle string) {
 		logrus.Errorf("%v - %d", err, ChatID)
 		return
 	}
-	logrus.Errorf("%d - %s, Updated with successfully!", ChatID, ChatTitle)
+	logrus.Infof("%d - %s, Updated with successfully!", ChatID, ChatTitle)
 }

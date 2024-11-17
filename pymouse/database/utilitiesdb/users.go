@@ -60,5 +60,5 @@ func UpdateUser(UserID int64, UserName string, FirstName string) {
 		logrus.Errorf("%v - %d", err, UserID)
 		return
 	}
-	logrus.Errorf("%d - %s, Updated with successfully!", UserID, FirstName)
+	logrus.Infof("%d - %s, Updated with successfully!", UserID, FirstName)
 }
