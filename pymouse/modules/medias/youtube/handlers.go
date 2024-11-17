@@ -156,6 +156,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 	YouTubeVideo, yerr := YouTubeClient.GetVideo(VideoID)
 	if yerr != nil {
 		logrus.Errorf("Failed to Get Video in YouTube, please check your Proxy or YouTube-Downloader.")
+		return
 	}
 
 	ThumbnailURL := GetThumbURL(YouTubeVideo.ID)
@@ -345,6 +346,7 @@ func YouTubeACallHandler(bot *telego.Bot, update telego.Update) {
 		YouTubeVideo, err := YouTubeClient.GetVideo(VideoID)
 		if err != nil {
 			logrus.Errorf("Failed to Get Video in YouTube, please check your Proxy or YouTube-Downloader.")
+			return
 		}
 
 		ThumbnailURL := GetThumbURL(YouTubeVideo.ID)
