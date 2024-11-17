@@ -2,13 +2,14 @@ package client
 
 import (
 	"github.com/mymmrac/telego"
+	"github.com/sirupsen/logrus"
 )
 
 // CreateBot creates a new Telegram bot instance using telego.
 func CreateBot(token string, telegram_api string) (*telego.Bot, error) {
-	client, err := telego.NewBot(token)
+	client, err := telego.NewBot(token, telego.WithLogger(logrus.StandardLogger()))
 	if telegram_api != "" {
-		client, err = telego.NewBot(token, telego.WithAPIServer(telegram_api))
+		client, err = telego.NewBot(token, telego.WithAPIServer(telegram_api), telego.WithLogger(logrus.StandardLogger()))
 	}
 	return client, err
 }

@@ -89,7 +89,7 @@ func ConfigureLogging() error {
 
 	// Setting Logrus configuration
 	logrus.SetOutput(io.Discard)
-	logrus.SetLevel(logrus.DebugLevel)
+	logrus.SetLevel(logrus.InfoLevel)
 	logrus.SetReportCaller(true)
 	logrus.SetFormatter(&CustomFormatter{})
 	return nil
