@@ -19,7 +19,7 @@ func main() {
 	logrus.Info("Creating Bot Client...")
 	botClient, err := client.CreateBot(config.BotToken, config.TelegramAPIURL)
 	if err != nil {
-		logrus.Errorf("Error in creating bot Client: %v", err)
+		logrus.Fatalf("Error in creating bot Client: %v", err)
 	}
 
 	chanSignal := make(chan os.Signal, 1)
@@ -29,13 +29,13 @@ func main() {
 	logrus.Info("Bot Created, Starting Get Updates of Long Polling...")
 	updates, err := client.GetUpdates(botClient)
 	if err != nil {
-		logrus.Errorf("Error in get Updates of Telegram-Bot: %v", err)
+		logrus.Fatalf("Error in get Updates of Telegram-Bot: %v", err)
 	}
 	logrus.Info("GetUpdates Started With Successfully, Creating Bot Handler...")
 
 	botHandler, err := th.NewBotHandler(botClient, updates)
 	if err != nil {
-		logrus.Errorf("Error in Create NewBotHandler: %v", err)
+		logrus.Fatalf("Error in Create NewBotHandler: %v", err)
 	}
 	logrus.Info("Bot Handler Created, Registering Handlers...")
 
