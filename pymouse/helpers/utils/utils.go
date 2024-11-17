@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/mymmrac/telego"
+	"github.com/sirupsen/logrus"
 )
 
 func GetArgs(update telego.Update) string {
@@ -94,7 +95,7 @@ func SplitIntoRows(items []telego.InlineKeyboardButton, width int) (IKB [][]tele
 func MatchByGroup(RegexBase *regexp.Regexp, Text string, Group string) string {
 	SubMatch := RegexBase.FindStringSubmatch(Text)
 	if SubMatch == nil {
-		fmt.Printf("[utils/MatchbyGroup][Warning]: No match found.")
+		logrus.Warn("No match found.")
 		return ""
 	}
 	MatchResponse := make(map[string]string)

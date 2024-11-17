@@ -1,8 +1,7 @@
 package database
 
 import (
-	"log"
-
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -23,7 +22,7 @@ func NewMongoCollection(collName string) *MongoCollection {
 func (mc *MongoCollection) UpdateOne(filter bson.M, data interface{}) (err error) {
 	_, err = mc.Collection.UpdateOne(tdContext, filter, bson.M{"$set": data}, options.Update().SetUpsert(true))
 	if err != nil {
-		log.Printf("[Database][UpdateOne][Error]: %v", err)
+		logrus.Error(err)
 	}
 	return
 }
@@ -38,7 +37,7 @@ func (mc *MongoCollection) FindOne(filter bson.M) (response *mongo.SingleResult)
 func (mc *MongoCollection) CountDocs(filter bson.M) (count int64, err error) {
 	count, err = mc.Collection.CountDocuments(tdContext, filter)
 	if err != nil {
-		log.Printf("[Database][CountDocs][Error]: %v", err)
+		logrus.Error(err)
 	}
 	return
 }
@@ -47,7 +46,7 @@ func (mc *MongoCollection) CountDocs(filter bson.M) (count int64, err error) {
 func (mc *MongoCollection) FindAll(filter bson.M) (cur *mongo.Cursor, err error) {
 	cur, err = mc.Collection.Find(tdContext, filter)
 	if err != nil {
-		log.Printf("[Database][FindAll][Error]: %v", err)
+		logrus.Error(err)
 	}
 	return
 }
@@ -56,7 +55,7 @@ func (mc *MongoCollection) FindAll(filter bson.M) (cur *mongo.Cursor, err error)
 func (mc *MongoCollection) DeleteOne(filter bson.M) (err error) {
 	_, err = mc.Collection.DeleteOne(tdContext, filter)
 	if err != nil {
-		log.Printf("[Database][DeleteOne][Error]: %v", err)
+		logrus.Error(err)
 	}
 	return
 }
@@ -65,7 +64,7 @@ func (mc *MongoCollection) DeleteOne(filter bson.M) (err error) {
 func (mc *MongoCollection) DeleteMany(filter bson.M) (err error) {
 	_, err = mc.Collection.DeleteMany(tdContext, filter)
 	if err != nil {
-		log.Printf("[Database][DeleteMany][Error]: %v", err)
+		logrus.Error(err)
 	}
 	return
 }

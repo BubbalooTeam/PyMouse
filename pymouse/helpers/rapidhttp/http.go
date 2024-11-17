@@ -5,13 +5,13 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
 	"pymouse/pymouse/config"
 	"strings"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"golang.org/x/net/http2"
 )
 
@@ -29,10 +29,10 @@ func GetHTTPTransport() *http.Transport {
 	if config.Socks5Proxy != "" {
 		ProxyURL, err := url.Parse(config.Socks5Proxy)
 		if err != nil {
-			log.Printf("[utils/GetHTTPTransport][Error]: An error occurred while parsing your proxy while trying to configure the common HTTPClient: %v", err)
+			logrus.Errorf("An error occurred while parsing your proxy while trying to configure the common HTTPClient: %v", err)
 			err = http2.ConfigureTransport(HTTPTransport)
 			if err != nil {
-				log.Printf("[utils/GetHTTPTransport][Error]: An error occurred while trying to configure the common HTTPClient: %v", err)
+				logrus.Errorf("An error occurred while trying to configure the common HTTPClient: %v", err)
 				return nil
 			}
 			return HTTPTransport
@@ -46,7 +46,7 @@ func GetHTTPTransport() *http.Transport {
 	}
 	err := http2.ConfigureTransport(HTTPTransport)
 	if err != nil {
-		log.Printf("[utils/GetHTTPTransport][Error]: An error occurred while trying to configure the common HTTPClient: %v", err)
+		logrus.Errorf("An error occurred while trying to configure the common HTTPClient: %v", err)
 		return nil
 	}
 
@@ -69,7 +69,7 @@ func GetHTTPClient() *http.Client {
 
 func Request(Client *http.Client, HTTPParams HTTPStruct) (*http.Response, error) {
 	if Client == nil {
-		log.Println("[utils/Request][Error]: HTTP Client is not found.")
+		logrus.Error("HTTP Client is not found.")
 		return nil, fmt.Errorf("HTTP Client was not Passed to the Request Function to Process")
 	}
 
@@ -87,12 +87,12 @@ func Request(Client *http.Client, HTTPParams HTTPStruct) (*http.Response, error)
 	if strings.Contains(HTTPParams.Method, "POST") && HTTPParams.POSTParams != nil {
 		jsonData, err := json.Marshal(HTTPParams.POSTParams.Json)
 		if err != nil {
-			log.Printf("[utils/Request][Error]: Error in Marshaling POSTParams: %v", err)
+			logrus.Errorf("Error in Marshaling POSTParams: %v", err)
 			return nil, err
 		}
 		request, err := http.NewRequest(HTTPParams.Method, parsedURL, bytes.NewBuffer(jsonData))
 		if err != nil {
-			log.Printf("[utils/Request][Error]: Error in creating a new request: %v", err)
+			logrus.Errorf("Error in creating a new request: %v", err)
 			return nil, err
 		}
 		if HTTPParams.Headers != nil {
@@ -106,7 +106,7 @@ func Request(Client *http.Client, HTTPParams HTTPStruct) (*http.Response, error)
 
 	request, err := http.NewRequest(HTTPParams.Method, parsedURL, nil)
 	if err != nil {
-		log.Printf("[utils/Request][Error]: Error in creating a new request: %v", err)
+		logrus.Errorf("Error in creating a new request: %v", err)
 		return nil, err
 	}
 

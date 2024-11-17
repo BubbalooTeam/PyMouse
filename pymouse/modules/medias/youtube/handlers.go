@@ -2,7 +2,6 @@ package youtube
 
 import (
 	"fmt"
-	"log"
 	"pymouse/pymouse/helpers/telegram"
 	"pymouse/pymouse/helpers/utils"
 	"regexp"
@@ -51,7 +50,7 @@ func GetYoutubeMedias(bot *telego.Bot, update telego.Update) {
 		BaseSearch := ytsearch.VideoSearch(query)
 		search, err := BaseSearch.Next()
 		if err != nil {
-			log.Printf("There was an error when searching on YouTube: %v", err)
+			logrus.Errorf("There was an error when searching on YouTube: %v", err)
 
 			bot.SendChatAction(
 				&telego.SendChatActionParams{
@@ -210,12 +209,12 @@ func YouTubeScrollCallback(bot *telego.Bot, update telego.Update) {
 	SearchKey := CallbackData[1]
 	VidPageNumber, err := strconv.Atoi(CallbackData[2])
 	if err != nil {
-		log.Printf("[youtube/YouTubeScrollCallback][Error]: Error in get the utility information (VidPageNumber): %v", err)
+		logrus.Errorf("Error in get the utility information (VidPageNumber): %v", err)
 		return
 	}
 	UserID, err := strconv.Atoi(CallbackData[3])
 	if err != nil {
-		log.Printf("[youtube/YouTubeScrollCallback][Error]: Error in get the utility information (UserID): %v", err)
+		logrus.Errorf("Error in get the utility information (UserID): %v", err)
 		return
 	}
 

@@ -1,10 +1,10 @@
 package utilitiesdb
 
 import (
-	"log"
 	"pymouse/pymouse/database"
 	"pymouse/pymouse/database/modeldb"
 
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -31,7 +31,7 @@ func FindUser(UserID int64, UserName string) (UI *modeldb.UsersInformations) {
 	if err == mongo.ErrNoDocuments {
 		UI = nil
 	} else if err != nil {
-		log.Printf("[MongoDB][Users/FindUser][Error]: %v", err)
+		logrus.Error(err)
 		UI = dftUser
 	}
 
@@ -57,8 +57,8 @@ func UpdateUser(UserID int64, UserName string, FirstName string) {
 	}
 	err := UsersCollection.UpdateOne(bson.M{"user_id": UserID}, UI)
 	if err != nil {
-		log.Printf("[MongoDB][Users/UpdateUser][Error]: %v - %d", err, UserID)
+		logrus.Errorf("%v - %d", err, UserID)
 		return
 	}
-	log.Printf("[MongoDB][Users/UpdateUser]: %d - %s, Updated with successfully!", UserID, FirstName)
+	logrus.Errorf("%d - %s, Updated with successfully!", UserID, FirstName)
 }

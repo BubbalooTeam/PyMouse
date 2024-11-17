@@ -1,11 +1,11 @@
 package utilitiesdb
 
 import (
-	"log"
 	"pymouse/pymouse/database"
 	"pymouse/pymouse/database/modeldb"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -37,7 +37,7 @@ func UpdateAway(
 	}
 	err := UsersCollection.UpdateOne(bson.M{"user_id": UserID}, UI)
 	if err != nil {
-		log.Printf("[MongoDB][Afk/UpdateAway][Error]: %v - %d", err, UserID)
+		logrus.Errorf("%v - %d", err, UserID)
 		return
 	}
 }

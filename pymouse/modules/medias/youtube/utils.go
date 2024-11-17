@@ -2,7 +2,6 @@ package youtube
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"net/http"
 	"net/url"
@@ -16,6 +15,7 @@ import (
 	"github.com/google/uuid"
 	yt_dl "github.com/kkdai/youtube/v2"
 	"github.com/mymmrac/telego"
+	"github.com/sirupsen/logrus"
 )
 
 func RandYouTubeKey() (RYK string) {
@@ -76,7 +76,7 @@ func GetThumbURL(VideoID string) (ThumbURL string) {
 			},
 		)
 		if err != nil {
-			log.Printf("[youtube/GetThumbURL][Error]: An error occurred.\n\n- VideoID: %s\nQuality: %s\nError: %v", VideoID, Quality, err)
+			logrus.Errorf("An error occurred.\n\n- VideoID: %s\nQuality: %s\nError: %v", VideoID, Quality, err)
 			continue
 		}
 		if response.StatusCode == 200 {
@@ -91,7 +91,7 @@ func GetYouTubeClient() yt_dl.Client {
 	if config.Socks5Proxy != "" {
 		ParsedProxyURL, err := url.Parse(config.Socks5Proxy)
 		if err != nil {
-			log.Println("[youtube/GetYouTubeClient][Error]: Error in parse Socks5Proxy, please check the bot .env file...")
+			logrus.Errorf("Error in parse Socks5Proxy, please check the bot .env file...")
 			return yt_dl.Client{}
 		}
 		HTTPClient := http.Client{
@@ -108,7 +108,7 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 	client := GetYouTubeClient()
 	video, err := client.GetVideo(videoID)
 	if err != nil {
-		log.Printf("[youtube/GetDownloadButtons]: Error in fetching video informations...")
+		logrus.Errorf("Error in fetching video informations...")
 		return nil
 	}
 

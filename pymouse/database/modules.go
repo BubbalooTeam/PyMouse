@@ -27,14 +27,14 @@ func InitDB() {
 	clientOptions := options.Client().ApplyURI(config.DatabaseURI)
 	client, err := mongo.Connect(bgContext, clientOptions)
 	if err != nil {
-		logrus.Errorf("[MongoDB][Connect][Error]: %v", err)
+		logrus.Error(err)
 	}
 
 	ctx, cancel := context.WithTimeout(bgContext, 10*time.Second)
 	defer cancel()
 
 	if err = client.Ping(ctx, nil); err != nil {
-		logrus.Errorf("[MongoDB][Ping][Error]: %v", err)
+		logrus.Error(err)
 	}
 
 	MongoClient = client

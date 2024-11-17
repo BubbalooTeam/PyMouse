@@ -1,10 +1,10 @@
 package utilitiesdb
 
 import (
-	"log"
 	"pymouse/pymouse/database"
 	"pymouse/pymouse/database/modeldb"
 
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -18,7 +18,7 @@ func FindChat(ChatID int64) (CI *modeldb.ChatsInformations) {
 	if err == mongo.ErrNoDocuments {
 		CI = nil
 	} else if err != nil {
-		log.Printf("[MongoDB][Chats/FindChat][Error]: %v", err)
+		logrus.Error(err)
 		CI = dftChat
 	}
 	return CI
@@ -43,8 +43,8 @@ func UpdateChat(ChatID int64, Username string, ChatTitle string) {
 	}
 	err := ChatsCollection.UpdateOne(bson.M{"chat_id": ChatID}, CI)
 	if err != nil {
-		log.Printf("[MongoDB][Chats/UpdateChat][Error]: %v - %d", err, ChatID)
+		logrus.Errorf("%v - %d", err, ChatID)
 		return
 	}
-	log.Printf("[MongoDB][Chats/UpdateChat]: %d - %s, Updated with successfully!", ChatID, ChatTitle)
+	logrus.Errorf("%d - %s, Updated with successfully!", ChatID, ChatTitle)
 }
