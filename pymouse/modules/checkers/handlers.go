@@ -50,7 +50,7 @@ func SaveChats(bot *telego.Bot, update telego.Update, next th.Handler) {
 		}
 		message = update.CallbackQuery.Message.(*telego.Message)
 	}
-	if strings.Contains(update.Message.Chat.Type, "private") || message.SenderChat != nil {
+	if strings.Contains(message.Chat.Type, "private") || message.SenderChat != nil {
 		next(bot, update)
 		return
 	}
