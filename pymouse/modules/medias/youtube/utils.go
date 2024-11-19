@@ -2,15 +2,17 @@ package youtube
 
 import (
 	"fmt"
-	"math"
+	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"pymouse/pymouse/config"
 	"pymouse/pymouse/helpers/rapidhttp"
 	"pymouse/pymouse/helpers/utils"
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	yt_dl "github.com/kkdai/youtube/v2"
@@ -116,7 +118,7 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 		{
 			{
 				Text:         "🥇 BEST - 🎥 MP4",
-				CallbackData: fmt.Sprintf("yt|dl|%s|mp4+140|%d|v", videoID, userID),
+				CallbackData: fmt.Sprintf("yt|dl|%s|mp4|%d|v", videoID, userID),
 			},
 		},
 	}
@@ -143,7 +145,7 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 				vidQDict[VidQuality][itagStr] = format.ContentLength
 			}
 		} else if strings.Contains(format.MimeType, "audio/mp4") && format.AudioChannels > 0 {
-			AudioBitrate := int(math.Round(float64(format.Bitrate) / 1000))
+			AudioBitrate := format.Bitrate / 1000
 			audioDict[AudioBitrate] = fmt.Sprintf("📀 %dKbps (%s)",
 				AudioBitrate,
 				utils.HumanBytes(format.ContentLength),
@@ -167,7 +169,7 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 			if maxSize > 0 {
 				videoButtons = append(videoButtons, telego.InlineKeyboardButton{
 					Text:         fmt.Sprintf("🎥 %s (%s)", VidQuality, utils.HumanBytes(maxSize)),
-					CallbackData: fmt.Sprintf("yt|dl|%s|%s+140|%d|v", videoID, maxItag, userID),
+					CallbackData: fmt.Sprintf("yt|dl|%s|%s|%d|v", videoID, maxItag, userID),
 				})
 			}
 		}
@@ -205,4 +207,123 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 	}
 
 	return IKB
+}
+
+func GetYouTubeFormat(Video *yt_dl.Video, Itag int) *yt_dl.Format {
+	YouTubeFormat := Video.Formats.Itag(Itag)
+	if len(YouTubeFormat) == 0 {
+		logrus.Error("This YouTube Video Itag is Invalid!")
+		return nil
+	}
+	return &YouTubeFormat[0]
+}
+
+func GetBestQuality(formats []yt_dl.Format, mediaType string) yt_dl.Format {
+	var bestQuality yt_dl.Format
+	var maxBitrate int
+
+	isDesiredQuality := func(qualityLabel string) bool {
+		supportedQualities := []string{"1080p60", "720p60", "1080p", "720p", "480p", "360p", "240p", "144p"}
+		for _, supported := range supportedQualities {
+			if strings.Contains(qualityLabel, supported) {
+				return true
+			}
+		}
+		return false
+	}
+
+	for _, format := range formats {
+		switch mediaType {
+		case "video":
+			if format.Bitrate > maxBitrate && isDesiredQuality(format.QualityLabel) {
+				maxBitrate = format.Bitrate
+				bestQuality = format
+			}
+		case "audio":
+			if format.AudioChannels > 0 && format.QualityLabel == "" && format.Bitrate > maxBitrate {
+				maxBitrate = format.Bitrate
+				bestQuality = format
+			}
+		}
+	}
+	return bestQuality
+}
+
+func DownloadYouTubeVideo(
+	VideoID string,
+	MediaType string,
+	VideoSItag string,
+) (*os.File, *yt_dl.Video, string) {
+	var MediaFile *os.File
+	var VideoFormat *yt_dl.Format
+	YouTubeClient := GetYouTubeClient()
+	YouTubeVideo, err := YouTubeClient.GetVideo(VideoID)
+	if err != nil {
+		logrus.Errorf("Failed to Get Video in YouTube, please check your Proxy or YouTube-Downloader.")
+		return nil, nil, ""
+	}
+
+	formatType := "audio/mp4"
+	if strings.Contains(MediaType, "video") {
+		formatType = "video/mp4"
+	}
+
+	switch VideoSItag {
+	case "mp3", "mp4":
+		VideoQuality := GetBestQuality(YouTubeVideo.Formats.Type(formatType), MediaType)
+		logrus.Info(VideoQuality.ItagNo)
+		VideoFormat = GetYouTubeFormat(YouTubeVideo, VideoQuality.ItagNo)
+		if VideoFormat == nil {
+			return nil, YouTubeVideo, ""
+		}
+	default:
+		VideoItag, err := strconv.Atoi(VideoSItag)
+		if err != nil {
+			logrus.Errorf("Error in get Download information (VideoItag): %v", err)
+			return nil, YouTubeVideo, ""
+		}
+		logrus.Info(VideoSItag)
+		logrus.Info(VideoItag)
+		VideoFormat = GetYouTubeFormat(YouTubeVideo, VideoItag)
+		if VideoFormat == nil {
+			return nil, YouTubeVideo, ""
+		}
+	}
+	// Switch Download Method, According to MediaType
+	switch MediaType {
+	case "audio":
+		MediaFile, err = os.CreateTemp("", fmt.Sprintf("%s.mp3", YouTubeVideo.Title))
+		if err != nil {
+			logrus.Errorf("Failed to create a YouTube Temporary directory: %v", err)
+			return nil, YouTubeVideo, ""
+		}
+	case "video":
+		MediaFile, err = os.CreateTemp("", fmt.Sprintf("%s.mp4", YouTubeVideo.Title))
+		if err != nil {
+			logrus.Errorf("Failed to create a YouTube Temporary directory: %v", err)
+			return nil, YouTubeVideo, ""
+		}
+	}
+	streamYouTube, _, err := YouTubeClient.GetStream(YouTubeVideo, VideoFormat)
+	if err != nil {
+		logrus.Errorf("Failed in Get the YouTube Stream: %v", err)
+		return nil, YouTubeVideo, ""
+	}
+	defer streamYouTube.Close()
+
+	_, err = io.Copy(MediaFile, streamYouTube)
+	if err != nil {
+		logrus.Errorf("Failed to copy stream to outputFile: %v", err)
+		os.Remove(MediaFile.Name())
+		return nil, YouTubeVideo, ""
+	}
+	return MediaFile, YouTubeVideo, YouTubeMakeTextWithInfos(
+		fmt.Sprintf("https://www.youtube.com/watch?v=%s", YouTubeVideo.ID),
+		YouTubeVideo.Title,
+		utils.TimeFormatter(YouTubeVideo.Duration.Seconds()),
+		utils.FormatInteger(YouTubeVideo.Views),
+		YouTubeVideo.PublishDate.Format(time.RFC822),
+		fmt.Sprintf("www.youtube.com/channel/%s", YouTubeVideo.ChannelID),
+		YouTubeVideo.Author,
+	)
 }

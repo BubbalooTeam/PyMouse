@@ -342,7 +342,8 @@ func YouTubeACallHandler(bot *telego.Bot, update telego.Update) {
 		return
 	}
 	ActionType := callbackData[1]
-	if strings.Contains(ActionType, "gen") {
+	switch ActionType {
+	case "gen":
 		YouTubeVideo, err := YouTubeClient.GetVideo(VideoID)
 		if err != nil {
 			logrus.Errorf("Failed to Get Video in YouTube, please check your Proxy or YouTube-Downloader.")
@@ -391,5 +392,12 @@ func YouTubeACallHandler(bot *telego.Bot, update telego.Update) {
 			},
 		)
 		return
+	case "dl":
+		MediaType := "audio"
+		if strings.Contains(callbackData[5], "v") {
+			MediaType = "video"
+		}
+		VideoFile, _, Caption := DownloadYouTubeVideo(VideoID, MediaType, callbackData[3])
+		logrus.Info(VideoFile, Caption)
 	}
 }
