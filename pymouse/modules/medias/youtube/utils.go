@@ -3,7 +3,6 @@ package youtube
 import (
 	"fmt"
 	"io"
-	"math"
 	"net/http"
 	"net/url"
 	"os"
@@ -146,7 +145,7 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 				vidQDict[VidQuality][itagStr] = format.ContentLength
 			}
 		} else if strings.Contains(format.MimeType, "audio/mp4") && format.AudioChannels > 0 {
-			AudioBitrate := int(math.Round(float64(format.Bitrate) / 1000))
+			AudioBitrate := format.Bitrate / 1000
 			audioDict[AudioBitrate] = fmt.Sprintf("📀 %dKbps (%s)",
 				AudioBitrate,
 				utils.HumanBytes(format.ContentLength),
@@ -210,38 +209,13 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 	return IKB
 }
 
-func GetYouTubeVideoFormat(Video *yt_dl.Video, Itag int) *yt_dl.Format {
+func GetYouTubeFormat(Video *yt_dl.Video, Itag int) *yt_dl.Format {
 	YouTubeFormat := Video.Formats.Itag(Itag)
 	if len(YouTubeFormat) == 0 {
 		logrus.Error("This YouTube Video Itag is Invalid!")
 		return nil
 	}
 	return &YouTubeFormat[0]
-}
-
-func GetYouTubeAudioFormat(video *yt_dl.Video, targetBitrate int) *yt_dl.Format {
-	targetBitrateInBits := targetBitrate * 1000
-
-	var bestFormat *yt_dl.Format
-	smallestDiff := math.MaxFloat64
-
-	for _, format := range video.Formats {
-		if strings.Contains(format.MimeType, "audio") && !strings.Contains(format.MimeType, "video") {
-			diff := math.Abs(float64(format.Bitrate - targetBitrateInBits))
-
-			if diff < smallestDiff {
-				smallestDiff = diff
-				bestFormat = &format
-			}
-		}
-	}
-
-	if bestFormat == nil {
-		logrus.Error("No compatible audio format found!")
-		return nil
-	}
-
-	return bestFormat
 }
 
 func GetBestQuality(formats []yt_dl.Format, mediaType string) yt_dl.Format {
@@ -298,7 +272,7 @@ func DownloadYouTubeVideo(
 	case "mp3", "mp4":
 		VideoQuality := GetBestQuality(YouTubeVideo.Formats.Type(formatType), MediaType)
 		logrus.Info(VideoQuality.ItagNo)
-		VideoFormat = GetYouTubeVideoFormat(YouTubeVideo, VideoQuality.ItagNo)
+		VideoFormat = GetYouTubeFormat(YouTubeVideo, VideoQuality.ItagNo)
 		if VideoFormat == nil {
 			return nil, YouTubeVideo, ""
 		}
@@ -308,12 +282,9 @@ func DownloadYouTubeVideo(
 			logrus.Errorf("Error in get Download information (VideoItag): %v", err)
 			return nil, YouTubeVideo, ""
 		}
-		if strings.Contains(MediaType, "video") {
-			VideoFormat = GetYouTubeVideoFormat(YouTubeVideo, VideoItag)
-		} else {
-			VideoFormat = GetYouTubeAudioFormat(YouTubeVideo, VideoItag)
-		}
-
+		logrus.Info(VideoSItag)
+		logrus.Info(VideoItag)
+		VideoFormat = GetYouTubeFormat(YouTubeVideo, VideoItag)
 		if VideoFormat == nil {
 			return nil, YouTubeVideo, ""
 		}
@@ -321,13 +292,13 @@ func DownloadYouTubeVideo(
 	// Switch Download Method, According to MediaType
 	switch MediaType {
 	case "audio":
-		MediaFile, err = os.CreateTemp("", "YouTubePymouseAud.mp3")
+		MediaFile, err = os.CreateTemp("", fmt.Sprintf("%s.mp3", YouTubeVideo.Title))
 		if err != nil {
 			logrus.Errorf("Failed to create a YouTube Temporary directory: %v", err)
 			return nil, YouTubeVideo, ""
 		}
 	case "video":
-		MediaFile, err = os.CreateTemp("", "YouTubePyMouseVid.mp3")
+		MediaFile, err = os.CreateTemp("", fmt.Sprintf("%s.mp4", YouTubeVideo.Title))
 		if err != nil {
 			logrus.Errorf("Failed to create a YouTube Temporary directory: %v", err)
 			return nil, YouTubeVideo, ""
