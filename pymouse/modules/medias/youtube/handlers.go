@@ -398,6 +398,15 @@ func YouTubeACallHandler(bot *telego.Bot, update telego.Update) {
 			MediaType = "video"
 		}
 		VideoFile, _, Caption := DownloadYouTubeVideo(VideoID, MediaType, callbackData[3])
-		logrus.Info(VideoFile, Caption)
+		_, err := bot.SendDocument(
+			&telego.SendDocumentParams{
+				ChatID: telegoutil.ID(message.Chat.ID),
+				Document: telego.InputFile{
+					File: VideoFile,
+				},
+				Caption: Caption,
+			},
+		)
+		logrus.Error(err)
 	}
 }

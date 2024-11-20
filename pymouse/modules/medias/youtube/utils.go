@@ -264,6 +264,8 @@ func DownloadYouTubeVideo(
 		return nil, nil, ""
 	}
 
+	sanitizedTitle := sanitizeFileName(YouTubeVideo.Title)
+
 	formatType := "audio/mp4"
 	if strings.Contains(MediaType, "video") {
 		formatType = "video/mp4"
@@ -290,21 +292,24 @@ func DownloadYouTubeVideo(
 			return nil, YouTubeVideo, ""
 		}
 	}
+
 	// Switch Download Method, According to MediaType
+	var fileExtension string
 	switch MediaType {
 	case "audio":
-		MediaFile, err = os.CreateTemp("", fmt.Sprintf("%s.mp3", YouTubeVideo.Title))
-		if err != nil {
-			logrus.Errorf("Failed to create a YouTube Temporary directory: %v", err)
-			return nil, YouTubeVideo, ""
-		}
+		fileExtension = ".mp3"
 	case "video":
-		MediaFile, err = os.CreateTemp("", fmt.Sprintf("%s.mp4", YouTubeVideo.Title))
-		if err != nil {
-			logrus.Errorf("Failed to create a YouTube Temporary directory: %v", err)
-			return nil, YouTubeVideo, ""
-		}
+		fileExtension = ".mp4"
+	default:
+		fileExtension = ".mp4"
 	}
+
+	MediaFile, err = os.CreateTemp("", fmt.Sprintf("%s%s", sanitizedTitle, fileExtension))
+	if err != nil {
+		logrus.Errorf("Failed to create a YouTube Temporary file: %v", err)
+		return nil, YouTubeVideo, ""
+	}
+
 	streamYouTube, _, err := YouTubeClient.GetStream(YouTubeVideo, VideoFormat)
 	if err != nil {
 		logrus.Errorf("Failed in Get the YouTube Stream: %v", err)
@@ -312,12 +317,30 @@ func DownloadYouTubeVideo(
 	}
 	defer streamYouTube.Close()
 
-	_, err = io.Copy(MediaFile, streamYouTube)
-	if err != nil {
-		logrus.Errorf("Failed to copy stream to outputFile: %v", err)
-		os.Remove(MediaFile.Name())
-		return nil, YouTubeVideo, ""
+	bufferSize := 1024 * 1024
+	buffer := make([]byte, bufferSize)
+	for {
+		bytesRead, readErr := streamYouTube.Read(buffer)
+		if bytesRead > 0 {
+			_, writeErr := MediaFile.Write(buffer[:bytesRead])
+			if writeErr != nil {
+				logrus.Errorf("Failed to write to file: %v", writeErr)
+				os.Remove(MediaFile.Name())
+				return nil, YouTubeVideo, ""
+			}
+		}
+
+		if readErr == io.EOF {
+			break
+		}
+
+		if readErr != nil {
+			logrus.Errorf("Failed to read stream: %v", readErr)
+			os.Remove(MediaFile.Name())
+			return nil, YouTubeVideo, ""
+		}
 	}
+
 	return MediaFile, YouTubeVideo, YouTubeMakeTextWithInfos(
 		fmt.Sprintf("https://www.youtube.com/watch?v=%s", YouTubeVideo.ID),
 		YouTubeVideo.Title,
@@ -327,4 +350,22 @@ func DownloadYouTubeVideo(
 		fmt.Sprintf("www.youtube.com/channel/%s", YouTubeVideo.ChannelID),
 		YouTubeVideo.Author,
 	)
+}
+
+func sanitizeFileName(fileName string) string {
+	fileName = strings.ReplaceAll(fileName, "/", "_")
+	fileName = strings.ReplaceAll(fileName, "\\", "_")
+	fileName = strings.ReplaceAll(fileName, ":", "_")
+	fileName = strings.ReplaceAll(fileName, "*", "_")
+	fileName = strings.ReplaceAll(fileName, "?", "_")
+	fileName = strings.ReplaceAll(fileName, "\"", "_")
+	fileName = strings.ReplaceAll(fileName, "<", "_")
+	fileName = strings.ReplaceAll(fileName, ">", "_")
+	fileName = strings.ReplaceAll(fileName, "|", "_")
+
+	if len(fileName) > 255 {
+		fileName = fileName[:255]
+	}
+
+	return fileName
 }
