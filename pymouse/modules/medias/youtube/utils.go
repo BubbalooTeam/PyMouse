@@ -3,6 +3,7 @@ package youtube
 import (
 	"fmt"
 	"io"
+	"math"
 	"net/http"
 	"net/url"
 	"os"
@@ -145,9 +146,9 @@ func GetDownloadButtons(videoID string, userID int64) (IKB [][]telego.InlineKeyb
 				vidQDict[VidQuality][itagStr] = format.ContentLength
 			}
 		} else if strings.Contains(format.MimeType, "audio/mp4") && format.AudioChannels > 0 {
-			AudioBitrate := format.Bitrate / 1000
+			AudioBitrate := format.ItagNo
 			audioDict[AudioBitrate] = fmt.Sprintf("📀 %dKbps (%s)",
-				AudioBitrate,
+				int(math.Round(float64(format.Bitrate)/1000.0)),
 				utils.HumanBytes(format.ContentLength),
 			)
 		}
