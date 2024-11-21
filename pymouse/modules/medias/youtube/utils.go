@@ -264,7 +264,7 @@ func DownloadYouTubeVideo(
 		return nil, nil, ""
 	}
 
-	sanitizedTitle := sanitizeFileName(YouTubeVideo.Title)
+	sanitizedTitle := sanitizeFileName(RandYouTubeKey())
 
 	formatType := "audio/mp4"
 	if strings.Contains(MediaType, "video") {
@@ -340,6 +340,7 @@ func DownloadYouTubeVideo(
 			return nil, YouTubeVideo, ""
 		}
 	}
+	MediaFile.Seek(0, 0)
 
 	return MediaFile, YouTubeVideo, YouTubeMakeTextWithInfos(
 		fmt.Sprintf("https://www.youtube.com/watch?v=%s", YouTubeVideo.ID),

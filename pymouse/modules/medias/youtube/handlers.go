@@ -404,7 +404,8 @@ func YouTubeACallHandler(bot *telego.Bot, update telego.Update) {
 				Document: telego.InputFile{
 					File: VideoFile,
 				},
-				Caption: Caption,
+				Caption:   Caption,
+				ParseMode: "HTML",
 			},
 		)
 		logrus.Error(err)
