@@ -7,9 +7,11 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"pymouse/pymouse/config"
 	"pymouse/pymouse/helpers/rapidhttp"
 	"pymouse/pymouse/helpers/utils"
+	"pymouse/pymouse/modules/medias"
 	"sort"
 	"strconv"
 	"strings"
@@ -250,21 +252,65 @@ func GetBestQuality(formats []yt_dl.Format, mediaType string) yt_dl.Format {
 	return bestQuality
 }
 
+func copyStreamWithRetries(ytClient *yt_dl.Client, ytVideo *yt_dl.Video, ytFormat *yt_dl.Format, mediaFile *os.File) error {
+	for attempt := 1; attempt <= 5; attempt++ {
+		stream, _, err := ytClient.GetStream(ytVideo, ytFormat)
+		if err != nil {
+			logrus.Errorf("Failed to get stream from YouTube: %v", err)
+			time.Sleep(2 * time.Second)
+			continue
+		}
+
+		_, err = io.Copy(mediaFile, stream)
+		stream.Close()
+
+		logrus.Error(err)
+		if err == nil {
+			return nil
+		}
+
+		mediaFile.Seek(0, 0)
+		mediaFile.Truncate(0)
+		time.Sleep(2 * time.Second)
+	}
+
+	os.Remove(mediaFile.Name())
+	return fmt.Errorf("youtube — Failed to copy stream, after 5 attempts")
+}
+
+func downloadAndMergeAudio(ytClient *yt_dl.Client, ytVideo *yt_dl.Video, mediaFile *os.File) error {
+	audioFormat := GetYouTubeFormat(ytVideo, 140)
+
+	audioFile, err := os.CreateTemp("", "PyMouse_YouTube_*.m4a")
+	if err != nil {
+		return err
+	}
+	defer audioFile.Close()
+
+	err = copyStreamWithRetries(ytClient, ytVideo, audioFormat, audioFile)
+	if err != nil {
+		return err
+	}
+
+	return medias.MergeAudioVideo(mediaFile, audioFile)
+}
+
 func DownloadYouTubeVideo(
 	VideoID string,
 	MediaType string,
 	VideoSItag string,
-) (*os.File, *yt_dl.Video, string) {
+) (*os.File, string, error) {
 	var MediaFile *os.File
 	var VideoFormat *yt_dl.Format
+
 	YouTubeClient := GetYouTubeClient()
 	YouTubeVideo, err := YouTubeClient.GetVideo(VideoID)
 	if err != nil {
 		logrus.Errorf("Failed to Get Video in YouTube, please check your Proxy or YouTube-Downloader.")
-		return nil, nil, ""
+		return nil, "", err
 	}
 
-	sanitizedTitle := sanitizeFileName(RandYouTubeKey())
+	ytFilename := fmt.Sprintf("PyMouse_YouTube_%s", RandYouTubeKey())
 
 	formatType := "audio/mp4"
 	if strings.Contains(MediaType, "video") {
@@ -277,19 +323,17 @@ func DownloadYouTubeVideo(
 		logrus.Info(VideoQuality.ItagNo)
 		VideoFormat = GetYouTubeFormat(YouTubeVideo, VideoQuality.ItagNo)
 		if VideoFormat == nil {
-			return nil, YouTubeVideo, ""
+			return nil, "", fmt.Errorf("youtube stream with this format is not avalaible")
 		}
 	default:
 		VideoItag, err := strconv.Atoi(VideoSItag)
 		if err != nil {
 			logrus.Errorf("Error in get Download information (VideoItag): %v", err)
-			return nil, YouTubeVideo, ""
+			return nil, "", err
 		}
-		logrus.Info(VideoSItag)
-		logrus.Info(VideoItag)
 		VideoFormat = GetYouTubeFormat(YouTubeVideo, VideoItag)
 		if VideoFormat == nil {
-			return nil, YouTubeVideo, ""
+			return nil, "", fmt.Errorf("youtube stream with this format is not avalaible")
 		}
 	}
 
@@ -304,45 +348,37 @@ func DownloadYouTubeVideo(
 		fileExtension = ".mp4"
 	}
 
-	MediaFile, err = os.CreateTemp("", fmt.Sprintf("%s%s", sanitizedTitle, fileExtension))
+	MediaFile, err = os.Create(filepath.Join(os.TempDir(), ytFilename+fileExtension))
 	if err != nil {
-		logrus.Errorf("Failed to create a YouTube Temporary file: %v", err)
-		return nil, YouTubeVideo, ""
+		logrus.Error("Failed to create a temporary file.")
+		return nil, "", err
 	}
 
-	streamYouTube, _, err := YouTubeClient.GetStream(YouTubeVideo, VideoFormat)
-	if err != nil {
-		logrus.Errorf("Failed in Get the YouTube Stream: %v", err)
-		return nil, YouTubeVideo, ""
-	}
-	defer streamYouTube.Close()
-
-	bufferSize := 1024 * 1024
-	buffer := make([]byte, bufferSize)
-	for {
-		bytesRead, readErr := streamYouTube.Read(buffer)
-		if bytesRead > 0 {
-			_, writeErr := MediaFile.Write(buffer[:bytesRead])
-			if writeErr != nil {
-				logrus.Errorf("Failed to write to file: %v", writeErr)
-				os.Remove(MediaFile.Name())
-				return nil, YouTubeVideo, ""
-			}
-		}
-
-		if readErr == io.EOF {
-			break
-		}
-
-		if readErr != nil {
-			logrus.Errorf("Failed to read stream: %v", readErr)
+	defer func() {
+		if err != nil {
+			MediaFile.Close()
 			os.Remove(MediaFile.Name())
-			return nil, YouTubeVideo, ""
+		}
+	}()
+
+	// Downloader of YouTube.
+	logrus.Info("Trying to download YouTube stream...")
+	err = copyStreamWithRetries(&YouTubeClient, YouTubeVideo, VideoFormat, MediaFile)
+	if err != nil {
+		logrus.Errorf("Failed to download a YouTube stream: %v", err)
+		return nil, "", err
+	}
+
+	if strings.Contains(MediaType, "video") {
+		err = downloadAndMergeAudio(&YouTubeClient, YouTubeVideo, MediaFile)
+		if err != nil {
+			logrus.Errorf("Failed to merge audio in video: %v", err)
+			return nil, "", err
 		}
 	}
 	MediaFile.Seek(0, 0)
 
-	return MediaFile, YouTubeVideo, YouTubeMakeTextWithInfos(
+	return MediaFile, YouTubeMakeTextWithInfos(
 		fmt.Sprintf("https://www.youtube.com/watch?v=%s", YouTubeVideo.ID),
 		YouTubeVideo.Title,
 		utils.TimeFormatter(YouTubeVideo.Duration.Seconds()),
@@ -350,23 +386,5 @@ func DownloadYouTubeVideo(
 		YouTubeVideo.PublishDate.Format(time.RFC822),
 		fmt.Sprintf("www.youtube.com/channel/%s", YouTubeVideo.ChannelID),
 		YouTubeVideo.Author,
-	)
-}
-
-func sanitizeFileName(fileName string) string {
-	fileName = strings.ReplaceAll(fileName, "/", "_")
-	fileName = strings.ReplaceAll(fileName, "\\", "_")
-	fileName = strings.ReplaceAll(fileName, ":", "_")
-	fileName = strings.ReplaceAll(fileName, "*", "_")
-	fileName = strings.ReplaceAll(fileName, "?", "_")
-	fileName = strings.ReplaceAll(fileName, "\"", "_")
-	fileName = strings.ReplaceAll(fileName, "<", "_")
-	fileName = strings.ReplaceAll(fileName, ">", "_")
-	fileName = strings.ReplaceAll(fileName, "|", "_")
-
-	if len(fileName) > 255 {
-		fileName = fileName[:255]
-	}
-
-	return fileName
+	), nil
 }

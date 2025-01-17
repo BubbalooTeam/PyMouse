@@ -397,17 +397,61 @@ func YouTubeACallHandler(bot *telego.Bot, update telego.Update) {
 		if strings.Contains(callbackData[5], "v") {
 			MediaType = "video"
 		}
-		VideoFile, _, Caption := DownloadYouTubeVideo(VideoID, MediaType, callbackData[3])
-		_, err := bot.SendDocument(
-			&telego.SendDocumentParams{
-				ChatID: telegoutil.ID(message.Chat.ID),
-				Document: telego.InputFile{
-					File: VideoFile,
-				},
-				Caption:   Caption,
+		bot.EditMessageCaption(
+			&telego.EditMessageCaptionParams{
+				ChatID:    telegoutil.ID(message.Chat.ID),
+				MessageID: update.CallbackQuery.Message.GetMessageID(),
+				Caption:   "<b>Downloading...</b>",
 				ParseMode: "HTML",
 			},
 		)
-		logrus.Error(err)
+		VideoFile, Caption, err := DownloadYouTubeVideo(VideoID, MediaType, callbackData[3])
+		if err != nil {
+			fmt.Println(err)
+			bot.EditMessageCaption(
+				&telego.EditMessageCaptionParams{
+					ChatID:    telegoutil.ID(message.Chat.ID),
+					MessageID: update.CallbackQuery.Message.GetMessageID(),
+					Caption:   "<b>Failed to extract/download your stream...</b>",
+					ParseMode: "HTML",
+				},
+			)
+			return
+		}
+
+		bot.EditMessageCaption(
+			&telego.EditMessageCaptionParams{
+				ChatID:    telegoutil.ID(message.Chat.ID),
+				MessageID: update.CallbackQuery.Message.GetMessageID(),
+				Caption:   "<b>Uploading...</b>",
+				ParseMode: "HTML",
+			},
+		)
+		logrus.Info(VideoFile.Name())
+		if strings.Contains(MediaType, "audio") {
+			_, err := bot.SendAudio(
+				&telego.SendAudioParams{
+					ChatID:    telegoutil.ID(message.Chat.ID),
+					Audio:     telegoutil.File(VideoFile),
+					Caption:   Caption,
+					ParseMode: "HTML",
+				},
+			)
+			logrus.Error(err)
+		} else if strings.Contains(MediaType, "video") {
+			_, err := bot.SendVideo(
+				&telego.SendVideoParams{
+					ChatID:    telegoutil.ID(message.Chat.ID),
+					Video:     telegoutil.File(VideoFile),
+					Caption:   Caption,
+					ParseMode: "HTML",
+				},
+			)
+			logrus.Error(err)
+		}
+		bot.DeleteMessage(&telego.DeleteMessageParams{
+			ChatID:    telegoutil.ID(message.Chat.ID),
+			MessageID: update.CallbackQuery.Message.GetMessageID(),
+		})
 	}
 }
