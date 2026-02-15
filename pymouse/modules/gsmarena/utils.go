@@ -160,15 +160,12 @@ func fetchDevice(deviceID string) GSMArenaDeviceBaseResult {
 		return GSMArenaDeviceBaseResult{}
 	}
 
-	// Nome
 	name := strings.TrimSpace(
 		doc.Find(".specs-phone-name-title").First().Text(),
 	)
 
-	// Imagem
 	image, _ := doc.Find(".specs-photo-main img").Attr("src")
 
-	// Specs
 	doc.Find("#specs-list table").Each(func(i int, table *goquery.Selection) {
 
 		category := strings.TrimSpace(table.Find("th").First().Text())
