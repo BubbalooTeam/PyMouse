@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"os"
 	"os/signal"
 	"pymouse/pymouse"
@@ -26,8 +27,10 @@ func main() {
 	signal.Notify(chanSignal, syscall.SIGINT, syscall.SIGTERM)
 	botSignal := make(chan struct{}, 1)
 
+	ctx := context.Background()
+
 	logrus.Info("Bot Created, Starting Get Updates of Long Polling...")
-	updates, err := client.GetUpdates(botClient)
+	updates, err := client.GetUpdates(ctx, botClient)
 	if err != nil {
 		logrus.Fatalf("Error in get Updates of Telegram-Bot: %v", err)
 	}
@@ -44,7 +47,7 @@ func main() {
 
 	logrus.Info("Handler Registered, PyMouse is almost starting...")
 
-	botUser, err := botClient.GetMe()
+	botUser, err := botClient.GetMe(ctx)
 	if err != nil {
 		logrus.Fatal(err)
 	}
@@ -52,7 +55,6 @@ func main() {
 		<-chanSignal
 		logrus.Info("Stopping PyMouse...")
 
-		botClient.StopLongPolling()
 		if err != nil {
 			logrus.Fatal(err)
 		}

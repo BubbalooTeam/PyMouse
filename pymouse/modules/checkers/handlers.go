@@ -2,69 +2,77 @@ package checkers
 
 import (
 	"fmt"
-	"pymouse/pymouse/database/utilitiesdb"
-
 	"strings"
+
+	"pymouse/pymouse/database/utilitiesdb"
 
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 )
 
-func SaveUsers(bot *telego.Bot, update telego.Update, next th.Handler) {
-	var UserName string
+func SaveUsers(ctx *th.Context, update telego.Update) error {
+	var userName string
 
 	message := update.Message
+
 	if message == nil {
 		if update.CallbackQuery == nil {
-			next(bot, update)
-			return
+			return ctx.Next(update)
 		}
-		message = update.CallbackQuery.Message.(*telego.Message)
+
+		if msg, ok := update.CallbackQuery.Message.(*telego.Message); ok {
+			message = msg
+		} else {
+			return ctx.Next(update)
+		}
 	}
+
 	if message.SenderChat != nil {
-		next(bot, update)
-		return
+		return ctx.Next(update)
 	}
-	// Telegram user informations
-	UserID := message.From.ID
-	FirstName := message.From.FirstName
+
+	userID := message.From.ID
+	firstName := message.From.FirstName
+
 	if message.From.Username != "" {
-		UserName = fmt.Sprintf("@%s", message.From.Username)
+		userName = fmt.Sprintf("@%s", message.From.Username)
 	}
 
-	// Update or Insert User Informations
-	utilitiesdb.UpdateUser(UserID, UserName, FirstName)
+	utilitiesdb.UpdateUser(userID, userName, firstName)
 
-	// Pass to next handler
-	next(bot, update)
+	return ctx.Next(update)
 }
 
-func SaveChats(bot *telego.Bot, update telego.Update, next th.Handler) {
-	var UserName string
+func SaveChats(ctx *th.Context, update telego.Update) error {
+	var userName string
 
 	message := update.Message
+
 	if message == nil {
 		if update.CallbackQuery == nil {
-			next(bot, update)
-			return
+
+			return ctx.Next(update)
 		}
-		message = update.CallbackQuery.Message.(*telego.Message)
+
+		if msg, ok := update.CallbackQuery.Message.(*telego.Message); ok {
+			message = msg
+		} else {
+			return ctx.Next(update)
+		}
 	}
+
 	if strings.Contains(message.Chat.Type, "private") || message.SenderChat != nil {
-		next(bot, update)
-		return
+		return ctx.Next(update)
 	}
 
-	// Telegram Chat Informations
-	ChatID := message.Chat.ID
-	ChatTitle := message.Chat.Title
+	chatID := message.Chat.ID
+	chatTitle := message.Chat.Title
+
 	if message.Chat.Username != "" {
-		UserName = fmt.Sprintf("@%s", message.Chat.Username)
+		userName = fmt.Sprintf("@%s", message.Chat.Username)
 	}
 
-	// Update or Insert Chat Informations
-	utilitiesdb.UpdateChat(ChatID, UserName, ChatTitle)
+	utilitiesdb.UpdateChat(chatID, userName, chatTitle)
 
-	// Pass to next handler
-	next(bot, update)
+	return ctx.Next(update)
 }

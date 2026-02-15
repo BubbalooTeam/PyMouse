@@ -1,6 +1,8 @@
 package client
 
 import (
+	"context"
+
 	"github.com/mymmrac/telego"
 	"github.com/sirupsen/logrus"
 )
@@ -15,8 +17,8 @@ func CreateBot(token string, telegram_api string) (*telego.Bot, error) {
 }
 
 // GetUpdates retrieves updates from the Telegram server.
-func GetUpdates(bot *telego.Bot) (<-chan telego.Update, error) {
-	updates, err := bot.UpdatesViaLongPolling(&telego.GetUpdatesParams{
+func GetUpdates(ctx context.Context, bot *telego.Bot) (<-chan telego.Update, error) {
+	updates, err := bot.UpdatesViaLongPolling(ctx, &telego.GetUpdatesParams{
 		Timeout: 4,
 	}, telego.WithLongPollingUpdateInterval(0))
 	if err != nil {

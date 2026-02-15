@@ -9,22 +9,25 @@ import (
 	"time"
 
 	"github.com/mymmrac/telego"
+	"github.com/mymmrac/telego/telegohandler"
 	"github.com/mymmrac/telego/telegoutil"
 )
 
-func StopAway(bot *telego.Bot, update telego.Update) {
+func StopAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update) {
 	User := update.Message.From
 
 	// Stop Away From Keyboard (AFK), updating database informations.
 	utilitiesdb.UnSetAway(User.ID)
 
 	bot.SendChatAction(
+		ctx,
 		&telego.SendChatActionParams{
 			ChatID: telegoutil.ID(update.Message.Chat.ID),
 			Action: "typing",
 		},
 	)
 	bot.SendMessage(
+		ctx,
 		&telego.SendMessageParams{
 			ChatID:    telegoutil.ID(update.Message.Chat.ID),
 			Text:      fmt.Sprintf("<b>%s is back!</b>", User.FirstName),
@@ -36,13 +39,14 @@ func StopAway(bot *telego.Bot, update telego.Update) {
 	)
 }
 
-func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformations) {
+func SenderAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformations) {
 	var AwayText string
 
 	Away := utilitiesdb.GetAway(UI.UserID)
 
 	if Away.IsAway {
 		bot.SendChatAction(
+			ctx,
 			&telego.SendChatActionParams{
 				ChatID: telegoutil.ID(update.Message.Chat.ID),
 				Action: "typing",
@@ -56,6 +60,7 @@ func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformat
 			AwayText += fmt.Sprintf("\n<b>Last seen:</b> <code>%s</code>", utils.TimeFormatter(time.Now().UTC().Sub(Away.AwayTime).Seconds()))
 		}
 		bot.SendMessage(
+			ctx,
 			&telego.SendMessageParams{
 				ChatID:    telegoutil.ID(update.Message.Chat.ID),
 				Text:      AwayText,
@@ -68,18 +73,18 @@ func SenderAway(bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformat
 	}
 }
 
-func CaSAway(bot *telego.Bot, update telego.Update) {
+func CaSAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update) {
 	var UI *modeldb.UsersInformations
 	// Get mentioned user and notify user who mentioned
 	UI = telegram.GetUserMentioned(bot, update)
 	if UI != nil {
-		SenderAway(bot, update, UI)
+		SenderAway(ctx, bot, update, UI)
 		return
 	}
 
 	UI = telegram.GetUserReplied(bot, update)
 	if UI != nil {
-		SenderAway(bot, update, UI)
+		SenderAway(ctx, bot, update, UI)
 		return
 	}
 }

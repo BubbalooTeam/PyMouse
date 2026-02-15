@@ -12,12 +12,14 @@ import (
 	"github.com/mymmrac/telego/telegoutil"
 )
 
-func SetAway(bot *telego.Bot, update telego.Update) {
+func SetAway(ctx *th.Context, update telego.Update) error {
+	bot := ctx.Bot()
+
 	User := update.Message.From
 	Away := utilitiesdb.GetAway(User.ID)
 	if Away.IsAway {
-		StopAway(bot, update)
-		return
+		StopAway(ctx, bot, update)
+		return nil
 	}
 	AwayReason := utils.GetArgs(update)
 
@@ -25,51 +27,60 @@ func SetAway(bot *telego.Bot, update telego.Update) {
 	utilitiesdb.SetAway(User.ID, time.Now().UTC(), AwayReason)
 
 	// Send ChatAction via Telegram
-	bot.SendChatAction(&telego.SendChatActionParams{
-		ChatID: telegoutil.ID(update.Message.Chat.ID),
-		Action: "typing",
-	})
+	bot.SendChatAction(
+		ctx,
+		&telego.SendChatActionParams{
+			ChatID: telegoutil.ID(update.Message.Chat.ID),
+			Action: "typing",
+		})
 
 	// Send a notification to notify AFK
 	if AwayReason != "" {
-		bot.SendMessage(&telego.SendMessageParams{
+		bot.SendMessage(
+			ctx,
+			&telego.SendMessageParams{
+				ChatID:    telegoutil.ID(update.Message.Chat.ID),
+				Text:      fmt.Sprintf("<b>%s is now unavailable!</b>\n<b>Reason:</b> %s", update.Message.From.FirstName, AwayReason),
+				ParseMode: "HTML",
+				ReplyParameters: &telego.ReplyParameters{
+					MessageID: update.Message.MessageID,
+				},
+			},
+		)
+		return nil
+	}
+	bot.SendMessage(
+		ctx,
+		&telego.SendMessageParams{
 			ChatID:    telegoutil.ID(update.Message.Chat.ID),
-			Text:      fmt.Sprintf("<b>%s is now unavailable!</b>\n<b>Reason:</b> %s", update.Message.From.FirstName, AwayReason),
+			Text:      fmt.Sprintf("<b>%s is now unavailable!</b>", update.Message.From.FirstName),
 			ParseMode: "HTML",
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
 			},
-		})
-		return
-	}
-	bot.SendMessage(&telego.SendMessageParams{
-		ChatID:    telegoutil.ID(update.Message.Chat.ID),
-		Text:      fmt.Sprintf("<b>%s is now unavailable!</b>", update.Message.From.FirstName),
-		ParseMode: "HTML",
-		ReplyParameters: &telego.ReplyParameters{
-			MessageID: update.Message.MessageID,
 		},
-	})
+	)
+	return nil
 }
 
-func CheckAway(bot *telego.Bot, update telego.Update, next th.Handler) {
+func CheckAway(ctx *th.Context, update telego.Update) error {
+	bot := ctx.Bot()
 	message := update.Message
 	re := regexp.MustCompile(`(?i)^\/?(afk|away|brb)\b`)
 
 	if message == nil || message.SenderChat != nil || re.MatchString(message.Text) {
-		next(bot, update)
-		return
+		return ctx.Next(update)
 	}
 
 	if message.Chat.Type != "private" {
 		UserAway := utilitiesdb.GetAway(message.From.ID)
 
 		if UserAway.IsAway {
-			StopAway(bot, update)
+			StopAway(ctx, bot, update)
 		}
 
 		// Get mentioned user and notify user who mentioned
-		CaSAway(bot, update)
+		CaSAway(ctx, bot, update)
 	}
-	next(bot, update)
+	return ctx.Next(update)
 }
