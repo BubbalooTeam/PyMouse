@@ -18,6 +18,12 @@ func CreateBot(token string, telegram_api string) (*telego.Bot, error) {
 
 // GetUpdates retrieves updates from the Telegram server.
 func GetUpdates(ctx context.Context, bot *telego.Bot) (<-chan telego.Update, error) {
+	bot.DeleteWebhook(
+		ctx,
+		&telego.DeleteWebhookParams{
+			DropPendingUpdates: true,
+		},
+	)
 	updates, err := bot.UpdatesViaLongPolling(ctx, &telego.GetUpdatesParams{
 		Timeout: 4,
 	}, telego.WithLongPollingUpdateInterval(0))

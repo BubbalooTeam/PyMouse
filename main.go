@@ -30,6 +30,7 @@ func main() {
 	ctx := context.Background()
 
 	logrus.Info("Bot Created, Starting Get Updates of Long Polling...")
+
 	updates, err := client.GetUpdates(ctx, botClient)
 	if err != nil {
 		logrus.Fatalf("Error in get Updates of Telegram-Bot: %v", err)
