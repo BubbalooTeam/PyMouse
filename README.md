@@ -5,6 +5,7 @@
 [![PyMouse News](https://img.shields.io/badge/PyMouse-News-blue.svg)](//t.me/PyMouseNews)
 
 <img height="180" align="right" alt="PyMouse" src="https://telegra.ph/file/80c139778c565cfce7f3e.png"/>
+
 > PyMouse is a fast, useful, fun, and elegant bot, developed using the power of the Go language and built on the [telego](//pkg.go.dev/github.com/mymmrac/telego) library, integrating directly with the [Telegram bot API](//core.telegram.org/bots/api).
 
 ## ✨ Features
