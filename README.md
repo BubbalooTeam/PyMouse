@@ -1,8 +1,8 @@
 # PyMouse Telegram BOT
 
 [![Go 1.25+](https://img.shields.io/badge/golang-1.25+-blue.svg)](//go.dev)
-[![PyMouse](https://img.shields.io/badge/PyMouse-Telegram-blue.svg)](//t.me/PyMouseBOT)
-[![PyMouse News](https://img.shields.io/badge/PyMouse-News-blue.svg)](//t.me/PyMouseNews)
+[![PyMouse](https://img.shields.io/badge/PyMouse-Telegram-purple.svg)](//t.me/PyMouseBOT)
+[![PyMouse News](https://img.shields.io/badge/PyMouse-News-orange.svg)](//t.me/PyMouseNews)
 
 <img height="95" align="right" alt="PyMouse" src="https://telegra.ph/file/80c139778c565cfce7f3e.png"/>
 
