@@ -1,0 +1,76 @@
+{
+    "buttons": {
+        "about": "ℹ️ About",
+        "back": "Back",
+        "help": "👮 Help",
+        "language": "🌐 Language",
+        "privacy": "🔒️ Privacy"
+     },
+    "gsmarena": {
+        "phone-formatter": {
+            "status": "Status",
+            "network": "Network",
+            "dimensions": "Dimensions",
+            "weight": "Weight",
+            "jack": "3.5mm jack",
+            "usb": "USB connector",
+            "sensors": "Sensors",
+            "battery": "Battery",
+            "charging": "Charging",
+            "display": "Display",
+            "chipset": "Chipset's",
+            "main-camera": "Rear Camera",
+            "selfie-camera": "Front Camera",
+            "memory": "ROM/RAM Memory"
+        },
+        "checkers": {
+            "notforYou": "The device model selection/pagination button listed by GSMarena is not targeted at you."
+        },
+        "reason": {
+            "device-lister": "I was returned different variations of different devices with the query <b>%s</b>, choose a model from these devices using the buttons below.",
+            "device-not-provided": "<b>The device was not provided to me.</b>\n\n<b>Usage:</b> <code>/d S24 Ultra</code>",
+            "device-not-found": "<b>Device not Found.</b>"
+        }
+    },
+    "help": {
+        "help-intro": "Hello! My name is <b>%s</b>, I am a multifunctional bot created to help you with various tasks and provide entertainment for your group! Take a look at the modules below to get an idea of some things I can help you with.\n\n<b>Main commands:</b>\n- /start - Checks if the bot is active and working, also provides menu options.\n- /help - Provides information about the bot's modules and how to use them.\n- /lang - Allows you to change the bot's language to your desired language.\n\nAll commands can be used with: <code>!</code> or <code>/</code> as a prefix.",
+        "here-is-help": "Below is the help for the <b>%s</b> module.\n\n",
+        "module-not-exists": "The module <code>%s</code> doesn't exists.",
+        "module-info-error": "Sorry, there was a problem getting the module information.",
+        "module-description-not-found": "• The description for the module <code>%s</code> was not found.",
+        "descriptions": {
+            "afk": {
+                "afk": "With the AFK module, you can set your status to 'Away' to inform others that you are not available at the moment. When someone mentions you or sends a direct message, the bot will automatically respond with your customized AFK message. You can also set a reason for your absence, and the bot will inform when you are back.\n\n<b>Main commands:</b>\n- /afk [reason]: Sets your status to AFK with an optional reason."
+            },
+            "medias": {
+                "medias": "The Medias module allows you to download videos and music from various popular platforms such as YouTube and TikTok. Easily, you can request the download of multimedia content directly in the chat. The bot will take care of the download process and send the file to you as soon as it's ready.",
+                "youtube": "The YouTube module allows you to download videos and music directly from YouTube. With a simple command, you can request the download of any video or music available on the platform.\n\n<b>Main commands:</b>\n- /ytdl [video URL or title]: Downloads the YouTube video or music based on the provided URL or title, and in the chosen quality.",
+                "tiktok": "The TikTok module allows you to download videos directly from TikTok. You can request the download of any video available on the platform. Just send me the link of the desired video, and I will send you the downloaded file directly in the chat."
+            },
+            "miscellaneous": {
+                "miscellaneous": "The Miscellaneous module includes a variety of useful features that don't fit into other specific categories. It contains tools and resources to enhance your experience with the bot, providing practical solutions for different needs.",
+                "gsmarena": "The GSMArena module allows you to access detailed information about a wide range of mobile devices. You can search for specifications, features, and reviews of smartphones directly in the chat, making it easier to compare and choose the ideal device for you.\n\n<b>Main commands:</b>\n- /d [device model]: Searches for information about the specified mobile device using data provided by the GSMArena database.",
+                "weather": "The Weather module provides up-to-date weather information for any desired location. You can get weather forecasts, current conditions, and other relevant data directly in the chat, helping you plan your day better.\n\n<b>Main commands:</b>\n- /weather | /clima [location]: Gets the current weather conditions and forecast for the specified location."
+            } 
+        },
+        "titles": {
+            "afk": {
+                "afk": "AFK"
+            },
+            "medias": {
+                "medias": "Medias",
+                "youtube": "YouTube",
+                "tiktok": "TikTok"
+            },
+            "miscellaneous": {
+                "miscellaneous": "Miscellaneous",
+                "gsmarena": "GSMArena",
+                "weather": "Weather"
+            }
+        }
+    },
+    "pm-menu": {
+        "start-private": "Hello <b>%s</b>, I'am <b>%s</b>. A robot with cool and fun functions for your chat. Click the buttons below to learn more about me.",
+        "start-group": "<b>Hello! My name is %s!</b>"
+    }
+}

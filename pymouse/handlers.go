@@ -1,40 +1,53 @@
 package pymouse
 
 import (
+	"pymouse/pymouse/client"
 	"pymouse/pymouse/modules/afk"
 	"pymouse/pymouse/modules/checkers"
-	"pymouse/pymouse/modules/gsmarena"
-	"pymouse/pymouse/modules/start"
-	"regexp"
+	"pymouse/pymouse/modules/miscellaneous"
+	"pymouse/pymouse/modules/pm_menu"
+	"strings"
 
-	"github.com/mymmrac/telego"
-	th "github.com/mymmrac/telego/telegohandler"
+	"sync"
+
+	"github.com/sirupsen/logrus"
 )
 
-type BotStruct struct {
-	Client  *telego.Bot
-	Handler *th.BotHandler
-}
-
-func NewHandler(bot *telego.Bot, botHandler *th.BotHandler) *BotStruct {
-	return &BotStruct{
-		Client:  bot,
-		Handler: botHandler,
+var (
+	packageLoadersMutex sync.Mutex
+	packageLoaders      = map[string]func(*client.BotStruct){
+		"afk":           afk.LoadModule,
+		"checkers":      checkers.LoadModule,
+		"miscellaneous": miscellaneous.LoadModule,
+		"pm_menu":       pm_menu.LoadModule,
 	}
-}
+)
 
-func (bS *BotStruct) Register() {
-	// Checkers of DataBase and Utilities of BOT on bot_incoming.
-	bS.Handler.Use(checkers.SaveChats)
-	bS.Handler.Use(checkers.SaveUsers)
-	bS.Handler.Use(checkers.SaveChats)
-	// Checkers of Database of Utilities
-	bS.Handler.Use(afk.CheckAway)
+func Register(bS *client.BotStruct) {
+	var wg sync.WaitGroup
+	done := make(chan struct{}, len(packageLoaders))
+	moduleNames := make([]string, 0, len(packageLoaders))
 
-	// Bot Commands, comming soon, add a dinamic commands loader.
-	bS.Handler.Handle(start.Start, th.CommandEqual("start"))
-	bS.Handler.Handle(afk.SetAway, th.CommandEqual("afk"))
-	bS.Handler.Handle(gsmarena.DeviceSearch, th.CommandEqual("d"))
-	bS.Handler.Handle(gsmarena.DeviceSearchPagination, th.CallbackDataMatches(regexp.MustCompile(`^search_device_page\|\d+\|\d+\|[a-zA-Z0-9-]+$`)))
-	bS.Handler.Handle(gsmarena.DeviceSearchSelect, th.CallbackDataMatches(regexp.MustCompile(`^device\|[a-zA-Z0-9_-]+\|\d+\|[a-f0-9]{8}$`)))
+	for module, loader := range packageLoaders {
+		wg.Add(1)
+		go func(moduleName string, moduleLoader func(*client.BotStruct)) {
+			defer wg.Done()
+			packageLoadersMutex.Lock()
+			defer packageLoadersMutex.Unlock()
+			moduleLoader(bS)
+			done <- struct{}{}
+			moduleNames = append(moduleNames, moduleName)
+		}(module, loader)
+	}
+	go func() {
+		wg.Wait()
+		close(done)
+	}()
+
+	for range done {
+	}
+
+	joinedModuleNames := strings.Join(moduleNames, ", ")
+
+	logrus.Infof("Modules Loaded: %s", joinedModuleNames)
 }

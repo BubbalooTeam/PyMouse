@@ -2,6 +2,7 @@ package gsmarena
 
 import (
 	"fmt"
+	"pymouse/pymouse/helpers/i18n"
 	"pymouse/pymouse/helpers/utils"
 	"strconv"
 	"strings"
@@ -18,12 +19,13 @@ var searchCache = cache.New(15*time.Minute, 30*time.Minute)
 
 func DeviceSearch(ctx *th.Context, update telego.Update) error {
 	bot := ctx.Bot()
+	l := i18n.Locale(update.Message.Chat)
 	query := utils.GetArgs(update)
 
 	if query == "" {
 		bot.SendMessage(ctx, &telego.SendMessageParams{
 			ChatID:    telegoutil.ID(update.Message.Chat.ID),
-			Text:      "<b>Device not provided!</b>\n<i>Uso:</i> <code>/d Moto G34</code>",
+			Text:      l("gsmarena.reason.device-not-provided"),
 			ParseMode: "HTML",
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
@@ -39,7 +41,7 @@ func DeviceSearch(ctx *th.Context, update telego.Update) error {
 	case 0:
 		bot.SendMessage(ctx, &telego.SendMessageParams{
 			ChatID:    telegoutil.ID(update.Message.Chat.ID),
-			Text:      "<b>Device not found!</b>",
+			Text:      l("gsmarena.reason.device-not-found"),
 			ParseMode: "HTML",
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
@@ -49,7 +51,7 @@ func DeviceSearch(ctx *th.Context, update telego.Update) error {
 
 	case 1:
 		deviceSpecs := fetchDevice(results[0].ID)
-		formattedMsg := formatGSMarenaMessage(deviceSpecs)
+		formattedMsg := formatGSMarenaMessage(deviceSpecs, l)
 
 		bot.SendMessage(ctx, &telego.SendMessageParams{
 			ChatID:    telegoutil.ID(update.Message.Chat.ID),
@@ -62,7 +64,7 @@ func DeviceSearch(ctx *th.Context, update telego.Update) error {
 		return nil
 
 	default:
-		searchID := uuid.NewString()[:8]
+		searchID := uuid.NewString()[:5]
 		searchCache.Set(searchID, results, cache.DefaultExpiration)
 
 		btns := GSMarenaCreateKeyboard(
@@ -73,11 +75,8 @@ func DeviceSearch(ctx *th.Context, update telego.Update) error {
 		)
 
 		bot.SendMessage(ctx, &telego.SendMessageParams{
-			ChatID: telegoutil.ID(update.Message.Chat.ID),
-			Text: fmt.Sprintf(
-				"I was returned different variations of different devices with the query <b>%s</b>, choose a model from these devices using the buttons below.",
-				query,
-			),
+			ChatID:    telegoutil.ID(update.Message.Chat.ID),
+			Text:      fmt.Sprintf(l("gsmarena.reason.device-lister"), query),
 			ParseMode: "HTML",
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
@@ -164,32 +163,11 @@ func DeviceSearchSelect(ctx *th.Context, update telego.Update) error {
 		})
 		return nil
 	}
+	l := i18n.Locale(update.CallbackQuery.Message.GetChat())
 
-	cached, found := searchCache.Get(searchID)
-	if !found {
-		bot.AnswerCallbackQuery(ctx, &telego.AnswerCallbackQueryParams{
-			CallbackQueryID: callback.ID,
-			Text:            "Search expired. Please search again.",
-			ShowAlert:       true,
-		})
-		return nil
-	}
-
-	results := cached.([]GSMArenaDeviceSearchResult)
-
-	valid := false
-	for _, d := range results {
-		if d.ID == deviceID {
-			valid = true
-			break
-		}
-	}
-	if !valid {
-		return nil
-	}
-
+	searchCache.Delete(searchID)
 	deviceSpecs := fetchDevice(deviceID)
-	formattedMsg := formatGSMarenaMessage(deviceSpecs)
+	formattedMsg := formatGSMarenaMessage(deviceSpecs, l)
 
 	msg := callback.Message
 	if msg == nil {

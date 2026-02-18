@@ -35,7 +35,7 @@ func SaveUsers(ctx *th.Context, update telego.Update) error {
 	firstName := message.From.FirstName
 
 	if message.From.Username != "" {
-		userName = fmt.Sprintf("@%s", message.From.Username)
+		userName = fmt.Sprintf("%s", message.From.Username)
 	}
 
 	utilitiesdb.UpdateUser(userID, userName, firstName)
@@ -50,7 +50,6 @@ func SaveChats(ctx *th.Context, update telego.Update) error {
 
 	if message == nil {
 		if update.CallbackQuery == nil {
-
 			return ctx.Next(update)
 		}
 
@@ -69,7 +68,7 @@ func SaveChats(ctx *th.Context, update telego.Update) error {
 	chatTitle := message.Chat.Title
 
 	if message.Chat.Username != "" {
-		userName = fmt.Sprintf("@%s", message.Chat.Username)
+		userName = fmt.Sprintf("%s", message.Chat.Username)
 	}
 
 	utilitiesdb.UpdateChat(chatID, userName, chatTitle)

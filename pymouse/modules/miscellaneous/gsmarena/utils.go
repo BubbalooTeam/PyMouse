@@ -76,7 +76,6 @@ const (
 )
 
 func getDataFromURL(urlExt string) (string, error) {
-	fmt.Println(fmt.Sprintf(GSMArenaBaseURL, urlExt))
 	http_client := rapidhttp.GetHTTPClient()
 	r, err := rapidhttp.Request(
 		http_client,
@@ -91,8 +90,15 @@ func getDataFromURL(urlExt string) (string, error) {
 		return "", fmt.Errorf("[BadRequest]: Failed to complete the request in GSMArena: %v", err)
 	}
 	if r.StatusCode != 200 {
-		if r.StatusCode == 400 {
-			return "", fmt.Errorf("[BadRequest]: Failed to connect to the GSMArena website: 400")
+		switch r.StatusCode {
+		case 400:
+			return "", fmt.Errorf("[BadRequest]: Failed to connect to the GSMArena website: %d.", r.StatusCode)
+		case 404:
+			return "", fmt.Errorf("[BadRequest]: The GSMArena URL is invalid, please review it: %d.", r.StatusCode)
+		case 429:
+			return "", fmt.Errorf("[TooManyRequests]: Please wait while we automatically unlock PyMouse access. This process may take minutes, hours, days, or even weeks: %d.", r.StatusCode)
+		default:
+			return "", fmt.Errorf("[GSMarena]: An unknown error occurred while requesting on the GSMarena website.")
 		}
 
 	}
@@ -261,6 +267,7 @@ func parseSpecifications(phone_details []PhoneDetail) ParsedSpecs {
 
 func formatGSMarenaMessage(
 	device GSMArenaDeviceBaseResult,
+	l func(string) string,
 ) string {
 
 	parsed := parseSpecifications(device.PhoneDetails)
@@ -283,7 +290,7 @@ func formatGSMarenaMessage(
 
 		b.WriteString(fmt.Sprintf(
 			"<b>%s:</b> <i>%s</i>\n\n",
-			key,
+			l(fmt.Sprintf("gsmarena.phone-formatter.%s", key)),
 			value,
 		))
 	}
@@ -299,8 +306,8 @@ func formatGSMarenaMessage(
 	writeField("charging", parsed.Charging)
 	writeField("display", parsed.Display)
 	writeField("chipset", parsed.Chipset)
-	writeField("main_camera", parsed.MainCamera)
-	writeField("selfie_camera", parsed.SelfieCamera)
+	writeField("main-camera", parsed.MainCamera)
+	writeField("selfie-camera", parsed.SelfieCamera)
 	writeField("memory", parsed.Memory)
 
 	return b.String()
@@ -355,7 +362,7 @@ func GSMarenaCreateKeyboard(
 		btn := telegoutil.InlineKeyboardButton(
 			formatDeviceName(device.Name),
 		).WithCallbackData(
-			fmt.Sprintf("device|%s|%d|%s", device.ID, userID, searchID),
+			fmt.Sprintf("d|%s|%d|%s", device.ID, userID, searchID),
 		)
 
 		row = append(row, btn)
@@ -369,7 +376,7 @@ func GSMarenaCreateKeyboard(
 		rows = append(rows, row)
 	}
 	if totalPages > 1 {
-		callbackPattern := fmt.Sprintf("search_device_page|{number}|%d|%s", userID, searchID)
+		callbackPattern := fmt.Sprintf("gsm_page|{number}|%d|%s", userID, searchID)
 
 		pagination := telegram.KeyboardPaginate(
 			totalPages,
