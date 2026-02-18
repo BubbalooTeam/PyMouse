@@ -1,12 +1,12 @@
 # PyMouse Telegram BOT
 
-[![Go 1.25+](https://img.shields.io/badge/golang-1.25+-blue.svg)](//go.dev)
-[![PyMouse](https://img.shields.io/badge/PyMouse-Telegram-purple.svg)](//t.me/PyMouseBOT)
-[![PyMouse News](https://img.shields.io/badge/PyMouse-News-orange.svg)](//t.me/PyMouseNews)
+[![Go 1.25+](https://img.shields.io/badge/golang-1.25+-blue.svg)](https://go.dev)
+[![PyMouse](https://img.shields.io/badge/PyMouse-Telegram-purple.svg)](https://t.me/PyMouseBOT)
+[![PyMouse News](https://img.shields.io/badge/PyMouse-News-orange.svg)](https://t.me/PyMouseNews)
 
 <img height="95" align="right" alt="PyMouse" src="https://telegra.ph/file/80c139778c565cfce7f3e.png"/>
 
-> PyMouse is a fast, modern, useful, fun, and elegant bot, developed using the power of the Go language and built on the [telego](//pkg.go.dev/github.com/mymmrac/telego) library, integrating directly with the [Telegram BOT API](//core.telegram.org/bots/api).
+> PyMouse is a fast, modern, useful, fun, and elegant bot, developed using the power of the Go language and built on the [telego](https://pkg.go.dev/github.com/mymmrac/telego) library, integrating directly with the [Telegram BOT API](https://core.telegram.org/bots/api).
 
 ## ✨ Features
 
@@ -15,7 +15,7 @@
 - **🚀 High Performance:** Developed in GoLang, a modern language designed to deliver high performance with native support for efficient concurrency, fast compilation, and static typing.
 
 ## 📑 Requeriments
-- [Go 1.25+](//go.dev/)
-- [MongoDB Database](//mongodb.com)
-- [Telegram Bot Token](//t.me/botfather)
+- [Go 1.25+](https://go.dev/)
+- [MongoDB Database](https://mongodb.com)
+- [Telegram Bot Token](https://t.me/botfather)
 - Group for making entries on Telegram
