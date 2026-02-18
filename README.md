@@ -15,7 +15,7 @@
 - **🚀 High Performance** Developed in GoLang, a modern language designed to deliver high performance with native support for efficient concurrency, fast compilation, and static typing.
 
 ## 📑 Requeriments
-- Go 1.25+
+- [Go 1.25+](//go.dev/)
 - [MongoDB Database](//mongodb.com)
 - [Telegram Bot Token](//t.me/botfather)
-- Group for making entries on Telegram (LOG_CHANNEL_ID)
+- Group for making entries on Telegram
