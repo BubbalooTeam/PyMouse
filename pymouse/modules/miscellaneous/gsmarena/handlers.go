@@ -100,7 +100,6 @@ func DeviceSearchPagination(ctx *th.Context, update telego.Update) error {
 	userID, _ := strconv.Atoi(parts[2])
 	searchID := parts[3]
 
-	// Segurança: apenas o dono pode usar
 	if int(callback.From.ID) != userID {
 		bot.AnswerCallbackQuery(ctx, &telego.AnswerCallbackQueryParams{
 			CallbackQueryID: callback.ID,

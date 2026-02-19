@@ -73,6 +73,7 @@ const (
 	GSMArenaBaseURL      = "https://www.gsmarena.com/%s"
 	GSMArenaSearchExtURL = "results.php3?sQuickSearch=yes&sName=%s"
 	GSMArenaDeviceExtURL = "%s.php"
+	devicesPerPage       = 9
 )
 
 func getDataFromURL(urlExt string) (string, error) {
@@ -327,8 +328,6 @@ func formatDeviceName(name string) string {
 
 	return strings.Join(words, " ")
 }
-
-const devicesPerPage = 9
 
 func GSMarenaCreateKeyboard(
 	search []GSMArenaDeviceSearchResult,

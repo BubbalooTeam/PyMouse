@@ -6,6 +6,7 @@ import (
 	"pymouse/pymouse/modules/checkers"
 	"pymouse/pymouse/modules/miscellaneous"
 	"pymouse/pymouse/modules/pm_menu"
+	"sort"
 	"strings"
 
 	"sync"
@@ -28,7 +29,13 @@ func Register(bS *client.BotStruct) {
 	done := make(chan struct{}, len(packageLoaders))
 	moduleNames := make([]string, 0, len(packageLoaders))
 
-	for module, loader := range packageLoaders {
+	sortedModules := make([]string, 0, len(packageLoaders))
+	for module := range packageLoaders {
+		sortedModules = append(sortedModules, module)
+	}
+	sort.Strings(sortedModules)
+
+	for _, module := range sortedModules {
 		wg.Add(1)
 		go func(moduleName string, moduleLoader func(*client.BotStruct)) {
 			defer wg.Done()
@@ -37,7 +44,7 @@ func Register(bS *client.BotStruct) {
 			moduleLoader(bS)
 			done <- struct{}{}
 			moduleNames = append(moduleNames, moduleName)
-		}(module, loader)
+		}(module, packageLoaders[module])
 	}
 	go func() {
 		wg.Wait()
