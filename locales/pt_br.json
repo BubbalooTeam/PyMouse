@@ -2,6 +2,7 @@
     "buttons": {
         "about": "ℹ️ Sobre",
         "back": "Voltar",
+        "go-to-pm": "Ir para o privado",
         "help": "👮 Ajuda",
         "language": "🌐 Idioma",
         "privacy": "🔒️ Privacidade"
@@ -24,7 +25,8 @@
             "memory": "Memória Interna/RAM"
         },
         "checkers": {
-            "notforYou": "O botão de seleção/paginação de modelo de dispositivo listado pela GSMarena não é direcionado para você."
+            "not-for-you": "O botão de seleção/paginação de modelo de dispositivo listado pela GSMarena não é direcionado para você.",
+            "search-expired": "A sua pesquisa expirou. Por favor, realize uma nova pesquisa para acessar os dispositivos."
         },
         "reason": {
             "device-lister": "Foram retornadas diferentes variações de diferentes dispositivos com a consulta <b>%s</b>, escolha um modelo destes dispositivos usando os botões abaixo.",

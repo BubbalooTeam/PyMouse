@@ -90,6 +90,7 @@ func DeviceSearch(ctx *th.Context, update telego.Update) error {
 func DeviceSearchPagination(ctx *th.Context, update telego.Update) error {
 	bot := ctx.Bot()
 	callback := update.CallbackQuery
+	l := i18n.Locale(update.CallbackQuery.Message.GetChat())
 
 	parts := strings.Split(callback.Data, "|")
 	if len(parts) != 4 {
@@ -103,7 +104,7 @@ func DeviceSearchPagination(ctx *th.Context, update telego.Update) error {
 	if int(callback.From.ID) != userID {
 		bot.AnswerCallbackQuery(ctx, &telego.AnswerCallbackQueryParams{
 			CallbackQueryID: callback.ID,
-			Text:            "You cannot use this pagination.",
+			Text:            l("gsmarena.checkers.not-for-you"),
 			ShowAlert:       true,
 		})
 		return nil
@@ -113,7 +114,7 @@ func DeviceSearchPagination(ctx *th.Context, update telego.Update) error {
 	if !found {
 		bot.AnswerCallbackQuery(ctx, &telego.AnswerCallbackQueryParams{
 			CallbackQueryID: callback.ID,
-			Text:            "Search expired. Please search again.",
+			Text:            l("gsmarena.checkers.search-expired"),
 			ShowAlert:       true,
 		})
 		return nil
@@ -139,6 +140,7 @@ func DeviceSearchPagination(ctx *th.Context, update telego.Update) error {
 func DeviceSearchSelect(ctx *th.Context, update telego.Update) error {
 	bot := ctx.Bot()
 	callback := update.CallbackQuery
+	l := i18n.Locale(update.CallbackQuery.Message.GetChat())
 
 	parts := strings.Split(callback.Data, "|")
 	if len(parts) != 4 {
@@ -157,12 +159,11 @@ func DeviceSearchSelect(ctx *th.Context, update telego.Update) error {
 	if int(callback.From.ID) != userID {
 		bot.AnswerCallbackQuery(ctx, &telego.AnswerCallbackQueryParams{
 			CallbackQueryID: callback.ID,
-			Text:            "You cannot select this device.",
+			Text:            l("gsmarena.checkers.not-for-you"),
 			ShowAlert:       true,
 		})
 		return nil
 	}
-	l := i18n.Locale(update.CallbackQuery.Message.GetChat())
 
 	searchCache.Delete(searchID)
 	deviceSpecs := fetchDevice(deviceID)
