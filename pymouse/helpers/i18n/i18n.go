@@ -11,6 +11,13 @@ import (
 	"github.com/mymmrac/telego"
 )
 
+type LocalizationStats struct {
+	TotalStrings         int     // Total number of strings in the localization file
+	TranslatedStrings    int     // Number of strings that have been translated
+	UntranslatedStrings  int     // Number of strings that are still untranslated
+	PercentageTranslated float64 // Percentage of strings that have been translated
+}
+
 var AvalaibleLanguages []string
 var defaultLanguage = "en_us"
 var StringsCache = make(map[string]map[string]interface{})
@@ -48,17 +55,7 @@ func CompileLocales() error {
 	return err
 }
 
-func getChatLanguage(chat telego.Chat) string {
-	var chatLanguage string
-	if strings.Contains(chat.Type, telego.ChatTypePrivate) {
-		chatLanguage = utilitiesdb.FindUser(chat.ID, "").Language
-	} else {
-		chatLanguage = utilitiesdb.FindChat(chat.ID).Language
-	}
-	return chatLanguage
-}
-
-func getStringFromNestedMap(langMap map[string]interface{}, key string) string {
+func GetStringFromNestedMap(langMap map[string]interface{}, key string) string {
 	keys := strings.Split(key, ".")
 	currentMap := langMap
 
@@ -81,7 +78,7 @@ func getStringFromNestedMap(langMap map[string]interface{}, key string) string {
 }
 
 func Locale(chat telego.Chat) func(string) string {
-	language := getChatLanguage(chat)
+	language := utilitiesdb.GetChatLanguage(chat)
 
 	langMap, ok := StringsCache[language]
 	if !ok {
@@ -95,9 +92,71 @@ func Locale(chat telego.Chat) func(string) string {
 	}
 
 	return func(key string) string {
-		if val := getStringFromNestedMap(langMap, key); val != "" {
+		if val := GetStringFromNestedMap(langMap, key); val != "" {
 			return val
 		}
 		return "STRING_UNAVAILABLE"
 	}
+}
+
+func GetLocalizationStats(langCode string) (LocalizationStats, error) {
+	defaultLangMap, ok := StringsCache[defaultLanguage]
+	if !ok {
+		return LocalizationStats{}, fmt.Errorf("default localization not found")
+	}
+
+	langMap, ok := StringsCache[langCode]
+	if !ok {
+		return LocalizationStats{}, fmt.Errorf("localization not found")
+	}
+
+	var stats LocalizationStats
+
+	var recursive func(current map[string]interface{}, path string)
+
+	recursive = func(current map[string]interface{}, path string) {
+		for key, value := range current {
+
+			fullPath := key
+			if path != "" {
+				fullPath = path + "." + key
+			}
+
+			switch v := value.(type) {
+
+			case string:
+				stats.TotalStrings++
+
+				defaultStr := GetStringFromNestedMap(defaultLangMap, fullPath)
+				langStr := GetStringFromNestedMap(langMap, fullPath)
+
+				if langCode != defaultLanguage {
+					if langStr != defaultStr &&
+						langStr != "STRING_UNAVALAIBLE" {
+						stats.TranslatedStrings++
+					}
+				} else {
+					if langStr == defaultStr {
+						stats.TranslatedStrings++
+					}
+				}
+
+			case map[string]interface{}:
+				if fullPath != "help.titles" {
+					recursive(v, fullPath)
+				}
+			}
+		}
+	}
+
+	recursive(defaultLangMap, "")
+
+	stats.UntranslatedStrings = stats.TotalStrings - stats.TranslatedStrings
+
+	if stats.TotalStrings > 0 {
+		stats.PercentageTranslated =
+			(float64(stats.TranslatedStrings) / float64(stats.TotalStrings)) * 100
+	}
+
+	return stats, nil
 }

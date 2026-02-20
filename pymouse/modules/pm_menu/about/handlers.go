@@ -1,4 +1,4 @@
-package start
+package about
 
 import (
 	"fmt"
@@ -11,8 +11,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func StartMessage(ctx *telegohandler.Context, update telego.Update) error {
-
+func AboutMessage(ctx *telegohandler.Context, update telego.Update) error {
 	if update.Message == nil {
 		return nil
 	}
@@ -34,8 +33,18 @@ func StartMessage(ctx *telegohandler.Context, update telego.Update) error {
 	})
 
 	if !strings.Contains(chat.Type, telego.ChatTypePrivate) {
+		keyboard := &telego.InlineKeyboardMarkup{
+			InlineKeyboard: [][]telego.InlineKeyboardButton{
+				{
+					{
+						Text: l("buttons.go-to-pm"),
+						URL:  fmt.Sprintf("https://t.me/%s?start=about", botUser.Username),
+					},
+				},
+			},
+		}
 
-		startText := fmt.Sprintf(
+		groupText := fmt.Sprintf(
 			l("pm-menu.start-group"),
 			botUser.FirstName,
 		)
@@ -43,9 +52,10 @@ func StartMessage(ctx *telegohandler.Context, update telego.Update) error {
 		bot.SendMessage(
 			ctx,
 			&telego.SendMessageParams{
-				ChatID:    telegoutil.ID(chat.ID),
-				Text:      startText,
-				ParseMode: "HTML",
+				ChatID:      telegoutil.ID(chat.ID),
+				Text:        groupText,
+				ParseMode:   "HTML",
+				ReplyMarkup: keyboard,
 				ReplyParameters: &telego.ReplyParameters{
 					MessageID: msg.MessageID,
 				},
@@ -59,39 +69,37 @@ func StartMessage(ctx *telegohandler.Context, update telego.Update) error {
 		InlineKeyboard: [][]telego.InlineKeyboardButton{
 			{
 				{
-					Text:         l("buttons.language"),
-					CallbackData: "LangMenu|StartBack|LangMenu",
-				},
-				{
-					Text:         l("buttons.help"),
-					CallbackData: "HelpMenu",
+					Text: l("buttons.source-code"),
+					URL:  "https://github.com/BubbalooTeam/PyMouse",
 				},
 			},
 			{
 				{
-					Text:         l("buttons.about"),
-					CallbackData: "AboutMenu",
+					Text: l("buttons.donate"),
+					URL:  "https://livepix.gg/bubbalooteam",
 				},
 				{
-					Text:         l("buttons.privacy"),
-					CallbackData: "PrivacyPolicy",
+					Text: l("buttons.channel-news"),
+					URL:  "https://t.me/PyMouseNews",
 				},
 			},
 		},
 	}
 
-	startText := fmt.Sprintf(
-		l("pm-menu.start-private"),
-		msg.From.FirstName,
+	aboutText := fmt.Sprintf(
+		l("pm-menu.about-text"),
 		botUser.FirstName,
 	)
 
 	bot.SendMessage(
 		ctx,
 		&telego.SendMessageParams{
-			ChatID:      telegoutil.ID(chat.ID),
-			Text:        startText,
-			ParseMode:   "HTML",
+			ChatID:    telegoutil.ID(chat.ID),
+			Text:      aboutText,
+			ParseMode: "HTML",
+			LinkPreviewOptions: &telego.LinkPreviewOptions{
+				IsDisabled: true,
+			},
 			ReplyMarkup: keyboard,
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: msg.MessageID,
@@ -102,14 +110,14 @@ func StartMessage(ctx *telegohandler.Context, update telego.Update) error {
 	return nil
 }
 
-func StartBackCallback(ctx *telegohandler.Context, update telego.Update) error {
+func AboutCallback(ctx *telegohandler.Context, update telego.Update) error {
 
 	if update.CallbackQuery == nil {
 		return nil
 	}
 
-	cb := update.CallbackQuery
 	bot := ctx.Bot()
+	cb := update.CallbackQuery
 	chat := cb.Message.GetChat()
 	l := i18n.Locale(chat)
 
@@ -119,67 +127,55 @@ func StartBackCallback(ctx *telegohandler.Context, update telego.Update) error {
 		return nil
 	}
 
-	if !strings.Contains(chat.Type, telego.ChatTypePrivate) {
-
-		startText := fmt.Sprintf(
-			l("pm-menu.start-group"),
-			botUser.FirstName,
-		)
-
-		bot.EditMessageText(
-			ctx,
-			&telego.EditMessageTextParams{
-				ChatID:    telegoutil.ID(chat.ID),
-				MessageID: cb.Message.GetMessageID(),
-				Text:      startText,
-				ParseMode: "HTML",
-			},
-		)
-
-		return nil
-	}
-
 	keyboard := &telego.InlineKeyboardMarkup{
 		InlineKeyboard: [][]telego.InlineKeyboardButton{
 			{
 				{
-					Text:         l("buttons.language"),
-					CallbackData: "LangMenu|StartBack|LangMenu",
-				},
-				{
-					Text:         l("buttons.help"),
-					CallbackData: "HelpMenu",
+					Text: l("buttons.source-code"),
+					URL:  "https://github.com/BubbalooTeam/PyMouse",
 				},
 			},
 			{
 				{
-					Text:         l("buttons.about"),
-					CallbackData: "AboutMenu",
+					Text: l("buttons.donate"),
+					URL:  "https://livepix.gg/bubbalooteam",
 				},
 				{
-					Text:         l("buttons.privacy"),
-					CallbackData: "PrivacyPolicy",
+					Text: l("buttons.channel-news"),
+					URL:  "https://t.me/PyMouseNews",
+				},
+			},
+			{
+				{
+					Text:         l("buttons.back"),
+					CallbackData: "StartBack",
 				},
 			},
 		},
 	}
 
-	startText := fmt.Sprintf(
-		l("pm-menu.start-private"),
-		cb.From.FirstName,
+	aboutText := fmt.Sprintf(
+		l("pm-menu.about-text"),
 		botUser.FirstName,
 	)
 
 	bot.EditMessageText(
 		ctx,
 		&telego.EditMessageTextParams{
-			ChatID:      telegoutil.ID(chat.ID),
-			MessageID:   cb.Message.GetMessageID(),
-			Text:        startText,
-			ParseMode:   "HTML",
+			ChatID:    telegoutil.ID(chat.ID),
+			MessageID: cb.Message.GetMessageID(),
+			Text:      aboutText,
+			ParseMode: "HTML",
+			LinkPreviewOptions: &telego.LinkPreviewOptions{
+				IsDisabled: true,
+			},
 			ReplyMarkup: keyboard,
 		},
 	)
+
+	bot.AnswerCallbackQuery(ctx, &telego.AnswerCallbackQueryParams{
+		CallbackQueryID: cb.ID,
+	})
 
 	return nil
 }

@@ -35,8 +35,9 @@ func DeviceSearch(ctx *th.Context, update telego.Update) error {
 	}
 
 	results := searchDevice(query).Results
+	totalResults := len(results)
 
-	switch len(results) {
+	switch totalResults {
 
 	case 0:
 		bot.SendMessage(ctx, &telego.SendMessageParams{
@@ -76,7 +77,7 @@ func DeviceSearch(ctx *th.Context, update telego.Update) error {
 
 		bot.SendMessage(ctx, &telego.SendMessageParams{
 			ChatID:    telegoutil.ID(update.Message.Chat.ID),
-			Text:      fmt.Sprintf(l("gsmarena.reason.device-lister"), query),
+			Text:      fmt.Sprintf(l("gsmarena.reason.device-lister"), totalResults, query),
 			ParseMode: "HTML",
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,

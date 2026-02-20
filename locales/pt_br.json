@@ -1,11 +1,32 @@
 {
+    "language": {
+        "flag": "🇧🇷",
+        "name": "Português (Brasil)",
+        "already-set": "O idioma deste chat já está definido para %s.",
+        "language-info": {
+            "chat-language": "<b>Idioma do chat:</b> <code>%s - %s</code>",
+            "native-language": "<b>Este é o idioma nativo do bot. Está <code>100% traduzido.</code></b>",
+            "missing-translations": "<b>Ainda há traduções faltando! Apenas <code>%d%%</code> do bot foi traduzido!</b>",
+            "language-info": "\n\n<b>Informações do idioma:</b>",
+            "language-total-strings": "\n\n- <b>Total de cordas:</b> <code>%d</code>",
+            "language-translated": "\n- <b>Cordas traduzidas:</b> <code>%d</code>",
+            "language-untranslated": "\n- <b>Cordas sem tradução:</b> <code>%d</code>"
+        },
+        "switch-lang": "Escolha o idioma que você quer usar abaixo.",
+        "switched-lang": "O idioma desse chat foi definido para %s."
+    },
     "buttons": {
         "about": "ℹ️ Sobre",
         "back": "Voltar",
+        "change-language": "🌐 Mude seu idioma",
+        "channel-news": "📬️ Notícias do PyMouse",
+        "donate": "💵 Contribua",
         "go-to-pm": "Ir para o privado",
         "help": "👮 Ajuda",
         "language": "🌐 Idioma",
-        "privacy": "🔒️ Privacidade"
+        "privacy": "🔒️ Privacidade",
+        "privacy-policy": "🔒️ Política de Privacidade",
+        "source-code": "📦️ Código Fonte (GitHub)"
     },
     "gsmarena": {
         "phone-formatter": {
@@ -29,7 +50,7 @@
             "search-expired": "A sua pesquisa expirou. Por favor, realize uma nova pesquisa para acessar os dispositivos."
         },
         "reason": {
-            "device-lister": "Foram retornadas diferentes variações de diferentes dispositivos com a consulta <b>%s</b>, escolha um modelo destes dispositivos usando os botões abaixo.",
+            "device-lister": "Foram retornados <b>%d dispositivos</b> com a consulta <b>%s</b>, escolha um modelo destes dispositivos usando os botões abaixo.",
             "device-not-provided": "<b>O dispositivo não foi fornecido para mim.</b>\n\n<b>Uso:</b> <code>/d S24 Ultra</code>",
             "device-not-found": "<b>Dispositivo não encontrado.</b>"
         }
@@ -78,6 +99,8 @@
         }
     },
     "pm-menu": {
+        "about-text": "— <b>%s</b>\n\nSou um bot multifuncional criado para unir diversão e praticidade às suas conversas. Com uma vasta gama de comandos, estou aqui para facilitar o seu dia a dia e transformar a sua experiência no Telegram.\n\nDesenvolvido com o poder do <a href=\"https://go.dev/\">Go</a>, minha estrutura utiliza a biblioteca <a href=\"https://pkg.go.dev/github.com/mymmrac/telego\">Telego</a> e integra-se diretamente à <a href=\"https://core.telegram.org/bots/api\">Telegram BOT API</a>.\n\nVocê pode contribuir com esse projeto de diferentes maneiras, seja sugerindo e implementando novos recursos através de <a href=\"https://github.com/BubbalooTeam/PyMouse/pulls\"><b>Pull Requests</b></a>, ou até mesmo nos apoiando financeiramente. Para mais informações clique nos botões abaixo.",
+        "privacy-text": "<b>%s Política de Privacidade:</b>\n\n<i>Este bot foi projetado e criado para garantir sua segurança e privacidade.\nObrigado pela sua confiança, nossa organização valoriza a proteção dos seus dados, além disso, valorizamos qualidade.</i>\n\n<b><i>Clique no botão abaixo para conferir o regulamento emitido pelo Telegram, utilizado por esse bot.</i></b>",
         "start-private": "Olá <b>%s</b>, eu sou <b>%s</b>. Um robô com funções legais e divertidas para o seu chat. Clique nos botões abaixo para saber mais sobre mim.",
         "start-group": "<b>Olá! Meu nome é %s!</b>"
     }
