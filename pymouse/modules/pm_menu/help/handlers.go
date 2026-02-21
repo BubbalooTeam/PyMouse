@@ -13,10 +13,6 @@ import (
 )
 
 func HelpMenu(ctx *telegohandler.Context, update telego.Update) error {
-	if update.Message == nil {
-		return nil
-	}
-
 	bot := ctx.Bot()
 
 	botUser, err := bot.GetMe(ctx)
@@ -84,10 +80,6 @@ func HelpMenu(ctx *telegohandler.Context, update telego.Update) error {
 }
 
 func HelpMenuCallback(ctx *telegohandler.Context, update telego.Update) error {
-	if update.CallbackQuery == nil {
-		return nil
-	}
-
 	cb := update.CallbackQuery.Message.(*telego.Message)
 	bot := ctx.Bot()
 
@@ -127,11 +119,6 @@ func HelpMenuCallback(ctx *telegohandler.Context, update telego.Update) error {
 }
 
 func HelpModule(ctx *telegohandler.Context, update telego.Update) error {
-
-	if update.CallbackQuery == nil {
-		return nil
-	}
-
 	cb := update.CallbackQuery
 
 	if cb.Data == "" || !strings.HasPrefix(cb.Data, "help:") {

@@ -12,11 +12,6 @@ import (
 )
 
 func StartMessage(ctx *telegohandler.Context, update telego.Update) error {
-
-	if update.Message == nil {
-		return nil
-	}
-
 	bot := ctx.Bot()
 	msg := update.Message
 	chat := msg.Chat
@@ -103,11 +98,6 @@ func StartMessage(ctx *telegohandler.Context, update telego.Update) error {
 }
 
 func StartBackCallback(ctx *telegohandler.Context, update telego.Update) error {
-
-	if update.CallbackQuery == nil {
-		return nil
-	}
-
 	cb := update.CallbackQuery
 	bot := ctx.Bot()
 	chat := cb.Message.GetChat()
