@@ -25,10 +25,11 @@ func GetUserMentioned(bot *telego.Bot, update telego.Update) (UI *modeldb.UsersI
 
 	if message.Entities != nil {
 		for _, y := range message.Entities {
-			if y.Type == "mention" {
+			switch y.Type {
+			case "mention":
 				UI = GetUserViaEntities(bot, update, y)
 				return UI
-			} else if y.Type == "text_mention" {
+			case "text_mention":
 				if y.User != nil {
 					UserID = y.User.ID
 
