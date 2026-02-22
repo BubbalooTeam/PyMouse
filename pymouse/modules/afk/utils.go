@@ -77,6 +77,7 @@ func CaSAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update) 
 	var UI *modeldb.UsersInformations
 	// Get mentioned user and notify user who mentioned
 	UI = telegram.GetUserMentioned(bot, update)
+
 	if UI != nil {
 		SenderAway(ctx, bot, update, UI)
 		return

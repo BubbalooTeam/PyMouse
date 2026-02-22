@@ -77,6 +77,7 @@ func CheckAway(ctx *th.Context, update telego.Update) error {
 
 		if UserAway.IsAway {
 			StopAway(ctx, bot, update)
+			return ctx.Next(update)
 		}
 
 		// Get mentioned user and notify user who mentioned

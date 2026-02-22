@@ -3,6 +3,7 @@ package telegram
 import (
 	"pymouse/pymouse/database/modeldb"
 	"pymouse/pymouse/database/utilitiesdb"
+	"strings"
 
 	"github.com/mymmrac/telego"
 )
@@ -15,6 +16,8 @@ func GetUserViaEntities(bot *telego.Bot, update telego.Update, entities telego.M
 
 	// Gets the message entity, and gets a user.
 	UserEntity := message.Text[EntOffset : EntOffset+EntLenght]
+	// Remove @ from the username and get the user informations
+	UserEntity = strings.Replace(UserEntity, "@", "", -1)
 	UI = utilitiesdb.FindUser(0, UserEntity)
 	return UI
 }
@@ -40,16 +43,7 @@ func GetUserMentioned(bot *telego.Bot, update telego.Update) (UI *modeldb.UsersI
 			}
 		}
 	}
-
-	if message.SenderChat != nil {
-		return nil
-	}
-
-	UserID = message.From.ID
-
-	// Get Absolute User from Database
-	UI = utilitiesdb.FindUser(UserID, "")
-	return UI
+	return nil
 }
 
 func GetUserReplied(bot *telego.Bot, update telego.Update) (UI *modeldb.UsersInformations) {
