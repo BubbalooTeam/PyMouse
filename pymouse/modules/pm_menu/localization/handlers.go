@@ -3,6 +3,7 @@ package localization
 import (
 	"fmt"
 	"pymouse/pymouse/database/utilitiesdb"
+	"pymouse/pymouse/helpers/admin"
 	"pymouse/pymouse/helpers/i18n"
 	"strings"
 
@@ -21,6 +22,10 @@ func ChangeLanguageMessage(ctx *telegohandler.Context, update telego.Update) err
 	msg := update.Message
 	chat := msg.Chat
 	l := i18n.Locale(chat)
+
+	if !admin.CheckAdmin(ctx, update, bot, admin.PermChangeInfo, l) {
+		return nil
+	}
 
 	changeMenuBack := "StartBack"
 	changeLangBack := "LangMenu"
@@ -54,6 +59,10 @@ func ChangeLanguageCallback(ctx *telegohandler.Context, update telego.Update) er
 	cb := update.CallbackQuery
 	chat := cb.Message.GetChat()
 	l := i18n.Locale(chat)
+
+	if !admin.CheckAdmin(ctx, update, bot, admin.PermChangeInfo, l) {
+		return nil
+	}
 
 	parts := strings.Split(cb.Data, "|")
 
@@ -96,6 +105,10 @@ func SelectLanguageCallback(ctx *telegohandler.Context, update telego.Update) er
 	chat := cb.Message.GetChat()
 	l := i18n.Locale(chat)
 
+	if !admin.CheckAdmin(ctx, update, bot, admin.PermChangeInfo, l) {
+		return nil
+	}
+
 	parts := strings.Split(cb.Data, "|")
 
 	changeMenuBack := parts[1]
@@ -132,6 +145,10 @@ func SwitchLanguageCallback(ctx *telegohandler.Context, update telego.Update) er
 	cb := update.CallbackQuery
 	chat := cb.Message.GetChat()
 	l := i18n.Locale(chat)
+
+	if !admin.CheckAdmin(ctx, update, bot, admin.PermChangeInfo, l) {
+		return nil
+	}
 
 	parts := strings.Split(cb.Data, "|")
 

@@ -10,6 +10,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var htmlTag = regexp.MustCompile(`<[^>]*>`)
+
 func GetArgs(update telego.Update) string {
 	MsgText := update.Message.Text
 	SplitedText := strings.Split(MsgText, " ")
@@ -105,4 +107,8 @@ func MatchByGroup(RegexBase *regexp.Regexp, Text string, Group string) string {
 		}
 	}
 	return MatchResponse[Group]
+}
+
+func StripHTML(text string) string {
+	return htmlTag.ReplaceAllString(text, "")
 }
