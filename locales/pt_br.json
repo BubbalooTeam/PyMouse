@@ -15,6 +15,12 @@
         "switch-lang": "Escolha o idioma que você quer usar abaixo.",
         "switched-lang": "O idioma desse chat foi definido para %s."
     },
+    "admin": {
+        "checkers": {
+            "not-admin": "<b>Você não é um administrador!</b>",
+            "missing-permissions": "<b>Desculpe, mas você precisa ter as seguintes permissões para usar este comando:</b> <code>%s</code>"
+        }
+    },
     "buttons": {
         "about": "ℹ️ Sobre",
         "back": "Voltar",
@@ -27,6 +33,21 @@
         "privacy": "🔒️ Privacidade",
         "privacy-policy": "🔒️ Política de Privacidade",
         "source-code": "📦️ Código Fonte (GitHub)"
+    },
+    "chat-type": {
+        "checkers": {
+            "only-groups": "<b>Desculpe, mas este comando só pode ser usado em grupos.</b>",
+            "only-private": "<b>Desculpe, mas este comando só pode ser usado em chats privados.</b>"
+        }
+    },
+    "generic-strings": {
+        "last-seen": "\n<b>Visto por último há:</b> <code>%s</code>",
+        "reason": "\n<b>Motivo:</b> <code>%s</code>"
+    }, 
+    "afk": {
+        "afk-set": "<b><i>%s</i> agora está ausente!</b>",
+        "afk-response": "<b><i>%s</i> está ausente!</b>",
+        "afk-back": "<b><i>%s</i> voltou!</b>"
     },
     "gsmarena": {
         "phone-formatter": {

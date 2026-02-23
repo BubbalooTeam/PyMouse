@@ -15,6 +15,12 @@
         "switch-lang": "Choose the language you want to use below.",
         "switched-lang": "The language of this chat has been set to %s."
     },
+    "admin": {
+        "checkers": {
+            "not-admin": "<b>You're not an administrator!</b>",
+            "missing-permissions": "<b>Sorry, but you need to have the following permissions to use this command:</b> <code>%s</code>"
+        }
+    },
     "buttons": {
         "about": "ℹ️ About",
         "back": "Back",
@@ -28,6 +34,21 @@
         "privacy-policy": "🔒️ Privacy Policy",
         "source-code": "📦️ Source Code (GitHub)"
      },
+    "chat-type": {
+        "checkers": {
+            "only-groups": "<b>Sorry, but this command can only be used in groups.</b>",
+            "only-private": "<b>Sorry, but this command can only be used in private chats.</b>"
+        }
+    },
+    "generic-strings": {
+        "last-seen": "\n<b>Last seen:</b> <code>%s</code>",
+        "reason": "\n<b>Reason:</b> <code>%s</code>"
+    },
+    "afk": {
+        "afk-set": "<b><i>%s</i> is now away!</b>",
+        "afk-response": "<b><i>%s</i> is away!</b>",
+        "afk-back": "<b><i>%s</i> is back!</b>"
+    },
     "gsmarena": {
         "phone-formatter": {
             "status": "Status",

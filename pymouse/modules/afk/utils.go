@@ -13,7 +13,7 @@ import (
 	"github.com/mymmrac/telego/telegoutil"
 )
 
-func StopAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update) {
+func StopAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update, l func(string) string) {
 	User := update.Message.From
 
 	// Stop Away From Keyboard (AFK), updating database informations.
@@ -30,7 +30,7 @@ func StopAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update)
 		ctx,
 		&telego.SendMessageParams{
 			ChatID:    telegoutil.ID(update.Message.Chat.ID),
-			Text:      fmt.Sprintf("<b>%s is back!</b>", User.FirstName),
+			Text:      fmt.Sprintf(l("afk.afk-back"), User.FirstName),
 			ParseMode: "HTML",
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
@@ -39,7 +39,7 @@ func StopAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update)
 	)
 }
 
-func SenderAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformations) {
+func SenderAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformations, l func(string) string) {
 	var AwayText string
 
 	Away := utilitiesdb.GetAway(UI.UserID)
@@ -52,12 +52,12 @@ func SenderAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Updat
 				Action: "typing",
 			},
 		)
-		AwayText += fmt.Sprintf("<b>%s is unavalaible!</b>", UI.FirstName)
+		AwayText += fmt.Sprintf(l("afk.afk-response"), UI.FirstName)
 		if Away.AwayReason != "" {
-			AwayText += fmt.Sprintf("\n<b>Reason:</b> <code>%s</code>", Away.AwayReason)
+			AwayText += fmt.Sprintf(l("generic-strings.reason"), Away.AwayReason)
 		}
 		if !Away.AwayTime.IsZero() {
-			AwayText += fmt.Sprintf("\n<b>Last seen:</b> <code>%s</code>", utils.TimeFormatter(time.Now().UTC().Sub(Away.AwayTime).Seconds()))
+			AwayText += fmt.Sprintf(l("generic-strings.last-seen"), utils.TimeFormatter(time.Now().UTC().Sub(Away.AwayTime).Seconds()))
 		}
 		bot.SendMessage(
 			ctx,
@@ -73,19 +73,19 @@ func SenderAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Updat
 	}
 }
 
-func CaSAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update) {
+func CaSAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update, l func(string) string) {
 	var UI *modeldb.UsersInformations
 	// Get mentioned user and notify user who mentioned
 	UI = telegram.GetUserMentioned(bot, update)
 
 	if UI != nil {
-		SenderAway(ctx, bot, update, UI)
+		SenderAway(ctx, bot, update, UI, l)
 		return
 	}
 
 	UI = telegram.GetUserReplied(bot, update)
 	if UI != nil {
-		SenderAway(ctx, bot, update, UI)
+		SenderAway(ctx, bot, update, UI, l)
 		return
 	}
 }

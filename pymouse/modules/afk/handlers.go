@@ -3,6 +3,7 @@ package afk
 import (
 	"fmt"
 	"pymouse/pymouse/database/utilitiesdb"
+	"pymouse/pymouse/helpers/i18n"
 	"pymouse/pymouse/helpers/utils"
 	"regexp"
 	"time"
@@ -14,11 +15,12 @@ import (
 
 func SetAway(ctx *th.Context, update telego.Update) error {
 	bot := ctx.Bot()
+	l := i18n.Locale(update.Message.Chat)
 
 	User := update.Message.From
 	Away := utilitiesdb.GetAway(User.ID)
 	if Away.IsAway {
-		StopAway(ctx, bot, update)
+		StopAway(ctx, bot, update, l)
 		return nil
 	}
 	AwayReason := utils.GetArgs(update)
@@ -32,28 +34,19 @@ func SetAway(ctx *th.Context, update telego.Update) error {
 		&telego.SendChatActionParams{
 			ChatID: telegoutil.ID(update.Message.Chat.ID),
 			Action: "typing",
-		})
+		},
+	)
+	afkMessage := fmt.Sprintf(l("afk.afk-set"), User.FirstName)
 
 	// Send a notification to notify AFK
 	if AwayReason != "" {
-		bot.SendMessage(
-			ctx,
-			&telego.SendMessageParams{
-				ChatID:    telegoutil.ID(update.Message.Chat.ID),
-				Text:      fmt.Sprintf("<b>%s is now unavailable!</b>\n<b>Reason:</b> %s", update.Message.From.FirstName, AwayReason),
-				ParseMode: "HTML",
-				ReplyParameters: &telego.ReplyParameters{
-					MessageID: update.Message.MessageID,
-				},
-			},
-		)
-		return nil
+		afkMessage += fmt.Sprintf(l("generic-strings.reason"), AwayReason)
 	}
 	bot.SendMessage(
 		ctx,
 		&telego.SendMessageParams{
 			ChatID:    telegoutil.ID(update.Message.Chat.ID),
-			Text:      fmt.Sprintf("<b>%s is now unavailable!</b>", update.Message.From.FirstName),
+			Text:      afkMessage,
 			ParseMode: "HTML",
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
@@ -71,17 +64,18 @@ func CheckAway(ctx *th.Context, update telego.Update) error {
 	if message == nil || message.SenderChat != nil || re.MatchString(message.Text) {
 		return ctx.Next(update)
 	}
+	l := i18n.Locale(message.Chat)
 
 	if message.Chat.Type != "private" {
 		UserAway := utilitiesdb.GetAway(message.From.ID)
 
 		if UserAway.IsAway {
-			StopAway(ctx, bot, update)
+			StopAway(ctx, bot, update, l)
 			return ctx.Next(update)
 		}
 
 		// Get mentioned user and notify user who mentioned
-		CaSAway(ctx, bot, update)
+		CaSAway(ctx, bot, update, l)
 	}
 	return ctx.Next(update)
 }
