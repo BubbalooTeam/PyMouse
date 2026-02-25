@@ -6,6 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.11.0
 	github.com/joho/godotenv v1.5.1
 	github.com/mymmrac/telego v1.6.0
+	github.com/showwin/speedtest-go v1.7.10
 	github.com/sirupsen/logrus v1.9.4
 	go.mongodb.org/mongo-driver v1.17.9
 	golang.org/x/net v0.50.0

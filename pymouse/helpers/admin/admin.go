@@ -1,11 +1,11 @@
 package admin
 
 import (
-	"context"
 	"fmt"
 	"pymouse/pymouse/helpers/utils"
 
 	"github.com/mymmrac/telego"
+	"github.com/mymmrac/telego/telegohandler"
 	"github.com/mymmrac/telego/telegoutil"
 )
 
@@ -22,7 +22,7 @@ const (
 
 func sendAdminError(
 	bot *telego.Bot,
-	ctx context.Context,
+	ctx *telegohandler.Context,
 	update telego.Update,
 	chatID int64,
 	isCallback bool,
@@ -47,7 +47,7 @@ func sendAdminError(
 }
 
 func CheckAdmin(
-	ctx context.Context,
+	ctx *telegohandler.Context,
 	update telego.Update,
 	bot *telego.Bot,
 	required AdminPerm,

@@ -6,6 +6,7 @@ import (
 	"pymouse/pymouse/modules/checkers"
 	"pymouse/pymouse/modules/miscellaneous"
 	"pymouse/pymouse/modules/pm_menu"
+	"pymouse/pymouse/modules/sudoers"
 	"sort"
 	"strings"
 
@@ -21,6 +22,7 @@ var (
 		"checkers":      checkers.LoadModule,
 		"miscellaneous": miscellaneous.LoadModule,
 		"pm_menu":       pm_menu.LoadModule,
+		"sudoers":       sudoers.LoadModules,
 	}
 )
 

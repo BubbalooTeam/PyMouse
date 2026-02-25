@@ -12,6 +12,7 @@ var (
 	BotToken       string
 	DatabaseURI    string
 	LogChannelID   int64
+	OwnerID        int64
 	Socks5Proxy    string
 	TelegramAPIURL string
 	WebhookURL     string
@@ -37,6 +38,10 @@ func init() {
 	LogChannelID, err = strconv.ParseInt(os.Getenv("LOG_CHANNEL_ID"), 10, 64)
 	if err != nil || LogChannelID == 0 {
 		logrus.Fatal(`In order to initialize this bot, you must set the "LOG_CHANNEL_ID" in the .env file.`)
+	}
+	OwnerID, err = strconv.ParseInt(os.Getenv("OWNER_ID"), 10, 64)
+	if err != nil || OwnerID == 0 {
+		logrus.Fatal(`In order to initialize this bot, you must set the "OWNER_ID" in the .env file.`)
 	}
 
 	Socks5Proxy = os.Getenv("SOCKS5_PROXY")

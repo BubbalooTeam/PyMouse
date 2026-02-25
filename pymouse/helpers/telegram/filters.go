@@ -2,6 +2,7 @@ package telegram
 
 import (
 	"context"
+	"pymouse/pymouse/config"
 	"strings"
 
 	"github.com/mymmrac/telego"
@@ -29,6 +30,20 @@ func Command(cmd string) th.Predicate {
 			}
 		}
 
+		return false
+	}
+}
+
+func IsDeveloper() th.Predicate {
+	return func(ctx context.Context, update telego.Update) bool {
+		if update.Message != nil {
+			return update.Message.From.ID == config.OwnerID
+		}
+
+		if update.CallbackQuery != nil {
+			return update.CallbackQuery.From.ID == config.OwnerID
+		}
+		
 		return false
 	}
 }
