@@ -16,13 +16,15 @@ func Command(cmd string) th.Predicate {
 			return false
 		}
 
-		text := update.Message.Text
+		text := strings.TrimSpace(update.Message.Text)
 		if text == "" {
 			return false
 		}
 
 		for _, p := range prefixes {
-			if strings.HasPrefix(text, p+cmd) {
+			full := p + cmd
+
+			if text == full || strings.HasPrefix(text, full+" ") {
 				return true
 			}
 		}
