@@ -91,7 +91,6 @@ func (h *HelpMiddleware) RegisterHelp(main string, args ...any) {
 
 		subSlug := Slug(sub)
 
-		// verificar duplicação
 		var subEntry *HelpEntry
 		for _, p := range mainEntry.Plugins {
 			if strings.EqualFold(p.Module, sub) {
@@ -109,7 +108,6 @@ func (h *HelpMiddleware) RegisterHelp(main string, args ...any) {
 			mainEntry.Plugins = append(mainEntry.Plugins, subEntry)
 		}
 
-		// Verificar se veio WithSubmodules
 		if len(args) > 1 {
 			if opt, ok := args[1].(submodulesOption); ok {
 
@@ -117,7 +115,6 @@ func (h *HelpMiddleware) RegisterHelp(main string, args ...any) {
 
 					childSlug := Slug(child)
 
-					// evitar duplicação
 					exists := false
 					for _, c := range subEntry.Plugins {
 						if strings.EqualFold(c.Module, child) {
@@ -140,7 +137,6 @@ func (h *HelpMiddleware) RegisterHelp(main string, args ...any) {
 		return
 	}
 
-	// Caso: main direto com WithSubmodules
 	if opt, ok := args[0].(submodulesOption); ok {
 
 		for _, child := range opt.items {

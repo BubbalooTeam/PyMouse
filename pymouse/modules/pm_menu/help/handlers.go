@@ -53,7 +53,6 @@ func HelpMenu(ctx *telegohandler.Context, update telego.Update) error {
 		return nil
 	}
 
-	// typing
 	bot.SendChatAction(ctx, &telego.SendChatActionParams{
 		ChatID: telegoutil.ID(chat.ID),
 		Action: telego.ChatActionTyping,
@@ -164,8 +163,6 @@ func HelpModule(ctx *telegohandler.Context, update telego.Update) error {
 		moduleTitle = moduleName
 	}
 
-	// -------- TEXTO --------
-
 	helpText := fmt.Sprintf(
 		l("help.here-is-help"),
 		moduleTitle,
@@ -180,8 +177,6 @@ func HelpModule(ctx *telegohandler.Context, update telego.Update) error {
 	}
 
 	helpText += description
-
-	// -------- KEYBOARD --------
 
 	var rows [][]telego.InlineKeyboardButton
 	var currentRow []telego.InlineKeyboardButton

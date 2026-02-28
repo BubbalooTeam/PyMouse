@@ -16,7 +16,6 @@ func FindModule(path []string, helpable []*middlewares.HelpEntry) *middlewares.H
 
 	var current *middlewares.HelpEntry
 
-	// Buscar root
 	for _, entry := range helpable {
 		if middlewares.Slug(entry.Module) == rootSlug {
 			current = entry

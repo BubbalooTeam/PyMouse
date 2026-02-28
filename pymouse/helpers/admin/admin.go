@@ -54,8 +54,6 @@ func CheckAdmin(
 	l func(string) string,
 	acceptInPrivate ...bool,
 ) bool {
-
-	// default true
 	allowPrivate := true
 	if len(acceptInPrivate) > 0 {
 		allowPrivate = acceptInPrivate[0]
