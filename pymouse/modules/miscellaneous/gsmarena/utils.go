@@ -113,7 +113,7 @@ func getDataFromURL(urlExt string) (string, error) {
 	return string(bodyBytes), nil
 }
 
-func searchDevice(query string) GSMArenaSearchResult {
+func searchDevice(query string) *GSMArenaSearchResult {
 	var results []GSMArenaDeviceSearchResult
 
 	html, err := getDataFromURL(
@@ -121,13 +121,13 @@ func searchDevice(query string) GSMArenaSearchResult {
 	)
 	if err != nil {
 		logrus.Error(err)
-		return GSMArenaSearchResult{}
+		return nil
 	}
 
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 	if err != nil {
 		logrus.Error(err)
-		return GSMArenaSearchResult{}
+		return nil
 	}
 
 	doc.Find(".makers li").Each(func(i int, s *goquery.Selection) {
@@ -147,24 +147,24 @@ func searchDevice(query string) GSMArenaSearchResult {
 		})
 	})
 
-	return GSMArenaSearchResult{
+	return &GSMArenaSearchResult{
 		Results: results,
 	}
 }
 
-func fetchDevice(deviceID string) GSMArenaDeviceBaseResult {
+func fetchDevice(deviceID string) *GSMArenaDeviceBaseResult {
 	var phoneDetails []PhoneDetail
 
 	html, err := getDataFromURL(fmt.Sprintf(GSMArenaDeviceExtURL, deviceID))
 	if err != nil {
 		logrus.Error(err)
-		return GSMArenaDeviceBaseResult{}
+		return nil
 	}
 
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 	if err != nil {
 		logrus.Error(err)
-		return GSMArenaDeviceBaseResult{}
+		return nil
 	}
 
 	name := strings.TrimSpace(
@@ -202,7 +202,7 @@ func fetchDevice(deviceID string) GSMArenaDeviceBaseResult {
 		}
 	})
 
-	return GSMArenaDeviceBaseResult{
+	return &GSMArenaDeviceBaseResult{
 		Name:         name,
 		ImageURL:     image,
 		URL:          fmt.Sprintf(GSMArenaBaseURL, fmt.Sprintf(GSMArenaDeviceExtURL, deviceID)),
@@ -267,7 +267,7 @@ func parseSpecifications(phone_details []PhoneDetail) ParsedSpecs {
 }
 
 func formatGSMarenaMessage(
-	device GSMArenaDeviceBaseResult,
+	device *GSMArenaDeviceBaseResult,
 	l func(string) string,
 ) string {
 
