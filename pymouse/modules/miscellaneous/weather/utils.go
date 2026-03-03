@@ -3,7 +3,6 @@ package weather
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"pymouse/pymouse/helpers/rapidhttp"
 )
 
@@ -93,12 +92,9 @@ func GetWeatherLocationInfo(locationName string, language string) (*WeatherLocat
 	}
 
 	defer r.Body.Close()
-	rBody, err := io.ReadAll(r.Body)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&APILocationInfo); err != nil {
 		return nil, err
 	}
-
-	json.Unmarshal(rBody, &APILocationInfo)
 
 	if len(APILocationInfo.Location.Address) == 0 {
 		return nil, fmt.Errorf("location not found")
@@ -112,7 +108,7 @@ func GetWeatherLocationInfo(locationName string, language string) (*WeatherLocat
 	}, nil
 }
 
-func GetWeatherInfo(latitude, longitude float64, language string) (*WeatherInfo, error) {
+func GetWeatherInfo(latitude, longitude float64, language string, units string) (*WeatherInfo, error) {
 	var APIWeatherInfo WeatherInfo
 	httpClient := rapidhttp.GetHTTPClient()
 	getWeatherParams := map[string]string{
@@ -120,7 +116,7 @@ func GetWeatherInfo(latitude, longitude float64, language string) (*WeatherInfo,
 		"format":   "json",
 		"language": language,
 		"geocode":  fmt.Sprintf("%f,%f", latitude, longitude),
-		"units":    "m",
+		"units":    units,
 	}
 	r, err := rapidhttp.Request(
 		httpClient,
@@ -137,11 +133,9 @@ func GetWeatherInfo(latitude, longitude float64, language string) (*WeatherInfo,
 	}
 
 	defer r.Body.Close()
-	rBody, err := io.ReadAll(r.Body)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&APIWeatherInfo); err != nil {
 		return nil, err
 	}
 
-	json.Unmarshal(rBody, &APIWeatherInfo)
 	return &APIWeatherInfo, nil
 }
