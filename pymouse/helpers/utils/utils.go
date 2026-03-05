@@ -46,6 +46,14 @@ func TimeFormatter(seconds float64) string {
 	return strings.Join(parts, ", ")
 }
 
+func FirstRunes(s string, n int) string {
+	r := []rune(s)
+	if len(r) < n {
+		return s
+	}
+	return string(r[:n])
+}
+
 func FormatInteger(number int) string {
 	switch {
 	case number >= 1000000000000000000:

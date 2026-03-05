@@ -124,5 +124,17 @@
         "privacy-text": "<b>%s Política de Privacidade:</b>\n\n<i>Este bot foi projetado e criado para garantir sua segurança e privacidade.\nObrigado pela sua confiança, nossa organização valoriza a proteção dos seus dados, além disso, valorizamos qualidade.</i>\n\n<b><i>Clique no botão abaixo para conferir o regulamento emitido pelo Telegram, utilizado por esse bot.</i></b>",
         "start-private": "Olá <b>%s</b>, eu sou <b>%s</b>. Um robô com funções legais e divertidas para o seu chat. Clique nos botões abaixo para saber mais sobre mim.",
         "start-group": "<b>Olá! Meu nome é %s!</b>"
+    },
+    "weather": {
+        "language": "pt",
+        "humidity": "Umidade: %d%%",
+        "temperature": "%d °C",
+        "temperature-feelsLike": "Sensação Térmica: %d °C",
+        "units": "m",
+        "wind": "Vento: %d km/h",
+        "checkers": {
+            "location-not-found": "<b>Localização não encontrada.</b>",
+            "location-not-provided": "<b>A localização não foi fornecida para mim.</b>\n\n<b>Uso:</b> <code>/weather São Paulo</code>"
+        }
     }
 }
