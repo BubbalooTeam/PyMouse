@@ -367,7 +367,7 @@ func MakeWeatherInterface(
 	im.SetRGB(1, 1, 1)
 	im.DrawStringAnchored(locationText, width/2, 120, 0.5, 0.5)
 
-	if err := im.LoadFontFace("pymouse/assets/fonts/arial.ttf", 80); err != nil {
+	if err := im.LoadFontFace("pymouse/assets/fonts/notosans-bold.ttf", 80); err != nil {
 		return "", err
 	}
 	yCurrent := 400.0
@@ -384,6 +384,10 @@ func MakeWeatherInterface(
 		380,
 		yCurrent+80,
 	)
+
+	if err := im.LoadFontFace("pymouse/assets/fonts/economica-italic.ttf", 80); err != nil {
+		return "", err
+	}
 
 	im.DrawString(
 		periodNow.WxObservations.WXPhraseLong,
@@ -422,10 +426,6 @@ func MakeWeatherInterface(
 	xSpacing := 450.0
 
 	for _, daily := range weather.DailyForecast.Forecast {
-		if err := im.LoadFontFace("pymouse/assets/fonts/arial.ttf", 60); err != nil {
-			return "", err
-		}
-
 		var period *ForecastPeriod
 
 		if isNight && daily.Night != nil {
@@ -448,8 +448,15 @@ func MakeWeatherInterface(
 
 		dayLabel := utils.FirstRunes(daily.Date, 3)
 
+		if err := im.LoadFontFace("pymouse/assets/fonts/notosans-bold.ttf", 60); err != nil {
+			return "", err
+		}
 		im.SetRGB(1, 1, 1)
 		im.DrawString(dayLabel, xStart, yForecast+260)
+
+		if err := im.LoadFontFace("pymouse/assets/fonts/arial.ttf", 60); err != nil {
+			return "", err
+		}
 
 		if tempMax := daily.TemperatureMax; tempMax != nil {
 			im.DrawString(
