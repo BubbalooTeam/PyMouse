@@ -2,7 +2,7 @@ package afk
 
 import (
 	"fmt"
-	"pymouse/pymouse/database/utilitiesdb"
+	"pymouse/pymouse/database/repositories"
 	"pymouse/pymouse/helpers/i18n"
 	"pymouse/pymouse/helpers/utils"
 	"regexp"
@@ -18,7 +18,7 @@ func SetAway(ctx *th.Context, update telego.Update) error {
 	l := i18n.Locale(update.Message.Chat)
 
 	User := update.Message.From
-	Away := utilitiesdb.GetAway(User.ID)
+	Away := repositories.GetAway(User.ID)
 	if Away.IsAway {
 		StopAway(ctx, bot, update, l)
 		return nil
@@ -26,7 +26,7 @@ func SetAway(ctx *th.Context, update telego.Update) error {
 	AwayReason := utils.GetArgs(update)
 
 	// Set User to Away From Keyboard (AFK)
-	utilitiesdb.SetAway(User.ID, time.Now().UTC(), AwayReason)
+	repositories.SetAway(User.ID, time.Now().UTC(), AwayReason)
 
 	// Send ChatAction via Telegram
 	bot.SendChatAction(
@@ -67,7 +67,7 @@ func CheckAway(ctx *th.Context, update telego.Update) error {
 	l := i18n.Locale(message.Chat)
 
 	if message.Chat.Type != "private" {
-		UserAway := utilitiesdb.GetAway(message.From.ID)
+		UserAway := repositories.GetAway(message.From.ID)
 
 		if UserAway.IsAway {
 			StopAway(ctx, bot, update, l)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"pymouse/pymouse/database/utilitiesdb"
+	"pymouse/pymouse/database/repositories"
 	"strings"
 
 	"github.com/mymmrac/telego"
@@ -78,7 +78,7 @@ func GetStringFromNestedMap(langMap map[string]interface{}, key string) string {
 }
 
 func Locale(chat telego.Chat) func(string) string {
-	language := utilitiesdb.GetChatLanguage(chat)
+	language := repositories.GetChatLanguage(chat)
 
 	langMap, ok := StringsCache[language]
 	if !ok {

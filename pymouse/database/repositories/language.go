@@ -1,8 +1,8 @@
-package utilitiesdb
+package repositories
 
 import (
 	"pymouse/pymouse/database"
-	"pymouse/pymouse/database/modeldb"
+	"pymouse/pymouse/database/models"
 	"strings"
 
 	"github.com/mymmrac/telego"
@@ -16,7 +16,7 @@ func updateUserLanguage(chatID int64, language string) bool {
 			return false
 		}
 	}
-	UI = &modeldb.UsersInformations{
+	UI = &models.UsersInformations{
 		UserID:   chatID,
 		Language: language,
 	}
@@ -36,7 +36,7 @@ func updateChatLanguage(chatID int64, language string) bool {
 			return false
 		}
 	}
-	CI = &modeldb.ChatsInformations{
+	CI = &models.ChatsInformations{
 		ChatID:   chatID,
 		Language: language,
 	}

@@ -1,18 +1,18 @@
-package utilitiesdb
+package repositories
 
 import (
 	"pymouse/pymouse/database"
-	"pymouse/pymouse/database/modeldb"
+	"pymouse/pymouse/database/models"
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func FindUser(UserID int64, UserName string) (UI *modeldb.UsersInformations) {
+func FindUser(UserID int64, UserName string) (UI *models.UsersInformations) {
 	var Filter bson.M
 
-	dftUser := &modeldb.UsersInformations{
+	dftUser := &models.UsersInformations{
 		UserID:   UserID,
 		UserName: UserName,
 	}
@@ -49,7 +49,7 @@ func UpdateUser(UserID int64, UserName string, FirstName string) {
 		UI.FirstName = FirstName
 		UI.UserName = UserName
 	} else {
-		UI = &modeldb.UsersInformations{
+		UI = &models.UsersInformations{
 			UserID:    UserID,
 			UserName:  UserName,
 			FirstName: FirstName,

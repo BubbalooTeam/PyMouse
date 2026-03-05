@@ -2,8 +2,8 @@ package afk
 
 import (
 	"fmt"
-	"pymouse/pymouse/database/modeldb"
-	"pymouse/pymouse/database/utilitiesdb"
+	"pymouse/pymouse/database/models"
+	"pymouse/pymouse/database/repositories"
 	"pymouse/pymouse/helpers/telegram"
 	"pymouse/pymouse/helpers/utils"
 	"time"
@@ -17,7 +17,7 @@ func StopAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update,
 	User := update.Message.From
 
 	// Stop Away From Keyboard (AFK), updating database informations.
-	utilitiesdb.UnSetAway(User.ID)
+	repositories.UnSetAway(User.ID)
 
 	bot.SendChatAction(
 		ctx,
@@ -39,10 +39,10 @@ func StopAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update,
 	)
 }
 
-func SenderAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update, UI *modeldb.UsersInformations, l func(string) string) {
+func SenderAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update, UI *models.UsersInformations, l func(string) string) {
 	var AwayText string
 
-	Away := utilitiesdb.GetAway(UI.UserID)
+	Away := repositories.GetAway(UI.UserID)
 
 	if Away.IsAway {
 		bot.SendChatAction(
@@ -74,7 +74,7 @@ func SenderAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Updat
 }
 
 func CaSAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Update, l func(string) string) {
-	var UI *modeldb.UsersInformations
+	var UI *models.UsersInformations
 	// Get mentioned user and notify user who mentioned
 	UI = telegram.GetUserMentioned(bot, update)
 

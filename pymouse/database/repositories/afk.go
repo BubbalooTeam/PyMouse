@@ -1,8 +1,8 @@
-package utilitiesdb
+package repositories
 
 import (
 	"pymouse/pymouse/database"
-	"pymouse/pymouse/database/modeldb"
+	"pymouse/pymouse/database/models"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -26,9 +26,9 @@ func UpdateAway(
 		UI.Away.AwayTime = AwayTime
 		UI.Away.AwayReason = AwayReason
 	} else {
-		UI = &modeldb.UsersInformations{
+		UI = &models.UsersInformations{
 			UserID: UserID,
-			Away: modeldb.AwayInformations{
+			Away: models.AwayInformations{
 				IsAway:     AwayState,
 				AwayTime:   AwayTime,
 				AwayReason: AwayReason,
@@ -58,7 +58,7 @@ func UnSetAway(
 
 func GetAway(
 	UserID int64,
-) (AI modeldb.AwayInformations) {
+) (AI models.AwayInformations) {
 	UI := FindUser(UserID, "")
 	AI = UI.Away
 	return AI

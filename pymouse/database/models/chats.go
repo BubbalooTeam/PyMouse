@@ -1,4 +1,4 @@
-package modeldb
+package models
 
 type ChatsInformations struct {
 	ChatID    int64  `bson:"chat_id,omitempty" json:"chat_id,omitempty"`

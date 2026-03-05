@@ -2,7 +2,7 @@ package localization
 
 import (
 	"fmt"
-	"pymouse/pymouse/database/utilitiesdb"
+	"pymouse/pymouse/database/repositories"
 	"pymouse/pymouse/helpers/i18n"
 
 	"github.com/mymmrac/telego"
@@ -47,7 +47,7 @@ func GetChangeLangTextAndButtons(
 	backCallback string,
 ) LocalizationArgs {
 
-	chatLanguage := utilitiesdb.GetChatLanguage(chat)
+	chatLanguage := repositories.GetChatLanguage(chat)
 	stats, _ := i18n.GetLocalizationStats(chatLanguage)
 
 	msgText := fmt.Sprintf(
@@ -102,7 +102,7 @@ func getSwitchLangButtons(
 	var rows [][]telego.InlineKeyboardButton
 	var currentRow []telego.InlineKeyboardButton
 
-	chatLanguage := utilitiesdb.GetChatLanguage(update.CallbackQuery.Message.GetChat())
+	chatLanguage := repositories.GetChatLanguage(update.CallbackQuery.Message.GetChat())
 	for i, lang := range i18n.AvalaibleLanguages {
 		langMap, ok := i18n.StringsCache[lang]
 		if !ok {

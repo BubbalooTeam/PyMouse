@@ -1,17 +1,17 @@
-package utilitiesdb
+package repositories
 
 import (
 	"pymouse/pymouse/database"
-	"pymouse/pymouse/database/modeldb"
+	"pymouse/pymouse/database/models"
 
 	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func FindChat(ChatID int64) (CI *modeldb.ChatsInformations) {
+func FindChat(ChatID int64) (CI *models.ChatsInformations) {
 	ChatsCollection := database.NewMongoCollection("chats")
-	dftChat := &modeldb.ChatsInformations{
+	dftChat := &models.ChatsInformations{
 		ChatID: ChatID,
 	}
 	err := ChatsCollection.FindOne(bson.M{"chat_id": ChatID}).Decode(&CI)
@@ -35,7 +35,7 @@ func UpdateChat(ChatID int64, Username string, ChatTitle string) {
 		CI.Username = Username
 		CI.ChatTitle = ChatTitle
 	} else {
-		CI = &modeldb.ChatsInformations{
+		CI = &models.ChatsInformations{
 			ChatID:    ChatID,
 			Username:  Username,
 			ChatTitle: ChatTitle,

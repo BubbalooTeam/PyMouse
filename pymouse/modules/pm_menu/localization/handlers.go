@@ -2,7 +2,7 @@ package localization
 
 import (
 	"fmt"
-	"pymouse/pymouse/database/utilitiesdb"
+	"pymouse/pymouse/database/repositories"
 	"pymouse/pymouse/helpers/admin"
 	"pymouse/pymouse/helpers/i18n"
 	"strings"
@@ -155,7 +155,7 @@ func SwitchLanguageCallback(ctx *telegohandler.Context, update telego.Update) er
 	language := parts[1]
 	changeMenuBack := parts[2]
 
-	switchLanguage := utilitiesdb.SetChatLanguage(chat, language)
+	switchLanguage := repositories.SetChatLanguage(chat, language)
 	if !switchLanguage {
 		bot.AnswerCallbackQuery(
 			ctx,

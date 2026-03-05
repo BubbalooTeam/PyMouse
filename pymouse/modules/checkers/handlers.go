@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"pymouse/pymouse/database/utilitiesdb"
+	"pymouse/pymouse/database/repositories"
 
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
@@ -38,7 +38,7 @@ func SaveUsers(ctx *th.Context, update telego.Update) error {
 		userName = fmt.Sprintf("%s", message.From.Username)
 	}
 
-	utilitiesdb.UpdateUser(userID, userName, firstName)
+	repositories.UpdateUser(userID, userName, firstName)
 
 	return ctx.Next(update)
 }
@@ -71,7 +71,7 @@ func SaveChats(ctx *th.Context, update telego.Update) error {
 		userName = fmt.Sprintf("%s", message.Chat.Username)
 	}
 
-	utilitiesdb.UpdateChat(chatID, userName, chatTitle)
+	repositories.UpdateChat(chatID, userName, chatTitle)
 
 	return ctx.Next(update)
 }

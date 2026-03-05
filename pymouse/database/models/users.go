@@ -1,4 +1,4 @@
-package modeldb
+package models
 
 type UsersInformations struct {
 	UserID    int64            `bson:"user_id,omitempty" json:"user_id,omitempty"`
