@@ -11,6 +11,7 @@ import (
 var (
 	BotToken       string
 	DatabaseURI    string
+	DownloadPath   string
 	LogChannelID   int64
 	OwnerID        int64
 	Socks5Proxy    string
@@ -35,6 +36,12 @@ func init() {
 	if DatabaseURI == "" {
 		logrus.Fatal(`In order to initialize this bot, you must insert the "DATABASE_URI" in the .env file.`)
 	}
+
+	DownloadPath = os.Getenv("DOWNLOAD_PATH")
+	if DownloadPath == "" {
+		DownloadPath = "pymouse/downloads"
+	}
+
 	LogChannelID, err = strconv.ParseInt(os.Getenv("LOG_CHANNEL_ID"), 10, 64)
 	if err != nil || LogChannelID == 0 {
 		logrus.Fatal(`In order to initialize this bot, you must set the "LOG_CHANNEL_ID" in the .env file.`)

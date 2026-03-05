@@ -8,6 +8,7 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"pymouse/pymouse/config"
 	"pymouse/pymouse/helpers/rapidhttp"
 	"pymouse/pymouse/helpers/utils"
 	"strings"
@@ -482,7 +483,7 @@ func MakeWeatherInterface(
 		xStart += xSpacing
 	}
 
-	dir := "pymouse/downloads"
+	dir := fmt.Sprintf("%s/%s", config.DownloadPath, "weather")
 
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return "", err
