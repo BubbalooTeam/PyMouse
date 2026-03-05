@@ -1,15 +1,15 @@
 module pymouse
 
-go 1.25.5
+go 1.25.7
 
 require (
 	github.com/PuerkitoBio/goquery v1.11.0
 	github.com/joho/godotenv v1.5.1
-	github.com/mymmrac/telego v1.6.0
+	github.com/mymmrac/telego v1.7.0
 	github.com/showwin/speedtest-go v1.7.10
 	github.com/sirupsen/logrus v1.9.4
 	go.mongodb.org/mongo-driver v1.17.9
-	golang.org/x/net v0.50.0
+	golang.org/x/net v0.51.0
 )
 
 require (
@@ -37,7 +37,7 @@ require (
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.69.0
-	github.com/valyala/fastjson v1.6.7 // indirect
+	github.com/valyala/fastjson v1.6.10 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.2.0 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
