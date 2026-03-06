@@ -2,6 +2,8 @@ package help
 
 import (
 	"pymouse/pymouse/middlewares"
+	"sort"
+	"strings"
 
 	"github.com/mymmrac/telego"
 )
@@ -61,6 +63,24 @@ func GenerateHelpKeyboard(helpable []*middlewares.HelpEntry, l func(string) stri
 	if len(helpable) == 0 {
 		helpable = middlewares.Help.GetHelpable()
 	}
+
+	sort.Slice(helpable, func(i, j int) bool {
+		var a, b string
+
+		if helpable[i].TitleI18n != "" {
+			a = l(helpable[i].TitleI18n)
+		} else {
+			a = helpable[i].Module
+		}
+
+		if helpable[j].TitleI18n != "" {
+			b = l(helpable[j].TitleI18n)
+		} else {
+			b = helpable[j].Module
+		}
+
+		return strings.ToLower(a) < strings.ToLower(b)
+	})
 
 	var rows [][]telego.InlineKeyboardButton
 	var currentRow []telego.InlineKeyboardButton
