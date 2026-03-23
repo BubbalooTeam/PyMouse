@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/mymmrac/telego"
 	"github.com/sirupsen/logrus"
 )
@@ -91,6 +92,12 @@ func HumanBytes(size int64) string {
 	return fmt.Sprintf("%.2f %sB", s, units[i])
 }
 
+func RandKey() (RYK string) {
+	newID := uuid.New()
+	RYK = newID.String()[:8]
+	return RYK
+}
+
 func SplitIntoRows(items []telego.InlineKeyboardButton, width int) (IKB [][]telego.InlineKeyboardButton) {
 	for i := 0; i < len(items); i += width {
 		end := i + width
@@ -100,6 +107,11 @@ func SplitIntoRows(items []telego.InlineKeyboardButton, width int) (IKB [][]tele
 		IKB = append(IKB, items[i:end])
 	}
 	return IKB
+}
+
+func SanitizeFilename(name string) string {
+	re := regexp.MustCompile(`[<>:"/\\|?*\x00-\x1F]`)
+	return re.ReplaceAllString(name, "_")
 }
 
 func MatchByGroup(RegexBase *regexp.Regexp, Text string, Group string) string {

@@ -130,5 +130,24 @@
             "location-not-found": "<b>Location not found.</b>",
             "location-not-provided": "<b>No location was provided to me.</b>\n\n<b>Usage:</b> <code>/weather São Paulo</code>"
         }
+    },
+    "youtube-dl": {
+        "downloading": "<b>Downloading your video/music. Please wait.</b>",
+        "getting-formats": "<b>Getting available formats. Please wait.</b>",
+        "uploading": "<b>Uploading your video/music. Please wait...</b>",
+        "checkers": {
+            "no-args": "What is the video title, channel name, or video URL to download?",
+            "excededd-limit": "You have exceeded my maximum download limit, which is 1GB for video/music. You can choose lower resolution downloads, or subscribe to one of our plans to download up to 2GB of video/music.",
+            "not-for-you": "This YouTube downloader button is not for you.",
+            "already-in-video": "You are already viewing this video. You can switch between them using the buttons responsible for this action.",
+            "video-cache-not-found": "This video could not be found in my cache. This usually means the search was performed more than 15 minutes ago. Please try a new search.",
+            "video-not-found": "<code>No videos were found on YouTube!</code>"
+        },
+        "formatter": {
+            "published-time": "\n\n<b>❯ Published:</b> <code>%s</code>",
+            "duration-time": "\n<b>❯ Duration:</b> <code>%s</code>",
+            "views-count": "\n<b>❯ Views:</b> <code>%s</code>",
+            "creator-of-content": "\n<b>❯ Content Creator:</b> <b>%s</b>"
+        }
     }
 }

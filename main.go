@@ -16,6 +16,7 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/lrstanley/go-ytdlp"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 	"github.com/mymmrac/telego/telegoutil"
@@ -46,6 +47,8 @@ func main() {
 	ctx := context.Background()
 
 	logrus.Info("Bot Created, Starting Get Updates of Long Polling...")
+
+	ytdlp.MustInstall(ctx, nil)
 
 	updates, err := client.GetUpdates(ctx, botClient, config.WebhookURL)
 	if err != nil {
