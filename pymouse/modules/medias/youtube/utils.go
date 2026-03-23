@@ -346,6 +346,7 @@ func DownloadByFormatID(videoID string, formatID int) (string, error) {
 			ExtractAudio().
 			AudioFormat("mp3").
 			AudioQuality("0").
+			EmbedMetadata().
 			Output(template)
 	} else {
 		template = fmt.Sprintf("%s/%%(title)s_v.%%(ext)s", dir)
