@@ -487,6 +487,7 @@ func YouTubeACallHandler(ctx *telegohandler.Context, update telego.Update) error
 							File: file,
 						},
 						Caption:   outText,
+						ParseMode: "HTML",
 						Duration:  int(callbackInfo.VideoDuration),
 						Performer: callbackInfo.VideoChannel,
 						Thumbnail: &telego.InputFile{
@@ -509,8 +510,9 @@ func YouTubeACallHandler(ctx *telegohandler.Context, update telego.Update) error
 						Media: telego.InputFile{
 							File: file,
 						},
-						Caption:  outText,
-						Duration: int(callbackInfo.VideoDuration),
+						Caption:   outText,
+						ParseMode: "HTML",
+						Duration:  int(callbackInfo.VideoDuration),
 						Thumbnail: &telego.InputFile{
 							URL: callbackInfo.VideoThumbnail,
 						},
