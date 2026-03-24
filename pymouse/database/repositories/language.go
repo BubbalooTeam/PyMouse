@@ -52,9 +52,19 @@ func updateChatLanguage(chatID int64, language string) bool {
 func GetChatLanguage(chat telego.Chat) string {
 	var chatLanguage string
 	if strings.Contains(chat.Type, telego.ChatTypePrivate) {
-		chatLanguage = FindUser(chat.ID, "").Language
+		userInfo := FindUser(chat.ID, "")
+		if userInfo != nil {
+			chatLanguage = userInfo.Language
+		} else {
+			chatLanguage = "en_us"
+		}
 	} else {
-		chatLanguage = FindChat(chat.ID).Language
+		chatInfo := FindChat(chat.ID)
+		if chatInfo != nil {
+			chatLanguage = chatInfo.Language
+		} else {
+			chatLanguage = "en_us"
+		}
 	}
 	return chatLanguage
 }
