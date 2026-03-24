@@ -44,7 +44,7 @@ func SenderAway(ctx *telegohandler.Context, bot *telego.Bot, update telego.Updat
 
 	Away := repositories.GetAway(UI.UserID)
 
-	if Away.IsAway {
+	if Away != nil && Away.IsAway {
 		bot.SendChatAction(
 			ctx,
 			&telego.SendChatActionParams{
