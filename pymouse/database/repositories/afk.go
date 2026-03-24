@@ -60,6 +60,9 @@ func GetAway(
 	UserID int64,
 ) (AI *models.AwayInformations) {
 	UI := FindUser(UserID, "")
-	AI = &UI.Away
+	AI = nil
+	if UI != nil {
+		AI = &UI.Away
+	}
 	return AI
 }
