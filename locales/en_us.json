@@ -30,6 +30,7 @@
         "go-to-pm": "Go to Private",
         "help": "👮 Help",
         "language": "🌐 Language",
+        "open-in": "Abrir em %s",
         "privacy": "🔒️ Privacy",
         "privacy-policy": "🔒️ Privacy Policy",
         "source-code": "📦️ Source Code (GitHub)"
@@ -136,6 +137,8 @@
         "getting-formats": "<b>Getting available formats. Please wait.</b>",
         "uploading": "<b>Uploading your video/music. Please wait...</b>",
         "checkers": {
+            "download-failed": "<b>Failed to download your video/music.</b>",
+            "extract-info-failed": "<b>Failed to extract video information!</b>",
             "no-args": "What is the video title, channel name, or video URL to download?",
             "excededd-limit": "You have exceeded my maximum download limit, which is 1GB for video/music. You can choose lower resolution downloads, or subscribe to one of our plans to download up to 2GB of video/music.",
             "not-for-you": "This YouTube downloader button is not for you.",

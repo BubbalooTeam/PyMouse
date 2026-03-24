@@ -30,6 +30,7 @@
         "go-to-pm": "Ir para o privado",
         "help": "👮 Ajuda",
         "language": "🌐 Idioma",
+        "open-in": "Abrir em %s",
         "privacy": "🔒️ Privacidade",
         "privacy-policy": "🔒️ Política de Privacidade",
         "source-code": "📦️ Código Fonte (GitHub)"
@@ -142,6 +143,8 @@
         "getting-formats": "<b>Obtendo os formatos disponíveis. Por favor, aguarde.</b>",
         "uploading": "<b>Enviando seu vídeo/música. Por favor, aguarde...</b>",
         "checkers": {
+            "download-failed": "<b>Falha ao fazer download do seu vídeo/música.</b>",
+            "extract-info-failed": "<b>Falha ao extrair as informações do vídeo!</b>",
             "no-args": "Qual é o título do vídeo, nome do canal ou o URL do vídeo a ser baixado?",
             "excededd-limit": "Você excedeu meu limite de download máximo, neste caso, 1GB de vídeo/música. Você pode optar por downloads em resoluções mais baixas, ou assinar um dos nossos planos para ser capaz de realizar o download de até 2GB de vídeo/música.",
             "not-for-you": "Esse botão do downloader do YouTube não é para você.",

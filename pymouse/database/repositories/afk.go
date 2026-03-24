@@ -58,8 +58,8 @@ func UnSetAway(
 
 func GetAway(
 	UserID int64,
-) (AI models.AwayInformations) {
+) (AI *models.AwayInformations) {
 	UI := FindUser(UserID, "")
-	AI = UI.Away
+	AI = &UI.Away
 	return AI
 }

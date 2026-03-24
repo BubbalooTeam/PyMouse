@@ -69,7 +69,7 @@ func CheckAway(ctx *th.Context, update telego.Update) error {
 	if message.Chat.Type != "private" {
 		UserAway := repositories.GetAway(message.From.ID)
 
-		if UserAway.IsAway {
+		if UserAway == nil || UserAway.IsAway {
 			StopAway(ctx, bot, update, l)
 			return ctx.Next(update)
 		}

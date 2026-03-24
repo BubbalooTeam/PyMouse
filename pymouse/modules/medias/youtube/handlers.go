@@ -334,7 +334,16 @@ func YouTubeACallHandler(ctx *telegohandler.Context, update telego.Update) error
 		)
 		videoInfo, err := ExtractVideoInfo(callbackInfo.VideoID)
 		if err != nil {
-			logrus.Errorf("Failed to Get Video in YouTube, please check your Proxy or YouTube-Downloader.")
+			bot.EditMessageCaption(
+				ctx,
+				&telego.EditMessageCaptionParams{
+					ChatID:    telegoutil.ID(update.CallbackQuery.Message.GetChat().ID),
+					MessageID: update.CallbackQuery.Message.GetMessageID(),
+					Caption:   l("youtube-dl.checkers.extract-info-failed"),
+					ParseMode: "HTML",
+				},
+			)
+			logrus.Errorf("Failed to extract video informations: %v", err)
 			return nil
 		}
 		ThumbnailURL := GetThumbURL(videoInfo.ID)
@@ -420,10 +429,11 @@ func YouTubeACallHandler(ctx *telegohandler.Context, update telego.Update) error
 				&telego.EditMessageCaptionParams{
 					ChatID:    telegoutil.ID(update.CallbackQuery.Message.GetChat().ID),
 					MessageID: update.CallbackQuery.Message.GetMessageID(),
-					Caption:   "Failed to download video/song...",
+					Caption:   l("youtube-dl.checkers.download-failed"),
 					ParseMode: "HTML",
 				},
 			)
+			logrus.Errorf("Failed to download video/song: %v", err)
 			return nil
 		}
 
@@ -447,6 +457,24 @@ func YouTubeACallHandler(ctx *telegohandler.Context, update telego.Update) error
 			os.Remove(filename)
 		}()
 
+		keyboard := [][]telego.InlineKeyboardButton{
+			{
+				{
+					Text: fmt.Sprintf(l("buttons.open-in"), "YouTube"),
+					URL:  fmt.Sprintf("https://youtube.com/watch?v=%s", callbackInfo.VideoID),
+				},
+			},
+		}
+		outText := fmt.Sprintf("<b><i>%s</i></b>\n\n", callbackInfo.VideoTitle)
+		outText += fmt.Sprintf(
+			l("youtube-dl.formatter.creator-of-content"),
+			callbackInfo.VideoChannel,
+		)
+		outText += fmt.Sprintf(
+			l("youtube-dl.formatter.duration-time"),
+			utils.TimeFormatter(float64(callbackInfo.VideoDuration)),
+		)
+
 		if strings.Contains(mediaType, "a") {
 			bot.EditMessageMedia(
 				ctx,
@@ -458,12 +486,15 @@ func YouTubeACallHandler(ctx *telegohandler.Context, update telego.Update) error
 						Media: telego.InputFile{
 							File: file,
 						},
-						Caption:   fmt.Sprintf("%s - %s", callbackInfo.VideoTitle, callbackInfo.VideoChannel),
+						Caption:   outText,
 						Duration:  int(callbackInfo.VideoDuration),
 						Performer: callbackInfo.VideoChannel,
 						Thumbnail: &telego.InputFile{
 							URL: callbackInfo.VideoThumbnail,
 						},
+					},
+					ReplyMarkup: &telego.InlineKeyboardMarkup{
+						InlineKeyboard: keyboard,
 					},
 				},
 			)
@@ -478,11 +509,14 @@ func YouTubeACallHandler(ctx *telegohandler.Context, update telego.Update) error
 						Media: telego.InputFile{
 							File: file,
 						},
-						Caption:  fmt.Sprintf("%s - %s", callbackInfo.VideoTitle, callbackInfo.VideoChannel),
+						Caption:  outText,
 						Duration: int(callbackInfo.VideoDuration),
 						Thumbnail: &telego.InputFile{
 							URL: callbackInfo.VideoThumbnail,
 						},
+					},
+					ReplyMarkup: &telego.InlineKeyboardMarkup{
+						InlineKeyboard: keyboard,
 					},
 				},
 			)
