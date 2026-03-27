@@ -12,9 +12,12 @@ import (
 func FindUser(UserID int64, UserName string) (UI *models.UsersInformations) {
 	var Filter bson.M
 
-	dftUser := &models.UsersInformations{
+	defaultUser := &models.UsersInformations{
 		UserID:   UserID,
 		UserName: UserName,
+		Away: models.AwayInformations{
+			IsAway: false,
+		},
 	}
 
 	UsersCollection := database.NewMongoCollection("users")
@@ -32,7 +35,7 @@ func FindUser(UserID int64, UserName string) (UI *models.UsersInformations) {
 		UI = nil
 	} else if err != nil {
 		logrus.Error(err)
-		UI = dftUser
+		UI = defaultUser
 	}
 
 	return UI

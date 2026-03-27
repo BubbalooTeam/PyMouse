@@ -11,7 +11,7 @@ import (
 
 func FindChat(ChatID int64) (CI *models.ChatsInformations) {
 	ChatsCollection := database.NewMongoCollection("chats")
-	dftChat := &models.ChatsInformations{
+	defaultChat := &models.ChatsInformations{
 		ChatID: ChatID,
 	}
 	err := ChatsCollection.FindOne(bson.M{"chat_id": ChatID}).Decode(&CI)
@@ -19,7 +19,7 @@ func FindChat(ChatID int64) (CI *models.ChatsInformations) {
 		CI = nil
 	} else if err != nil {
 		logrus.Error(err)
-		CI = dftChat
+		CI = defaultChat
 	}
 	return CI
 }
