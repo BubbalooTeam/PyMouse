@@ -15,9 +15,6 @@ func FindUser(UserID int64, UserName string) (UI *models.UsersInformations) {
 	defaultUser := &models.UsersInformations{
 		UserID:   UserID,
 		UserName: UserName,
-		Away: models.AwayInformations{
-			IsAway: false,
-		},
 	}
 
 	UsersCollection := database.NewMongoCollection("users")
@@ -56,9 +53,6 @@ func UpdateUser(UserID int64, UserName string, FirstName string) {
 			UserID:    UserID,
 			UserName:  UserName,
 			FirstName: FirstName,
-			Away: models.AwayInformations{
-				IsAway: false,
-			},
 		}
 	}
 	err := UsersCollection.UpdateOne(bson.M{"user_id": UserID}, UI)
