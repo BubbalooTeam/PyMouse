@@ -64,7 +64,7 @@ func Translate(ctx *telegohandler.Context, update telego.Update) error {
 		&telego.EditMessageTextParams{
 			ChatID:    telegoutil.ID(update.Message.Chat.ID),
 			MessageID: msg.MessageID,
-			Text:      fmt.Sprintf("<b>%s -> %s</b>\n\n<code>%s</code>", translated.From.Language.Iso, targetLang, translated.Text),
+			Text:      fmt.Sprintf("<b>%s -> %s</b>\n<blockquote><code>%s</code></blockquote>", translated.From.Language.Iso, targetLang, translated.Text),
 			ParseMode: "HTML",
 		},
 	)
