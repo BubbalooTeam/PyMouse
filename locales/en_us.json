@@ -95,6 +95,7 @@
             "miscellaneous": {
                 "miscellaneous": "The Miscellaneous module includes a variety of useful features that don't fit into other specific categories. It contains tools and resources to enhance your experience with the bot, providing practical solutions for different needs.",
                 "gsmarena": "The GSMArena module allows you to access detailed information about a wide range of mobile devices. You can search for specifications, features, and reviews of smartphones directly in the chat, making it easier to compare and choose the ideal device for you.\n\n<b>Main commands:</b>\n- /d [device model]: Searches for information about the specified mobile device using data provided by the GSMArena database.",
+                "translator": "The Translator module allows you to translate text between different languages directly in the chat. You can specify the target language and the text you want to translate, and the bot will provide you with the translated version, making communication easier across language barriers.\n\n<b>Main commands:</b>\n- /tr [target language (optional)] [text]: Translates the provided text into the specified target language. If no target language is specified, it will be translated to English by default.",
                 "weather": "The Weather module provides up-to-date weather information for any desired location. You can get weather forecasts, current conditions, and other relevant data directly in the chat, helping you plan your day better.\n\n<b>Main commands:</b>\n- /weather | /clima [location]: Gets the current weather conditions and forecast for the specified location."
             } 
         },
@@ -110,6 +111,7 @@
             "miscellaneous": {
                 "miscellaneous": "Miscellaneous",
                 "gsmarena": "GSMArena",
+                "translator": "Translator",
                 "weather": "Weather"
             }
         }
@@ -119,6 +121,12 @@
         "privacy-text": "<b>%s Privacy Policy:</b>\n\n<i>This bot was designed and created to ensure your safety and privacy.\nThank you for your trust, our organization values the protection of your data, in addition, we value quality.</i>\n\n<b><i>Click the button below to check out the regulation issued by Telegram, used by this bot.</i></b>",
         "start-private": "Hello <b>%s</b>, I'am <b>%s</b>. A robot with cool and fun functions for your chat. Click the buttons below to learn more about me.",
         "start-group": "<b>Hello! My name is %s!</b>"
+    },
+    "translator": {
+        "translating": "<b>Translating your text. Please wait...</b>",
+        "checkers": {
+            "translator-text-not-provided": "<b>The text to be translated was not provided to me.</b>\n\n<b>Usage:</b> <code>/tr (target language[optional]) Hello, how are you?</code>"
+        }
     },
     "weather": {
         "language": "en",

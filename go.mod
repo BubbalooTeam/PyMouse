@@ -15,8 +15,19 @@ require (
 
 require (
 	github.com/ProtonMail/go-crypto v1.4.1 // indirect
+	github.com/abadojack/whatlanggo v1.0.1 // indirect
 	github.com/cloudflare/circl v1.6.3 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
+	github.com/icholy/digest v1.1.0 // indirect
+	github.com/imroc/req/v3 v3.57.0 // indirect
+	github.com/quic-go/qpack v0.6.0 // indirect
+	github.com/quic-go/quic-go v0.57.1 // indirect
+	github.com/refraction-networking/utls v1.8.1 // indirect
+	github.com/tidwall/gjson v1.18.0 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/ulikunitz/xz v0.5.15 // indirect
+	gopkg.gilang.dev/translator/v2 v2.0.0 // indirect
 )
 
 require (
