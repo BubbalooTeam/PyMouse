@@ -125,6 +125,7 @@
     "translator": {
         "translating": "<b>Translating your text. Please wait...</b>",
         "checkers": {
+            "translator-failed": "<b>Failed to translate your text.</b>",
             "translator-text-not-provided": "<b>The text to be translated was not provided to me.</b>\n\n<b>Usage:</b> <code>/tr (target language[optional]) Hello, how are you?</code>"
         }
     },

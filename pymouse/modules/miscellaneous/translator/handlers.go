@@ -15,10 +15,28 @@ import (
 )
 
 func Translate(ctx *telegohandler.Context, update telego.Update) error {
+	var text string
 	bot := ctx.Bot()
 	l := i18n.Locale(update.Message.Chat)
 
-	text := utils.GetArgs(update)
+	args := utils.GetArgs(update)
+
+	if update.Message.ReplyToMessage != nil {
+		replyText := update.Message.ReplyToMessage.Text
+
+		if replyText == "" {
+			replyText = update.Message.ReplyToMessage.Caption
+		}
+
+		if args != "" {
+			text = args + " " + replyText
+		} else {
+			text = replyText
+		}
+	} else {
+		text = args
+	}
+
 	targetLang := getTranslatorLanguage(text, update.Message.Chat)
 	if strings.HasPrefix(text, targetLang) {
 		text = strings.TrimSpace(strings.Replace(text, targetLang, "", 1))
@@ -55,8 +73,36 @@ func Translate(ctx *telegohandler.Context, update telego.Update) error {
 		targetLang,
 	)
 	if err != nil {
+		bot.EditMessageText(
+			ctx,
+			&telego.EditMessageTextParams{
+				ChatID:    telegoutil.ID(update.Message.Chat.ID),
+				Text:      l("translator.checkers.translator-failed"),
+				ParseMode: "HTML",
+			},
+		)
 		logrus.Errorf("failed to translate text: %v", err)
 		return nil
+	}
+	if translated.From.Language.Iso == targetLang && translated.From.Language.Iso != "en" {
+		targetLang = "en"
+		translated, err = gt.Translate(
+			context.Background(),
+			text,
+			targetLang,
+		)
+		if err != nil {
+			bot.EditMessageText(
+				ctx,
+				&telego.EditMessageTextParams{
+					ChatID:    telegoutil.ID(update.Message.Chat.ID),
+					Text:      l("translator.checkers.translator-failed"),
+					ParseMode: "HTML",
+				},
+			)
+			logrus.Errorf("failed to translate text: %v", err)
+			return nil
+		}
 	}
 
 	bot.EditMessageText(

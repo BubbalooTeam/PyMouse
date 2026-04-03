@@ -131,6 +131,7 @@
     "translator": {
         "translating": "<b>Traduzindo seu texto. Por favor, aguarde...</b>",
         "checkers": {
+            "translator-failed": "<b>Falha ao traduzir seu texto.</b>",
             "translator-text-not-provided": "<b>O texto a ser traduzido não foi fornecido para mim.</b>\n\n<b>Uso:</b> <code>/tr (idioma de destino[opcional]) Olá, como vai você?</code>"
         }
     },
