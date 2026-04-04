@@ -77,6 +77,7 @@ func Translate(ctx *telegohandler.Context, update telego.Update) error {
 			ctx,
 			&telego.EditMessageTextParams{
 				ChatID:    telegoutil.ID(update.Message.Chat.ID),
+				MessageID: msg.MessageID,
 				Text:      l("translator.checkers.translator-failed"),
 				ParseMode: "HTML",
 			},
@@ -96,6 +97,7 @@ func Translate(ctx *telegohandler.Context, update telego.Update) error {
 				ctx,
 				&telego.EditMessageTextParams{
 					ChatID:    telegoutil.ID(update.Message.Chat.ID),
+					MessageID: msg.MessageID,
 					Text:      l("translator.checkers.translator-failed"),
 					ParseMode: "HTML",
 				},
