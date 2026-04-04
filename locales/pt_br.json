@@ -95,7 +95,7 @@
             "miscellaneous": {
                 "miscellaneous": "O módulo Diversos reúne várias funcionalidades úteis que não se encaixam em outras categorias específicas. Ele inclui ferramentas e recursos variados que podem melhorar sua experiência com o bot, oferecendo soluções práticas para diferentes necessidades.",
                 "gsmarena": "O módulo GSMArena permite que você acesse informações detalhadas sobre uma ampla variedade de dispositivos móveis. Você pode pesquisar especificações, recursos e análises de smartphones diretamente no chat, facilitando a comparação e a escolha do dispositivo ideal para você.\n\n<b>Comandos principais:</b>\n- /d [modelo do dispositivo]: Pesquisa informações sobre o dispositivo móvel especificado usando informações fornecidas pelo banco de dados do GSMArena.",
-                "translator": "O módulo Tradutor permite que você traduza textos para diferentes idiomas diretamente no chat. Com suporte a uma ampla variedade de idiomas, você pode facilmente obter traduções precisas e rápidas para se comunicar com pessoas de diferentes partes do mundo ou entender conteúdos em idiomas estrangeiros.\n\n<b>Comandos principais:</b>\n- /tr (idioma de destino[opcional]) [texto]: Traduz o texto fornecido para o idioma de destino especificado. Se nenhum idioma de destino for fornecido, o bot traduzirá para o idioma nativo do chat.",
+                "translator": "O módulo Tradutor permite que você traduza textos para diferentes idiomas diretamente no chat. Com suporte a uma ampla variedade de idiomas, você pode facilmente obter traduções precisas e rápidas para se comunicar com pessoas de diferentes partes do mundo ou entender conteúdos em idiomas estrangeiros.\n\n<b>Comandos principais:</b>\n- /tr [código do idioma / PEP 639-1] [texto]: Traduz o texto fornecido para o idioma de destino especificado. Se nenhum idioma de destino for fornecido, o bot traduzirá para o idioma nativo do chat. Você também pode usar este comando respondendo a uma mensagem, e o texto da mensagem respondida será traduzido para o idioma de destino especificado ou para o idioma nativo do chat, caso nenhum idioma de destino seja fornecido.",
                 "weather": "O módulo Clima fornece informações meteorológicas atualizadas para qualquer localização desejada. Você pode obter previsões do tempo, condições atuais e outros dados relevantes diretamente no chat, ajudando você a se planejar melhor para o dia.\n\n<b>Comandos principais:</b>\n- /weather | /clima [localização]: Obtém as condições climáticas atuais e a previsão para a localização especificada."
             },
             "stickers": {
@@ -132,7 +132,7 @@
         "translating": "<b>Traduzindo seu texto. Por favor, aguarde...</b>",
         "checkers": {
             "translator-failed": "<b>Falha ao traduzir seu texto.</b>",
-            "translator-text-not-provided": "<b>O texto a ser traduzido não foi fornecido para mim.</b>\n\n<b>Uso:</b> <code>/tr (idioma de destino[opcional]) Olá, como vai você?</code>"
+            "translator-text-not-provided": "<b>O texto a ser traduzido não foi fornecido para mim.</b>\n\n<b>Uso:</b> <code>/tr (código do idioma / PEP 639-1) Olá, como vai você?</code>"
         }
     },
     "weather": {

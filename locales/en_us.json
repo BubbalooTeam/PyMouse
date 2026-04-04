@@ -95,7 +95,7 @@
             "miscellaneous": {
                 "miscellaneous": "The Miscellaneous module includes a variety of useful features that don't fit into other specific categories. It contains tools and resources to enhance your experience with the bot, providing practical solutions for different needs.",
                 "gsmarena": "The GSMArena module allows you to access detailed information about a wide range of mobile devices. You can search for specifications, features, and reviews of smartphones directly in the chat, making it easier to compare and choose the ideal device for you.\n\n<b>Main commands:</b>\n- /d [device model]: Searches for information about the specified mobile device using data provided by the GSMArena database.",
-                "translator": "The Translator module allows you to translate text between different languages directly in the chat. You can specify the target language and the text you want to translate, and the bot will provide you with the translated version, making communication easier across language barriers.\n\n<b>Main commands:</b>\n- /tr [target language (optional)] [text]: Translates the provided text into the specified target language. If no target language is specified, it will be translated to English by default.",
+                "translator": "The Translator module allows you to translate text between different languages directly in the chat. You can specify the target language and the text you want to translate, and the bot will provide you with the translated version, making communication easier across language barriers.\n\n<b>Main commands:</b>\n- /tr [language code / PEP 639-1] [text]: Translates the provided text into the specified target language. If no target language is specified, it will be translated to English by default. You can use this command by replying to a message, and the text of the replied message will be translated into the specified target language or the native language of the chat if no target language is provided.",
                 "weather": "The Weather module provides up-to-date weather information for any desired location. You can get weather forecasts, current conditions, and other relevant data directly in the chat, helping you plan your day better.\n\n<b>Main commands:</b>\n- /weather | /clima [location]: Gets the current weather conditions and forecast for the specified location."
             } 
         },
@@ -126,7 +126,7 @@
         "translating": "<b>Translating your text. Please wait...</b>",
         "checkers": {
             "translator-failed": "<b>Failed to translate your text.</b>",
-            "translator-text-not-provided": "<b>The text to be translated was not provided to me.</b>\n\n<b>Usage:</b> <code>/tr (target language[optional]) Hello, how are you?</code>"
+            "translator-text-not-provided": "<b>The text to be translated was not provided to me.</b>\n\n<b>Usage:</b> <code>/tr (language code / PEP 639-1) Hello, how are you?</code>"
         }
     },
     "weather": {
