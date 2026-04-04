@@ -3,6 +3,7 @@ package youtube
 import (
 	"fmt"
 	"os"
+	"pymouse/pymouse/config"
 	"pymouse/pymouse/helpers/i18n"
 	"pymouse/pymouse/helpers/telegram"
 	"pymouse/pymouse/helpers/utils"
@@ -393,6 +394,12 @@ func YouTubeACallHandler(ctx *telegohandler.Context, update telego.Update) error
 		)
 		return nil
 	case "dl":
+		var maxFilesize int64
+		if config.TelegramAPIURL == "" || config.TelegramAPIURL == "https://api.telegram.org" {
+			maxFilesize = 25 * 1024 * 1024 // 25MB
+		} else {
+			maxFilesize = 1024 * 1024 * 1024 // 1GB
+		}
 		formatID, err := strconv.Atoi(callbackData[3])
 		if err != nil {
 			logrus.Error("failed to extract [formatID] information from callbackData.")
@@ -406,6 +413,31 @@ func YouTubeACallHandler(ctx *telegohandler.Context, update telego.Update) error
 				&telego.AnswerCallbackQueryParams{
 					CallbackQueryID: update.CallbackQuery.ID,
 					Text:            l("youtube-dl.checkers.video-cache-not-found"),
+					ShowAlert:       true,
+					CacheTime:       3,
+				},
+			)
+			return nil
+		}
+		formatFilesize, found := callbackInfo.Formats[fmt.Sprint(formatID)][fmt.Sprint(formatID)]
+		if !found {
+			bot.AnswerCallbackQuery(
+				ctx,
+				&telego.AnswerCallbackQueryParams{
+					CallbackQueryID: update.CallbackQuery.ID,
+					Text:            l("youtube-dl.checkers.format-unavalaible"),
+					ShowAlert:       true,
+					CacheTime:       3,
+				},
+			)
+			return nil
+		}
+		if formatFilesize >= maxFilesize {
+			bot.AnswerCallbackQuery(
+				ctx,
+				&telego.AnswerCallbackQueryParams{
+					CallbackQueryID: update.CallbackQuery.ID,
+					Text:            fmt.Sprintf(l("youtube-dl.checkers.exceded-limit"), utils.HumanBytes(maxFilesize)),
 					ShowAlert:       true,
 					CacheTime:       3,
 				},
