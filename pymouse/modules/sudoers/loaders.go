@@ -9,5 +9,11 @@ import (
 )
 
 func LoadModules(bS *client.BotStruct) {
-	bS.Handler.Handle(speedtst.SpeedTestMessage, telegohandler.And(telegram.Command("speedtest"), telegram.IsDeveloper()))
+	bS.Handler.Handle(
+		speedtst.SpeedTestMessage,
+		telegohandler.And(
+			telegram.Command("speedtest", bS.Client.Username()),
+			telegram.IsDeveloper(),
+		),
+	)
 }

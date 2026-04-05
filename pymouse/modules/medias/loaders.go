@@ -12,7 +12,7 @@ import (
 
 func LoadModule(bS *client.BotStruct) {
 	middlewares.Help.RegisterHelp("Medias", middlewares.Help.WithSubmodules("YouTube"))
-	bS.Handler.Handle(youtube.YouTubeDLHandler, telegram.Command("ytdl"))
+	bS.Handler.Handle(youtube.YouTubeDLHandler, telegram.Command("ytdl", bS.Client.Username()))
 	bS.Handler.Handle(youtube.YouTubeScrollCallbackHandler, telegohandler.CallbackDataMatches(regexp.MustCompile(`YouTubeScroll\|(.*)$`)))
 	bS.Handler.Handle(youtube.YouTubeACallHandler, telegohandler.CallbackDataMatches(regexp.MustCompile(`yt\|(.*)$`)))
 }

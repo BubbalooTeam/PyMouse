@@ -12,7 +12,7 @@ import (
 func LoadModule(bS *client.BotStruct) {
 	middlewares.Help.RegisterHelp("AFK")
 	bS.Handler.Handle(SetAway, telegohandler.Or(
-		telegram.Command("afk"),
+		telegram.Command("afk", bS.Client.Username()),
 		telegohandler.TextMatches(regexp.MustCompile(`^(?:brb)(\s.+)?`)),
 	),
 	)
