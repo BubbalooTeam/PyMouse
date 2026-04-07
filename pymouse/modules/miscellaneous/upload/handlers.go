@@ -83,7 +83,8 @@ func Upload(ctx *telegohandler.Context, update telego.Update) error {
 			Document: telego.InputFile{
 				File: file,
 			},
-			Caption: fmt.Sprintf("<b>Time:</b> <code>%s</code>", utils.TimeFormatter(time.Until(now).Abs().Seconds())),
+			Caption:   fmt.Sprintf("<b>Time:</b> <code>%s</code>", utils.TimeFormatter(time.Until(now).Abs().Seconds())),
+			ParseMode: "HTML",
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
 			},
