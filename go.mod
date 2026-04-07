@@ -4,6 +4,7 @@ go 1.25.7
 
 require (
 	github.com/PuerkitoBio/goquery v1.12.0
+	github.com/cavaliergopher/grab/v3 v3.0.1
 	github.com/joho/godotenv v1.5.1
 	github.com/mymmrac/telego v1.8.0
 	github.com/raitonoberu/ytsearch v0.2.0

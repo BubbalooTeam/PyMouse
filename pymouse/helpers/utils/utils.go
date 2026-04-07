@@ -132,3 +132,12 @@ func MatchByGroup(RegexBase *regexp.Regexp, Text string, Group string) string {
 func StripHTML(text string) string {
 	return htmlTag.ReplaceAllString(text, "")
 }
+
+func StringInSlice(str string, list []string) bool {
+	for _, v := range list {
+		if v == str {
+			return true
+		}
+	}
+	return false
+}
