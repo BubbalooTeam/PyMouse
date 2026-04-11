@@ -62,7 +62,10 @@ func downloadByURL(url string) (string, error) {
 		ext = strings.ToLower(path.Ext(lowerURL))
 	}
 
-	validExt := utils.StringInSlice(ext, allowedExtensions) || ext == ".tar.gz"
+	if !utils.StringInSlice(ext, allowedExtensions) && ext != ".tar.gz" {
+		return "", fmt.Errorf("extension not allowed: %s", ext)
+	}
+
 	req, err := grab.NewRequest(config.DownloadPath, url)
 	if err != nil {
 		return "", err
@@ -70,16 +73,15 @@ func downloadByURL(url string) (string, error) {
 
 	resp := client.Do(req)
 
-	if !validExt {
-		contentType := resp.HTTPResponse.Header.Get("Content-Type")
+	contentType := resp.HTTPResponse.Header.Get("Content-Type")
 
-		if !isAllowedMime(contentType) {
-			return "", fmt.Errorf("invalid file type (ext + mime)")
-		}
+	if !isAllowedMime(contentType) {
+		return "", fmt.Errorf("mime type not allowed: %s", contentType)
 	}
 
 	if err := resp.Err(); err != nil {
 		return "", err
 	}
+
 	return resp.Filename, nil
 }

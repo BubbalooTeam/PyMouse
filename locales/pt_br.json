@@ -96,7 +96,8 @@
                 "miscellaneous": "O módulo Diversos reúne várias funcionalidades úteis que não se encaixam em outras categorias específicas. Ele inclui ferramentas e recursos variados que podem melhorar sua experiência com o bot, oferecendo soluções práticas para diferentes necessidades.",
                 "gsmarena": "O módulo GSMArena permite que você acesse informações detalhadas sobre uma ampla variedade de dispositivos móveis. Você pode pesquisar especificações, recursos e análises de smartphones diretamente no chat, facilitando a comparação e a escolha do dispositivo ideal para você.\n\n<b>Comandos principais:</b>\n- /d [modelo do dispositivo]: Pesquisa informações sobre o dispositivo móvel especificado usando informações fornecidas pelo banco de dados do GSMArena.",
                 "translator": "O módulo Tradutor permite que você traduza textos para diferentes idiomas diretamente no chat. Com suporte a uma ampla variedade de idiomas, você pode facilmente obter traduções precisas e rápidas para se comunicar com pessoas de diferentes partes do mundo ou entender conteúdos em idiomas estrangeiros.\n\n<b>Comandos principais:</b>\n- /tr [código do idioma / PEP 639-1] [texto]: Traduz o texto fornecido para o idioma de destino especificado. Se nenhum idioma de destino for fornecido, o bot traduzirá para o idioma nativo do chat.\n• Você também pode usar este comando respondendo a uma mensagem, e o texto da mensagem respondida será traduzido para o idioma de destino especificado ou para o idioma nativo do chat, caso nenhum idioma de destino seja fornecido.",
-                "weather": "O módulo Clima fornece informações meteorológicas atualizadas para qualquer localização desejada. Você pode obter previsões do tempo, condições atuais e outros dados relevantes diretamente no chat, ajudando você a se planejar melhor para o dia.\n\n<b>Comandos principais:</b>\n- /weather | /clima [localização]: Obtém as condições climáticas atuais e a previsão para a localização especificada."
+                "weather": "O módulo Clima fornece informações meteorológicas atualizadas para qualquer localização desejada. Você pode obter previsões do tempo, condições atuais e outros dados relevantes diretamente no chat, ajudando você a se planejar melhor para o dia.\n\n<b>Comandos principais:</b>\n- /weather | /clima [localização]: Obtém as condições climáticas atuais e a previsão para a localização especificada.",
+                "upload": "O módulo Upload permite que você envie arquivos para o chat usando uma URL direta. Com um simples comando, você pode solicitar o upload de qualquer arquivo disponível online, e o bot cuidará do processo de download e envio do arquivo para você diretamente no chat.\n\n<b>Comandos principais:</b>\n- /upload [URL direta do arquivo]: Baixa o arquivo da URL fornecida e o envia para o chat em formato de documento."
             },
             "stickers": {
                 "stickers": "O módulo de Adesivos permite que você crie, gerencie e compartilhe pacotes de adesivos personalizados diretamente no chat. Você pode adicionar adesivos aos seus pacotes com facilidade, tornando suas conversas mais divertidas e expressivas.\n\n<b>Comandos principais:</b>\n- /getsticker: Obtém o arquivo e informações básicas do adesivo respondido.\n- /kang: Rouba o adesivo de uma mensagem respondida e o adiciona ao seu pacote de adesivos."
@@ -115,7 +116,8 @@
                 "miscellaneous": "Diversos",
                 "gsmarena": "GSMArena",
                 "translator": "Tradutor",
-                "weather": "Clima"
+                "weather": "Clima",
+                "upload": "Upload"
             },
             "stickers": {
                 "stickers": "Adesivos"
@@ -133,6 +135,15 @@
         "checkers": {
             "translator-failed": "<b>Falha ao traduzir seu texto.</b>",
             "translator-text-not-provided": "<b>O texto a ser traduzido não foi fornecido para mim.</b>\n\n<b>Uso:</b> <code>/tr (código do idioma / PEP 639-1) Olá, como vai você?</code>"
+        }
+    },
+    "upload": {
+        "downloading": "<b>Realizando o download do seu arquivo. Por favor, aguarde...</b>",
+        "uploading": "<b>Enviando seu arquivo. Por favor, aguarde...</b>",
+        "uploaded": "<b>Documento enviado com sucesso!</b>\n<b>Tempo:</b> <code>%s</code>",
+        "checkers": {
+            "download-failed": "<b>Falha ao fazer download do seu arquivo:</b> <blockquote>%v</blockquote>",
+            "url-not-provided": "<b>A URL direta do arquivo não foi fornecida para mim.</b>\n\n<b>Uso:</b> <code>/upload https://example.com/file.jpg</code>"
         }
     },
     "weather": {

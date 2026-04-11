@@ -14,7 +14,7 @@ import (
 )
 
 func LoadModule(bS *client.BotStruct) {
-	middlewares.Help.RegisterHelp("Miscellaneous", middlewares.Help.WithSubmodules("GSMArena", "Translator", "Weather"))
+	middlewares.Help.RegisterHelp("Miscellaneous", middlewares.Help.WithSubmodules("GSMArena", "Translator", "Upload", "Weather"))
 	// GSMArena Handlers
 	bS.Handler.Handle(gsmarena.DeviceSearch, telegram.Command("d", bS.Client.Username()))
 	bS.Handler.Handle(gsmarena.DeviceSearchPagination, th.CallbackDataMatches(regexp.MustCompile(`^gsm_page\|(.*)$`)))
