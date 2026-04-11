@@ -66,7 +66,7 @@ func downloadByURL(url string) (string, error) {
 		return "", fmt.Errorf("extension not allowed: %s", ext)
 	}
 
-	req, err := grab.NewRequest(config.DownloadPath, url)
+	req, err := grab.NewRequest(fmt.Sprintf("%s/%s", config.DownloadPath, "uploads"), url)
 	if err != nil {
 		return "", err
 	}
