@@ -2,6 +2,7 @@ package upload
 
 import (
 	"fmt"
+	"os"
 	"path"
 	"pymouse/pymouse/config"
 	"pymouse/pymouse/helpers/utils"
@@ -31,6 +32,7 @@ func isAllowedMime(mime string) bool {
 
 func downloadByURL(url string) (string, error) {
 	client := grab.NewClient()
+	pathBase := fmt.Sprintf("%s/%s", config.DownloadPath, "uploads")
 
 	allowedExtensions := []string{
 		".jpg", ".jpeg", ".png", ".gif",
@@ -66,7 +68,14 @@ func downloadByURL(url string) (string, error) {
 		return "", fmt.Errorf("extension not allowed: %s", ext)
 	}
 
-	req, err := grab.NewRequest(fmt.Sprintf("%s/%s", config.DownloadPath, "uploads"), url)
+	if _, err := os.Stat(pathBase); os.IsNotExist(err) {
+		err := os.MkdirAll(pathBase, 0755)
+		if err != nil {
+			return "", fmt.Errorf("failed to create upload directory: %w", err)
+		}
+	}
+
+	req, err := grab.NewRequest(pathBase, url)
 	if err != nil {
 		return "", err
 	}
