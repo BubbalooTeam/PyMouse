@@ -1,4 +1,4 @@
-package whatis
+package devices
 
 import (
 	"fmt"
@@ -24,6 +24,9 @@ func WhatIs(ctx *telegohandler.Context, update telego.Update) error {
 				ChatID:    telegoutil.ID(update.Message.Chat.ID),
 				Text:      l("android.whatis.checkers.device-not-provided"),
 				ParseMode: "HTML",
+				ReplyParameters: &telego.ReplyParameters{
+					MessageID: update.Message.MessageID,
+				},
 			},
 		)
 		return nil
@@ -37,6 +40,9 @@ func WhatIs(ctx *telegohandler.Context, update telego.Update) error {
 				ChatID:    telegoutil.ID(update.Message.Chat.ID),
 				Text:      l("android.whatis.checkers.device-not-found"),
 				ParseMode: "HTML",
+				ReplyParameters: &telego.ReplyParameters{
+					MessageID: update.Message.MessageID,
+				},
 			},
 		)
 		return nil
@@ -58,6 +64,9 @@ func WhatIs(ctx *telegohandler.Context, update telego.Update) error {
 				modelText,
 			),
 			ParseMode: "HTML",
+			ReplyParameters: &telego.ReplyParameters{
+				MessageID: update.Message.MessageID,
+			},
 		},
 	)
 	return nil

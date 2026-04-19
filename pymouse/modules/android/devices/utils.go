@@ -1,4 +1,4 @@
-package whatis
+package devices
 
 import (
 	"encoding/json"
