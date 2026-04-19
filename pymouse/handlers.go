@@ -3,6 +3,7 @@ package pymouse
 import (
 	"pymouse/pymouse/client"
 	"pymouse/pymouse/modules/afk"
+	"pymouse/pymouse/modules/android"
 	"pymouse/pymouse/modules/checkers"
 	"pymouse/pymouse/modules/medias"
 	"pymouse/pymouse/modules/miscellaneous"
@@ -20,6 +21,7 @@ var (
 	packageLoadersMutex sync.Mutex
 	packageLoaders      = map[string]func(*client.BotStruct){
 		"afk":           afk.LoadModule,
+		"android":       android.LoadModule,
 		"checkers":      checkers.LoadModule,
 		"medias":        medias.LoadModule,
 		"miscellaneous": miscellaneous.LoadModule,

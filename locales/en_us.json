@@ -50,6 +50,15 @@
         "afk-response": "<b><i>%s</i> is away!</b>",
         "afk-back": "<b><i>%s</i> is back!</b>"
     },
+    "android": {
+        "whatis": {
+            "device-info": "<code>%s</code> is <b>%s %s%s.</b>",
+            "checkers": {
+                "device-not-found": "<b>No device found with this codename.</b>",
+                "device-not-provided": "<b>The device codename was not provided to me.</b>\n\n<b>Usage:</b> <code>/whatis SM-N960F</code>"
+            }
+        }
+    },
     "gsmarena": {
         "phone-formatter": {
             "status": "Status",
@@ -87,6 +96,9 @@
             "afk": {
                 "afk": "With the AFK module, you can set your status to 'Away' to inform others that you are not available at the moment. When someone mentions you or sends a direct message, the bot will automatically respond with your customized AFK message. You can also set a reason for your absence, and the bot will inform when you are back.\n\n<b>Main commands:</b>\n- /afk [reason]: Sets your status to AFK with an optional reason."
             },
+            "android": {
+                "android": "The Android module provides information about various Android devices based on their codenames. You can search for a device using its codename, and the bot will return details such as the brand, model, and codename of the device. This module is useful for quickly identifying and learning more about different Android devices.\n\n<b>Main commands:</b>\n- /whatis [device codename or model]: Retrieves information about the specified Android device based on its codename."
+            },
             "medias": {
                 "medias": "The Medias module allows you to download videos and music from various popular platforms such as YouTube and TikTok. Easily, you can request the download of multimedia content directly in the chat. The bot will take care of the download process and send the file to you as soon as it's ready.",
                 "youtube": "The YouTube module allows you to download videos and music directly from YouTube. With a simple command, you can request the download of any video or music available on the platform.\n\n<b>Main commands:</b>\n- /ytdl [video URL or title]: Downloads the YouTube video or music based on the provided URL or title, and in the chosen quality.",
@@ -103,6 +115,9 @@
         "titles": {
             "afk": {
                 "afk": "AFK"
+            },
+            "android": {
+                "android": "Android"
             },
             "medias": {
                 "medias": "Medias",

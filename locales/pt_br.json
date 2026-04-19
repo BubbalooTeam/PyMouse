@@ -50,6 +50,15 @@
         "afk-response": "<b><i>%s</i> está ausente!</b>",
         "afk-back": "<b><i>%s</i> voltou!</b>"
     },
+    "android": {
+        "whatis": {
+            "device-info": "<code>%s</code> é <b>%s %s%s.</b>",
+            "checkers": {
+                "device-not-found": "<b>Nenhum dispositivo com este codinome foi encontrado.</b>",
+                "device-not-provided": "<b>O modelo do dispositivo não foi fornecido para mim.</b>\n\n<b>Uso:</b> <code>/whatis SM-N960F</code>"
+            }
+        }
+    },
     "gsmarena": {
         "phone-formatter": {
             "status": "Situação",
@@ -87,6 +96,9 @@
             "afk": {
                 "afk": "Com o módulo AFK, você pode definir seu status como 'Ausente' para informar aos outros que você não está disponível no momento. Quando alguém mencionar você ou enviar uma mensagem direta, o bot responderá automaticamente com sua mensagem AFK personalizada. Você também pode definir um motivo para sua ausência e o bot informará quando você estiver de volta.\n\n<b>Comandos principais:</b>\n- /afk [motivo]: Define seu status como AFK com um motivo opcional." 
             },
+            "android": {
+                "android": "O módulo Android oferece informações detalhadas sobre dispositivos Android. Você pode obter dados como fabricante, modelo e codinome de um dispositivo específico usando seu comando dedicado. Basta fornecer o modelo do dispositivo, e o bot retornará as informações relevantes para você.\n\n<b>Comandos principais:</b>\n- /whatis [codinome ou modelo]: Obtém informações sobre o dispositivo Android especificado, incluindo fabricante, modelo e codinome."
+            },
             "medias": {
                 "medias": "O módulo de Mídias permite que você baixe vídeos e músicas de várias plataformas populares, como YouTube e TikTok. Facilmente, você pode solicitar o download de conteúdo multimídia diretamente no chat. O bot cuidará do processo de download e enviará o arquivo para você assim que estiver pronto.",
                 "youtube": "O módulo YouTube permite que você baixe vídeos e músicas diretamente do YouTube. Com um simples comando, você pode solicitar o download de qualquer vídeo ou música disponível na plataforma.\n\n<b>Comandos principais:</b>\n- /ytdl [URL ou título do vídeo]: Baixa o vídeo ou música do YouTube com base na URL ou título fornecido, e na qualidade escolhida.",
@@ -106,6 +118,9 @@
         "titles": {
             "afk": {
                 "afk": "AFK"
+            },
+            "android": {
+                "android": "Android"
             },
             "medias": {
                 "medias": "Mídias",
