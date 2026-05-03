@@ -53,9 +53,11 @@
     "android": {
         "whatis": {
             "device-info": "<code>%s</code> is <b>%s %s%s.</b>",
+            "device-variants": "<b>Here are all the variants of the codename <code>%s</code>:\n\n%s</b>",
             "checkers": {
                 "device-not-found": "<b>No device found with this codename.</b>",
-                "device-not-provided": "<b>The device codename was not provided to me.</b>\n\n<b>Usage:</b> <code>/whatis SM-N960F</code>"
+                "device-not-provided": "<b>The device codename was not provided to me.</b>\n\n<b>Usage:</b> <code>/whatis SM-N960F</code>",
+                "variants-not-supported": "<b>Sorry, but the variants command is not meant to be used with device models.</b>\n\n<b>Correct usage:</b> <code>/whatis %s</code>"
             }
         }
     },
@@ -97,7 +99,7 @@
                 "afk": "With the AFK module, you can set your status to 'Away' to inform others that you are not available at the moment. When someone mentions you or sends a direct message, the bot will automatically respond with your customized AFK message. You can also set a reason for your absence, and the bot will inform when you are back.\n\n<b>Main commands:</b>\n- /afk [reason]: Sets your status to AFK with an optional reason."
             },
             "android": {
-                "android": "The Android module provides information about various Android devices based on their codenames. You can search for a device using its codename, and the bot will return details such as the brand, model, and codename of the device. This module is useful for quickly identifying and learning more about different Android devices.\n\n<b>Main commands:</b>\n- /whatis [device codename or model]: Retrieves information about the specified Android device based on its codename."
+                "android": "The Android module provides detailed information about Android devices. You can obtain data such as manufacturer, model, and codename of a specific device using its dedicated command. Simply provide the device model, and the bot will return the relevant information to you.\n\n<b>Main commands:</b>\n- /whatis [codename or model]: Gets information about the specified Android device, including manufacturer, model, and codename.\n- /variants [codename]: Gets a list of all variants of the specified Android device, including their respective models."
             },
             "medias": {
                 "medias": "The Medias module allows you to download videos and music from various popular platforms such as YouTube and TikTok. Easily, you can request the download of multimedia content directly in the chat. The bot will take care of the download process and send the file to you as soon as it's ready.",

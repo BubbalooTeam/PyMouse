@@ -23,7 +23,7 @@ type deviceEntry struct {
 	Model  string `json:"model"`
 }
 
-func getDevice(codename string) (WhatISBaseResult, bool) {
+func getDevices(codename string) ([]WhatISBaseResult, bool) {
 	var url string
 	var key string
 
@@ -51,34 +51,35 @@ func getDevice(codename string) (WhatISBaseResult, bool) {
 	)
 	if err != nil {
 		logrus.Error("failed to fetch device information:", err)
-		return WhatISBaseResult{}, false
+		return nil, false
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		logrus.Error("failed to read response body:", err)
-		return WhatISBaseResult{}, false
+		return nil, false
 	}
 
 	var db map[string][]deviceEntry
 	if err := json.Unmarshal(body, &db); err != nil {
 		logrus.Error("failed to parse json:", err)
-		return WhatISBaseResult{}, false
+		return nil, false
 	}
 
 	entries, ok := db[key]
 	if !ok || len(entries) == 0 {
-		return WhatISBaseResult{}, false
+		return nil, false
 	}
 
-	entry := entries[0]
-
-	result := WhatISBaseResult{
-		Name:   entry.Name,
-		Brand:  entry.Brand,
-		Model:  entry.Model,
-		Device: entry.Device,
+	results := make([]WhatISBaseResult, len(entries))
+	for i, entry := range entries {
+		results[i] = WhatISBaseResult{
+			Name:   entry.Name,
+			Brand:  entry.Brand,
+			Model:  entry.Model,
+			Device: entry.Device,
+		}
 	}
 
-	return result, true
+	return results, true
 }

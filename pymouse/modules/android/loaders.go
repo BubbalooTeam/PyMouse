@@ -11,5 +11,6 @@ func LoadModule(bS *client.BotStruct) {
 	middlewares.Help.RegisterHelp("Android")
 
 	// WhatIs Handlers
+	bS.Handler.Handle(devices.Variants, telegram.Command("variants", bS.Client.Username()))
 	bS.Handler.Handle(devices.WhatIs, telegram.Command("whatis", bS.Client.Username()))
 }
