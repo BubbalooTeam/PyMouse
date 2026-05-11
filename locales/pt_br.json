@@ -141,6 +141,23 @@
             }
         }
     },
+    "lastfm": {
+        "invalid-username": "<b>O nome de usuário do Last.fm fornecido é inválido.</b>",
+        "set": {
+            "no-username-provided": "<b>O nome de usuário do Last.fm não foi fornecido.</b>\n\n<b>Uso:</b> <code>/set [usuário]</code>",    
+            "username-set": "<b>Seu nome de usuário do Last.fm foi definido como:</b> <code>%s</code>",
+            "username-unset": "<b>Seu nome de usuário do Last.fm foi removido.</b>",
+            "no-username-set": "<b>Você não definiu um nome de usuário do Last.fm.</b>"
+        },
+        "nowplaying": {
+            "is-listening": "<b>%s</b> está ouvindo <b>%s - %s</b> pela <b>%d° vez</b>.",
+            "no-username-set": "<b>Você não definiu um nome de usuário do Last.fm.</b>\n\n<b>Uso:</b> <code>/set [usuário]</code>",
+            "no-scrobbles": "<b>Nenhuma música foi ouvida pelo usuário.</b>",
+            "was-listening": "<b>%s</b> estava ouvindo <b>%s - %s</b> pela <b>%d° vez</b>.",
+            "loved": "\n\n<i>❤️ Ele(a) curtiu essa música!</i>",
+            "error": "<b>Ocorreu um erro ao obter as informações de reprodução do usuário.</b>"
+        }
+    },
     "pm-menu": {
         "about-text": "— <b>%s</b>\n\nSou um bot multifuncional criado para unir diversão e praticidade às suas conversas. Com uma vasta gama de comandos, estou aqui para facilitar o seu dia a dia e transformar a sua experiência no Telegram.\n\nDesenvolvido com o poder do <a href=\"https://go.dev/\">Go</a>, minha estrutura utiliza a biblioteca <a href=\"https://pkg.go.dev/github.com/mymmrac/telego\">Telego</a> e integra-se diretamente à <a href=\"https://core.telegram.org/bots/api\">Telegram BOT API</a>.\n\nVocê pode contribuir com esse projeto de diferentes maneiras, seja sugerindo e implementando novos recursos através de <a href=\"https://github.com/BubbalooTeam/PyMouse/pulls\"><b>Pull Requests</b></a>, ou até mesmo nos apoiando financeiramente. Para mais informações clique nos botões abaixo.",
         "privacy-text": "<b>%s Política de Privacidade:</b>\n\n<i>Este bot foi projetado e criado para garantir sua segurança e privacidade.\nObrigado pela sua confiança, nossa organização valoriza a proteção dos seus dados, além disso, valorizamos qualidade.</i>\n\n<b><i>Clique no botão abaixo para conferir o regulamento emitido pelo Telegram, utilizado por esse bot.</i></b>",

@@ -12,6 +12,7 @@ var (
 	BotToken       string
 	DatabaseURI    string
 	DownloadPath   string
+	LastFMAPIKey   string
 	LogChannelID   int64
 	OwnerID        int64
 	Socks5Proxy    string
@@ -51,6 +52,7 @@ func init() {
 		logrus.Fatal(`In order to initialize this bot, you must set the "OWNER_ID" in the .env file.`)
 	}
 
+	LastFMAPIKey = os.Getenv("LASTFM_API_KEY")
 	Socks5Proxy = os.Getenv("SOCKS5_PROXY")
 	TelegramAPIURL = os.Getenv("TELEGRAM_API_URL")
 	WebhookURL = os.Getenv("WEBHOOK_URL")

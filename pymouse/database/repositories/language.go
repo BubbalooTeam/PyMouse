@@ -15,14 +15,16 @@ func updateUserLanguage(chatID int64, language string) bool {
 		if UI.Language == language {
 			return false
 		}
-	}
-	UI = &models.UsersInformations{
-		UserID:   chatID,
-		Language: language,
+		UI.Language = language
+	} else {
+		UI = &models.UsersInformations{
+			UserID:   chatID,
+			Language: language,
+		}
 	}
 
 	UsersCollection := database.NewMongoCollection("users")
-	err := UsersCollection.UpdateOne(bson.M{"user_id": chatID}, UI)
+	err := UsersCollection.UpdateOne(bson.M{"user_id": chatID}, &UI)
 	if err == nil {
 		return true
 	}
@@ -35,14 +37,16 @@ func updateChatLanguage(chatID int64, language string) bool {
 		if CI.Language == language {
 			return false
 		}
-	}
-	CI = &models.ChatsInformations{
-		ChatID:   chatID,
-		Language: language,
+		CI.Language = language
+	} else {
+		CI = &models.ChatsInformations{
+			ChatID:   chatID,
+			Language: language,
+		}
 	}
 
 	ChatsCollection := database.NewMongoCollection("chats")
-	err := ChatsCollection.UpdateOne(bson.M{"chat_id": chatID}, CI)
+	err := ChatsCollection.UpdateOne(bson.M{"chat_id": chatID}, &CI)
 	if err == nil {
 		return true
 	}

@@ -135,6 +135,15 @@
             }
         }
     },
+    "lastfm": {
+        "set": {
+            "no-username-provided": "<b>The Last.fm username was not provided to me.</b>\n\n<b>Usage:</b> <code>/set [username]</code>",
+            "invalid-username": "<b>The provided Last.fm username is invalid.</b>",
+            "username-set": "<b>Your Last.fm username has been set to:</b> <code>%s</code>",
+            "username-unset": "<b>Your Last.fm username has been unset.</b>",
+            "no-username-set": "<b>You have not set a Last.fm username.</b>"
+        }
+    },
     "pm-menu": {
         "about-text": "— <b>%s</b>\n\nI am a multifunctional bot created to bring fun and practicality to your conversations. With a wide range of commands, I'm here to make your day easier and transform your experience on Telegram.\n\nDeveloped with the power of <a href=\"https://go.dev/\">Go</a>, my structure utilizes the <a href=\"https://pkg.go.dev/github.com/mymmrac/telego\">Telego</a> library and integrates directly with the <a href=\"https://core.telegram.org/bots/api\">Telegram BOT API</a>.\n\nYou can contribute to this project in different ways, whether by suggesting and implementing new features through <a href=\"https://github.com/BubbalooTeam/PyMouse/pulls\"><b>Pull Requests</b></a>, or even financially supporting us. For more information, click the buttons below.",
         "privacy-text": "<b>%s Privacy Policy:</b>\n\n<i>This bot was designed and created to ensure your safety and privacy.\nThank you for your trust, our organization values the protection of your data, in addition, we value quality.</i>\n\n<b><i>Click the button below to check out the regulation issued by Telegram, used by this bot.</i></b>",
