@@ -101,6 +101,9 @@
             "android": {
                 "android": "The Android module provides detailed information about Android devices. You can obtain data such as manufacturer, model, and codename of a specific device using its dedicated command. Simply provide the device model, and the bot will return the relevant information to you.\n\n<b>Main commands:</b>\n- /whatis [codename or model]: Gets information about the specified Android device, including manufacturer, model, and codename.\n- /variants [codename]: Gets a list of all variants of the specified Android device, including their respective models."
             },
+            "lastfm": {
+                "lastfm": "The LastFM module allows you to connect your Last.fm account to the bot and share your music listening activity with others. You can set your Last.fm username, and the bot will be able to retrieve information about the songs you're currently listening to, as well as your listening history. This way, you can share your musical tastes and discoveries with your friends in the chat.\n\n<b>Main commands:</b>\n- /set [username]: Sets your Last.fm username to connect your account with the bot.\n- /lfm: Retrieves information about the song you're currently listening to on Last.fm."
+            },
             "medias": {
                 "medias": "The Medias module allows you to download videos and music from various popular platforms such as YouTube and TikTok. Easily, you can request the download of multimedia content directly in the chat. The bot will take care of the download process and send the file to you as soon as it's ready.",
                 "youtube": "The YouTube module allows you to download videos and music directly from YouTube. With a simple command, you can request the download of any video or music available on the platform.\n\n<b>Main commands:</b>\n- /ytdl [video URL or title]: Downloads the YouTube video or music based on the provided URL or title, and in the chosen quality.",
@@ -121,6 +124,9 @@
             "android": {
                 "android": "Android"
             },
+            "lastfm": {
+                "lastfm": "LastFM"
+            },
             "medias": {
                 "medias": "Medias",
                 "youtube": "YouTube",
@@ -136,14 +142,25 @@
         }
     },
     "lastfm": {
+        "invalid-username": "<b>The Last.fm username provided is invalid.</b>",
         "set": {
-            "no-username-provided": "<b>The Last.fm username was not provided to me.</b>\n\n<b>Usage:</b> <code>/set [username]</code>",
-            "invalid-username": "<b>The provided Last.fm username is invalid.</b>",
+            "no-username-provided": "<b>The Last.fm username was not provided.</b>\n\n<b>Usage:</b> <code>/set [username]</code>",
             "username-set": "<b>Your Last.fm username has been set to:</b> <code>%s</code>",
-            "username-unset": "<b>Your Last.fm username has been unset.</b>",
+            "username-unset": "<b>Your Last.fm username has been removed.</b>",
             "no-username-set": "<b>You have not set a Last.fm username.</b>"
+
+        },
+
+        "nowplaying": {
+            "is-listening": "<b>%s</b> is listening to <b>%s - %s</b> for the <b>%dth time</b>.",
+            "no-username-set": "<b>You haven't set a Last.fm username.</b>\n\n<b>Usage:</b> <code>/set [username]</code>",
+            "no-scrobbles": "<b>No music was listened to by the user.</b>",
+            "was-listening": "<b>%s</b> was listening to <b>%s - %s</b> for the <b>%dth time</b>.",
+            "loved": "\n\n<i>❤️ He/She liked this song!</i>",
+            "error": "<b>An error occurred while retrieving the user's playback information.</b>"
+
         }
-    },
+},
     "pm-menu": {
         "about-text": "— <b>%s</b>\n\nI am a multifunctional bot created to bring fun and practicality to your conversations. With a wide range of commands, I'm here to make your day easier and transform your experience on Telegram.\n\nDeveloped with the power of <a href=\"https://go.dev/\">Go</a>, my structure utilizes the <a href=\"https://pkg.go.dev/github.com/mymmrac/telego\">Telego</a> library and integrates directly with the <a href=\"https://core.telegram.org/bots/api\">Telegram BOT API</a>.\n\nYou can contribute to this project in different ways, whether by suggesting and implementing new features through <a href=\"https://github.com/BubbalooTeam/PyMouse/pulls\"><b>Pull Requests</b></a>, or even financially supporting us. For more information, click the buttons below.",
         "privacy-text": "<b>%s Privacy Policy:</b>\n\n<i>This bot was designed and created to ensure your safety and privacy.\nThank you for your trust, our organization values the protection of your data, in addition, we value quality.</i>\n\n<b><i>Click the button below to check out the regulation issued by Telegram, used by this bot.</i></b>",
