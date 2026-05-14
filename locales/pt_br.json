@@ -156,10 +156,10 @@
             "no-username-set": "<b>Você não definiu um nome de usuário do Last.fm.</b>"
         },
         "nowplaying": {
-            "is-listening": "<b>%s</b> está ouvindo <b>%s - %s</b> pela <b>%d° vez</b>.",
+            "is-listening": "Está ouvindo pela %d° vez.",
             "no-username-set": "<b>Você não definiu um nome de usuário do Last.fm.</b>\n\n<b>Uso:</b> <code>/set [usuário]</code>",
             "no-scrobbles": "<b>Nenhuma música foi ouvida pelo usuário.</b>",
-            "was-listening": "<b>%s</b> estava ouvindo <b>%s - %s</b> pela <b>%d° vez</b>.",
+            "was-listening": "Estava ouvindo pela %d° vez.",
             "loved": "\n\n<i>❤️ Ele(a) curtiu essa música!</i>",
             "error": "<b>Ocorreu um erro ao obter as informações de reprodução do usuário.</b>"
         }

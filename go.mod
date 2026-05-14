@@ -5,6 +5,7 @@ go 1.25.7
 require (
 	github.com/PuerkitoBio/goquery v1.12.0
 	github.com/cavaliergopher/grab/v3 v3.0.1
+	github.com/disintegration/imaging v1.6.2
 	github.com/joho/godotenv v1.5.1
 	github.com/mymmrac/telego v1.8.0
 	github.com/raitonoberu/ytsearch v0.2.0
@@ -34,7 +35,7 @@ require (
 require (
 	github.com/fogleman/gg v1.3.0
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
-	golang.org/x/image v0.38.0 // indirect
+	golang.org/x/image v0.38.0
 )
 
 require (

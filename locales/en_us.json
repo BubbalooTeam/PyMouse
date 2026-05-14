@@ -152,10 +152,10 @@
         },
 
         "nowplaying": {
-            "is-listening": "<b>%s</b> is listening to <b>%s - %s</b> for the <b>%dth time</b>.",
+            "is-listening": "Is listening for the %dth time.",
             "no-username-set": "<b>You haven't set a Last.fm username.</b>\n\n<b>Usage:</b> <code>/set [username]</code>",
             "no-scrobbles": "<b>No music was listened to by the user.</b>",
-            "was-listening": "<b>%s</b> was listening to <b>%s - %s</b> for the <b>%dth time</b>.",
+            "was-listening": "Was listening for the %dth time.",
             "loved": "\n\n<i>❤️ He/She liked this song!</i>",
             "error": "<b>An error occurred while retrieving the user's playback information.</b>"
 
