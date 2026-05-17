@@ -93,7 +93,7 @@ func trackPlays(httpClient *http.Client, username string, artist string, track s
 		return 0, fmt.Errorf("failed to decode track plays information.")
 	}
 	if trackPlaysInfo.Track.UserPlayCount == "" {
-		return 1, nil
+		return 0, nil
 	}
 	playCount, err := strconv.ParseInt(trackPlaysInfo.Track.UserPlayCount, 10, 64)
 	if err != nil {
@@ -157,6 +157,18 @@ func getTrack(httpClient *http.Client, username string) (LastFMTrackInformations
 		Image:     recentTracksInfo.RecentTracks.Track[0].Image[len(recentTracksInfo.RecentTracks.Track[0].Image)-1].URL,
 		Now:       recentTracksInfo.RecentTracks.Track[0].Attr.NowPlaying == "true",
 	}, nil
+}
+
+func getListeningText(trackInfo LastFMTrackInformations, l func(string) string) string {
+	textKey := "lastfm.nowplaying.was-listening"
+	if trackInfo.Now {
+		textKey = "lastfm.nowplaying.is-listening"
+	}
+	listeningText := l(textKey)
+	if trackInfo.Playcount > 0 {
+		listeningText += fmt.Sprintf(l("lastfm.nowplaying.userplaycount"), trackInfo.Playcount)
+	}
+	return fmt.Sprintf("%s.", listeningText)
 }
 
 func loadFont(path string, size float64) font.Face {
@@ -246,6 +258,7 @@ func DrawScrobble(
 	listening string,
 	loved bool,
 	fonts Fonts,
+	l func(string) string,
 ) (string, error) {
 	dir := fmt.Sprintf("%s/%s", config.DownloadPath, "lastfm")
 	dc := gg.NewContext(600, 250)
@@ -337,14 +350,14 @@ func DrawScrobble(
 
 	// loved
 	if loved {
-		if heart, err := imaging.Open("pymouse/assets/icons/lastfm/heart.png"); err == nil {
+		if heart, err := imaging.Open("pymouse/assets/icons/lastfm/loved.png"); err == nil {
 			heart = imaging.Resize(heart, 25, 25, imaging.Lanczos)
 			dc.DrawImage(heart, 248, 190)
 		}
 
-		dc.SetFontFace(artistFont)
+		dc.SetFontFace(arial23)
 		dc.DrawString(
-			"loved",
+			l("lastfm.nowplaying.loved"),
 			278,
 			210,
 		)

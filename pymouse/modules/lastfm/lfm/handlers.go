@@ -19,17 +19,16 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 	l := i18n.Locale(update.Message.Chat)
 
 	glabClient := grab.NewClient()
-	reply := &telego.ReplyParameters{
-		MessageID: update.Message.MessageID,
-	}
 
 	username := repositories.GetLastFMUsername(update.Message.From.ID)
 	if username == "" {
 		bot.SendMessage(ctx, &telego.SendMessageParams{
-			ChatID:          telegoutil.ID(update.Message.Chat.ID),
-			Text:            l("lastfm.nowplaying.no-username-set"),
-			ParseMode:       "HTML",
-			ReplyParameters: reply,
+			ChatID:    telegoutil.ID(update.Message.Chat.ID),
+			Text:      l("lastfm.nowplaying.no-username-set"),
+			ParseMode: "HTML",
+			ReplyParameters: &telego.ReplyParameters{
+				MessageID: update.Message.MessageID,
+			},
 		})
 		return nil
 	}
@@ -52,19 +51,18 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 		}
 
 		bot.SendMessage(ctx, &telego.SendMessageParams{
-			ChatID:          telegoutil.ID(update.Message.Chat.ID),
-			Text:            text,
-			ParseMode:       "HTML",
-			ReplyParameters: reply,
+			ChatID:    telegoutil.ID(update.Message.Chat.ID),
+			Text:      text,
+			ParseMode: "HTML",
+			ReplyParameters: &telego.ReplyParameters{
+				MessageID: update.Message.MessageID,
+			},
 		})
 
 		return nil
 	}
 
-	textKey := "lastfm.nowplaying.was-listening"
-	if trackInfo.Now {
-		textKey = "lastfm.nowplaying.is-listening"
-	}
+	listeningText := getListeningText(trackInfo, l)
 	imageURL := trackInfo.Image
 	if imageURL == "" {
 		imageURL = "https://telegra.ph/file/bdcf492162713ea5633a1.jpg"
@@ -78,13 +76,14 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 		trackInfo.Track,
 		trackInfo.Artist,
 		username,
-		fmt.Sprintf(l(textKey), trackInfo.Playcount),
+		listeningText,
 		trackInfo.Loved,
 		Fonts{
 			OpenSans: "pymouse/assets/fonts/opensans.ttf",
 			Poppins:  "pymouse/assets/fonts/poppins-semibolditalic.ttf",
 			Arial:    "pymouse/assets/fonts/arial.ttf",
 		},
+		l,
 	)
 
 	imF, _ := os.Open(im)
