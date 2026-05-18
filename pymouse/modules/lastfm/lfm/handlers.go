@@ -1,12 +1,10 @@
 package lfm
 
 import (
-	"fmt"
 	"os"
 	"pymouse/pymouse/database/repositories"
 	"pymouse/pymouse/helpers/i18n"
 	"pymouse/pymouse/helpers/rapidhttp"
-	"strings"
 
 	"github.com/cavaliergopher/grab/v3"
 	"github.com/mymmrac/telego"
@@ -68,8 +66,6 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 		imageURL = "https://telegra.ph/file/bdcf492162713ea5633a1.jpg"
 	}
 
-	youtubeURL := fmt.Sprintf("https://www.youtube.com/results?search_query=%s+%s", strings.ReplaceAll(trackInfo.Artist, " ", "+"), strings.ReplaceAll(trackInfo.Track, " ", "+"))
-
 	im, _ := DrawScrobble(
 		glabClient,
 		imageURL,
@@ -92,7 +88,7 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 		os.Remove(im)
 	}()
 
-	bot.SendPhoto(
+	_, err = bot.SendPhoto(
 		ctx,
 		&telego.SendPhotoParams{
 			ChatID: telegoutil.ID(update.Message.Chat.ID),
@@ -101,16 +97,6 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 			},
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
-			},
-			ReplyMarkup: &telego.InlineKeyboardMarkup{
-				InlineKeyboard: [][]telego.InlineKeyboardButton{
-					{
-						telego.InlineKeyboardButton{
-							Text: "📽️",
-							URL:  youtubeURL,
-						},
-					},
-				},
 			},
 		},
 	)
