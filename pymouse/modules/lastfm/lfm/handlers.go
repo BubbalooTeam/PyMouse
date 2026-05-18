@@ -88,7 +88,7 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 		os.Remove(im)
 	}()
 
-	_, err = bot.SendPhoto(
+	bot.SendPhoto(
 		ctx,
 		&telego.SendPhotoParams{
 			ChatID: telegoutil.ID(update.Message.Chat.ID),
