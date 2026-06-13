@@ -66,11 +66,11 @@ var GSMArenaHeaders = map[string]string{
 	"cache-control":   "max-age=0",
 	"priority":        "u=0, i",
 	"user-agent":      "Dalvik/2.1.0 (Linux; U; Android 12; M2012K11AG Build/SQ1D.211205.017)",
-	"referer":         "https://www.gsmarena.com",
+	"referer":         "https://m.gsmarena.com",
 }
 
 const (
-	GSMArenaBaseURL      = "https://www.gsmarena.com/%s"
+	GSMArenaBaseURL      = "https://m.gsmarena.com/%s"
 	GSMArenaSearchExtURL = "results.php3?sQuickSearch=yes&sName=%s"
 	GSMArenaDeviceExtURL = "%s.php"
 	devicesPerPage       = 9
@@ -130,18 +130,23 @@ func searchDevice(query string) *GSMArenaSearchResult {
 		return nil
 	}
 
-	doc.Find(".makers li").Each(func(i int, s *goquery.Selection) {
+	doc.Find(".general-menu li").Each(func(i int, s *goquery.Selection) {
 		a := s.Find("a")
 		img := s.Find("img")
-		span := s.Find("span")
+		strong := s.Find("strong")
 
 		id, _ := a.Attr("href")
 		image, _ := img.Attr("src")
 		description, _ := img.Attr("title")
 
+		// Extract text from strong tag and clean up line breaks
+		name := strings.TrimSpace(strong.Text())
+		name = strings.ReplaceAll(name, "\n", " ")
+		name = regexp.MustCompile(`\s+`).ReplaceAllString(name, " ")
+
 		results = append(results, GSMArenaDeviceSearchResult{
 			ID:          strings.ReplaceAll(id, ".php", ""),
-			Name:        strings.TrimSpace(span.Text()),
+			Name:        name,
 			Image:       image,
 			Description: description,
 		})
@@ -160,7 +165,6 @@ func fetchDevice(deviceID string) *GSMArenaDeviceBaseResult {
 		logrus.Error(err)
 		return nil
 	}
-
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
 	if err != nil {
 		logrus.Error(err)
