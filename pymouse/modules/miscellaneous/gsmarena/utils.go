@@ -139,7 +139,6 @@ func searchDevice(query string) *GSMArenaSearchResult {
 		image, _ := img.Attr("src")
 		description, _ := img.Attr("title")
 
-		// Extract text from strong tag and clean up line breaks
 		name := strings.TrimSpace(strong.Text())
 		name = strings.ReplaceAll(name, "\n", " ")
 		name = regexp.MustCompile(`\s+`).ReplaceAllString(name, " ")
@@ -171,11 +170,9 @@ func fetchDevice(deviceID string) *GSMArenaDeviceBaseResult {
 		return nil
 	}
 
-	name := strings.TrimSpace(
-		doc.Find(".specs-phone-name-title").First().Text(),
-	)
+	name := strings.TrimSpace(doc.Find("h1").First().Text())
 
-	image, _ := doc.Find(".specs-photo-main img").Attr("src")
+	image, _ := doc.Find(".specs-cp-pic-rating a img").Attr("src")
 
 	doc.Find("#specs-list table").Each(func(i int, table *goquery.Selection) {
 
