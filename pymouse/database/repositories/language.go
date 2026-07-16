@@ -59,16 +59,16 @@ func GetChatLanguage(chat telego.Chat) string {
 		userInfo := FindUser(chat.ID, "")
 		if userInfo != nil {
 			chatLanguage = userInfo.Language
-		} else {
-			chatLanguage = "en_us"
 		}
 	} else {
 		chatInfo := FindChat(chat.ID)
 		if chatInfo != nil {
 			chatLanguage = chatInfo.Language
-		} else {
-			chatLanguage = "en_us"
 		}
+	}
+
+	if chatLanguage == "" {
+		chatLanguage = "en_us"
 	}
 	return chatLanguage
 }

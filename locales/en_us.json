@@ -26,6 +26,7 @@
         "back": "Back",
         "change-language": "🌐 Change your language",
         "channel-news": "📬️ PyMouse News",
+        "create-lastfm": "🎧 Create Last.fm account",
         "donate": "💵 Donate",
         "go-to-pm": "Go to Private",
         "help": "👮 Help",
@@ -85,13 +86,13 @@
         "reason": {
             "device-lister": "I was returned <b>%d devices</b> with the query <b>%s</b>, choose a model from these devices using the buttons below.",
             "device-not-provided": "<b>The device was not provided to me.</b>\n\n<b>Usage:</b> <code>/d S24 Ultra</code>",
-            "device-not-found": "<b>Device not Found.</b>"
+            "device-not-found": "<b>Device not found.</b>"
         }
     },
     "help": {
         "help-intro": "Hello! My name is <b>%s</b>, I am a multifunctional bot created to help you with various tasks and provide entertainment for your group! Take a look at the modules below to get an idea of some things I can help you with.\n\n<b>Main commands:</b>\n- /start - Checks if the bot is active and working, also provides menu options.\n- /help - Provides information about the bot's modules and how to use them.\n- /lang - Allows you to change the bot's language to your desired language.\n\nAll commands can be used with: <code>!</code> or <code>/</code> as a prefix.",
         "here-is-help": "Below is the help for the <b>%s</b> module.\n\n",
-        "module-not-exists": "The module <code>%s</code> doesn't exists.",
+        "module-not-exists": "The module <code>%s</code> doesn't exist.",
         "module-info-error": "Sorry, there was a problem getting the module information.",
         "module-description-not-found": "• The description for the module <code>%s</code> was not found.",
         "descriptions": {
@@ -154,7 +155,7 @@
         "nowplaying": {
             "is-listening": "Is listening",
             "no-username-set": "<b>You haven't set a Last.fm username.</b>\n\n<b>Usage:</b> <code>/set [username]</code>",
-            "no-scrobbles": "<b>No music was listened to by the user.</b>",
+            "no-scrobbles": "<b>The user has not listened to any music.</b>",
             "userplaycount": " for the %dth time",
             "was-listening": "Was listening",
             "loved": "He/She liked this song!",

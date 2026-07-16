@@ -79,6 +79,9 @@ func GetStringFromNestedMap(langMap map[string]interface{}, key string) string {
 
 func Locale(chat telego.Chat) func(string) string {
 	language := repositories.GetChatLanguage(chat)
+	if language == "" {
+		language = defaultLanguage
+	}
 
 	langMap, ok := StringsCache[language]
 	if !ok {

@@ -21,6 +21,10 @@ import (
 	"golang.org/x/image/font/opentype"
 )
 
+const (
+	LastFMAPIURL = "http://ws.audioscrobbler.com/2.0/"
+)
+
 type trackPlaysInformations struct {
 	Track struct {
 		UserPlayCount string `json:"userplaycount"`
@@ -77,7 +81,7 @@ func trackPlays(httpClient *http.Client, username string, artist string, track s
 		httpClient,
 		rapidhttp.HTTPStruct{
 			Method: "GET",
-			URL:    "http://ws.audioscrobbler.com/2.0/",
+			URL:    LastFMAPIURL,
 			GETParams: &rapidhttp.HTTPGetStruct{
 				Params: trackPlaysParams,
 			},
@@ -120,7 +124,7 @@ func getTrack(httpClient *http.Client, username string) (LastFMTrackInformations
 		httpClient,
 		rapidhttp.HTTPStruct{
 			Method: "GET",
-			URL:    "http://ws.audioscrobbler.com/2.0/",
+			URL:    LastFMAPIURL,
 			GETParams: &rapidhttp.HTTPGetStruct{
 				Params: recentTracksParams,
 			},

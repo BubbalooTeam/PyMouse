@@ -28,6 +28,16 @@ func SetUser(ctx *telegohandler.Context, update telego.Update) error {
 				ReplyParameters: &telego.ReplyParameters{
 					MessageID: update.Message.MessageID,
 				},
+				ReplyMarkup: &telego.InlineKeyboardMarkup{
+					InlineKeyboard: [][]telego.InlineKeyboardButton{
+						{
+							telego.InlineKeyboardButton{
+								Text: l("buttons.create-lastfm"),
+								URL:  "https://www.last.fm/join",
+							},
+						},
+					},
+				},
 			},
 		)
 		return nil

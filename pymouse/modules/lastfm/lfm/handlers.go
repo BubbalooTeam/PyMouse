@@ -1,6 +1,7 @@
 package lfm
 
 import (
+	"fmt"
 	"os"
 	"pymouse/pymouse/database/repositories"
 	"pymouse/pymouse/helpers/i18n"
@@ -97,6 +98,16 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 			},
 			ReplyParameters: &telego.ReplyParameters{
 				MessageID: update.Message.MessageID,
+			},
+			ReplyMarkup: &telego.InlineKeyboardMarkup{
+				InlineKeyboard: [][]telego.InlineKeyboardButton{
+					{
+						{
+							Text:         "➕",
+							CallbackData: fmt.Sprintf("lfm_exp|%d", update.Message.From.ID),
+						},
+					},
+				},
 			},
 		},
 	)

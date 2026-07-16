@@ -8,9 +8,9 @@
             "native-language": "<b>Este é o idioma nativo do bot. Está <code>100% traduzido.</code></b>",
             "missing-translations": "<b>Ainda há traduções faltando! Apenas <code>%d%%</code> do bot foi traduzido!</b>",
             "language-info": "\n\n<b>Informações do idioma:</b>",
-            "language-total-strings": "\n\n- <b>Total de cordas:</b> <code>%d</code>",
-            "language-translated": "\n- <b>Cordas traduzidas:</b> <code>%d</code>",
-            "language-untranslated": "\n- <b>Cordas sem tradução:</b> <code>%d</code>"
+            "language-total-strings": "\n\n- <b>Total de strings:</b> <code>%d</code>",
+            "language-translated": "\n- <b>Strings traduzidas:</b> <code>%d</code>",
+            "language-untranslated": "\n- <b>Strings sem tradução:</b> <code>%d</code>"
         },
         "switch-lang": "Escolha o idioma que você quer usar abaixo.",
         "switched-lang": "O idioma desse chat foi definido para %s."
@@ -24,8 +24,9 @@
     "buttons": {
         "about": "ℹ️ Sobre",
         "back": "Voltar",
-        "change-language": "🌐 Mude seu idioma",
+        "change-language": "🌐 Alterar idioma",
         "channel-news": "📬️ Notícias do PyMouse",
+        "create-lastfm": "🎧 Criar conta do Last.fm",
         "donate": "💵 Contribua",
         "go-to-pm": "Ir para o privado",
         "help": "👮 Ajuda",
@@ -89,7 +90,7 @@
         }
     },
     "help": {
-        "help-intro": "Olá! Me chamo <b>%s</b>, sou um bot multifuncional criado para ajudar você com várias tarefas e fornecer entretenimento para seu grupo! Dê uma olhada nos módulos abaixo para ter uma ideia de algumas coisas em que posso ajuda-lo.\n\n<b>Comandos principais:</b>\n- /start - Verifica se o bot está ativo e funcionando, também fornece opções de menu.\n- /help - Fornece informações sobre os módulos do bot e como usá-los.\n- /lang - Permite alterar o idioma do bot para o idioma desejado.\n\nTodos os comandos podem ser usados com: <code>!</code> ou <code>/</code> como prefixo.",
+        "help-intro": "Olá! Me chamo <b>%s</b>, sou um bot multifuncional criado para ajudar você com várias tarefas e fornecer entretenimento para seu grupo! Dê uma olhada nos módulos abaixo para ter uma ideia de algumas coisas em que posso ajudá-lo.\n\n<b>Comandos principais:</b>\n- /start - Verifica se o bot está ativo e funcionando, também fornece opções de menu.\n- /help - Fornece informações sobre os módulos do bot e como usá-los.\n- /lang - Permite alterar o idioma do bot para o idioma desejado.\n\nTodos os comandos podem ser usados com: <code>!</code> ou <code>/</code> como prefixo.",
         "here-is-help": "Abaixo segue a ajuda para o módulo <b>%s</b>.\n\n",
         "module-not-exists": "O módulo <code>%s</code> não existe.",
         "module-info-error": "Desculpe, ocorreu um problema ao obter as informações do módulo.",
@@ -167,7 +168,7 @@
     },
     "pm-menu": {
         "about-text": "— <b>%s</b>\n\nSou um bot multifuncional criado para unir diversão e praticidade às suas conversas. Com uma vasta gama de comandos, estou aqui para facilitar o seu dia a dia e transformar a sua experiência no Telegram.\n\nDesenvolvido com o poder do <a href=\"https://go.dev/\">Go</a>, minha estrutura utiliza a biblioteca <a href=\"https://pkg.go.dev/github.com/mymmrac/telego\">Telego</a> e integra-se diretamente à <a href=\"https://core.telegram.org/bots/api\">Telegram BOT API</a>.\n\nVocê pode contribuir com esse projeto de diferentes maneiras, seja sugerindo e implementando novos recursos através de <a href=\"https://github.com/BubbalooTeam/PyMouse/pulls\"><b>Pull Requests</b></a>, ou até mesmo nos apoiando financeiramente. Para mais informações clique nos botões abaixo.",
-        "privacy-text": "<b>%s Política de Privacidade:</b>\n\n<i>Este bot foi projetado e criado para garantir sua segurança e privacidade.\nObrigado pela sua confiança, nossa organização valoriza a proteção dos seus dados, além disso, valorizamos qualidade.</i>\n\n<b><i>Clique no botão abaixo para conferir o regulamento emitido pelo Telegram, utilizado por esse bot.</i></b>",
+        "privacy-text": "<b>%s Política de Privacidade:</b>\n\n<i>Este bot foi projetado e criado para garantir sua segurança e privacidade.\nObrigado pela sua confiança. Nossa organização valoriza a proteção dos seus dados e também preza pela qualidade.</i>\n\n<b><i>Clique no botão abaixo para conferir o regulamento emitido pelo Telegram, utilizado por esse bot.</i></b>",
         "start-private": "Olá <b>%s</b>, eu sou <b>%s</b>. Um robô com funções legais e divertidas para o seu chat. Clique nos botões abaixo para saber mais sobre mim.",
         "start-group": "<b>Olá! Meu nome é %s!</b>"
     },
@@ -209,8 +210,8 @@
             "format-unavalaible": "O formato selecionado não está disponível. Tente uma nova pesquisa.",
             "no-args": "Qual é o título do vídeo, nome do canal ou o URL do vídeo a ser baixado?",
             "exceded-limit": "Você excedeu meu limite de download máximo, neste caso, %s de vídeo/música.",
-            "not-for-you": "Esse botão do downloader do YouTube não é para você.",
-            "already-in-video": "Você já está nesse vídeo, você pode alternar entre eles, usando os botões que são responsaveis por essa tarefa.",
+            "not-for-you": "Esse botão de download do YouTube não é para você.",
+            "already-in-video": "Você já está neste vídeo; pode alternar entre eles usando os botões responsáveis por essa tarefa.",
             "video-cache-not-found": "Este vídeo não foi encontrado no meu cache. Isso geralmente significa que a pesquisa foi realizada há mais de 15 minutos. Tente uma nova pesquisa.",
             "video-not-found": "<code>Nenhum vídeo foi encontrado no YouTube!</code>"
         },
