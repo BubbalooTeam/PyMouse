@@ -79,6 +79,8 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 			OpenSans: "pymouse/assets/fonts/opensans.ttf",
 			Poppins:  "pymouse/assets/fonts/poppins-semibolditalic.ttf",
 			Arial:    "pymouse/assets/fonts/arial.ttf",
+			Unicode:  "pymouse/assets/fonts/notosans-unicode.ttf",
+			CJK:      "pymouse/assets/fonts/notosanscjk-sc.otf",
 		},
 		l,
 	)
