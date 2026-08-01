@@ -65,6 +65,12 @@ type Fonts struct {
 	OpenSans string
 	Poppins  string
 	Arial    string
+	// Unicode covers Latin/Cyrillic/Greek (used when text is non-ASCII
+	// but contains no CJK characters).
+	Unicode string
+	// CJK covers Chinese/Japanese/Korean (and also Latin/Cyrillic,
+	// so it is used alone when any CJK rune is present).
+	CJK string
 }
 
 func trackPlays(httpClient *http.Client, username string, artist string, track string) (int64, error) {
@@ -253,6 +259,32 @@ func checkUnicode(s string) bool {
 	return false
 }
 
+// containsCJK reports whether s contains any CJK ideograph, hiragana,
+// katakana, hangul or CJK punctuation. These blocks are only covered by a
+// dedicated CJK font (e.g. Noto Sans CJK), not by Latin/Cyrillic fonts.
+func containsCJK(s string) bool {
+	for _, r := range s {
+		switch {
+		case r >= 0x2E80 && r <= 0x9FFF: // CJK radicals + Kangxi + CJK ideographs
+			return true
+		case r >= 0xAC00 && r <= 0xD7AF: // Hangul Syllables
+			return true
+		case r >= 0xF900 && r <= 0xFAFF: // CJK Compatibility Ideographs
+			return true
+		case r >= 0xFF00 && r <= 0xFFEF: // Halfwidth/Fullwidth + Katakana
+			return true
+		case r >= 0x3000 && r <= 0x30FF: // CJK symbols + Hiragana + Katakana
+			return true
+		case r >= 0x3041 && r <= 0x309F: // Hiragana (redundant safety)
+			return true
+		case r >= 0xFF66 && r <= 0xFF9F: // Halfwidth Katakana
+			return true
+		}
+	}
+
+	return false
+}
+
 func DrawScrobble(
 	glabClient *grab.Client,
 	imgURL string,
@@ -308,14 +340,38 @@ func DrawScrobble(
 	arial := loadFont(fonts.Arial, 21)
 	arial23 := loadFont(fonts.Arial, 17)
 
-	songFont := poppins
-	if !checkUnicode(songName) {
-		songFont = arial
+	// Pan-Unicode fallbacks for non-Latin scripts.
+	// The Latin-only fonts (Poppins/OpenSans/Arial bundled here) do not
+	// carry Cyrillic, Greek or CJK glyphs, so those runes render as
+	// nothing. We swap in a font that actually covers the script:
+	//   - any CJK rune  -> CJK font (also covers Latin/Cyrillic, so a
+	//     mixed line like "愛 Love" still renders fully);
+	//   - other non-ASCII (Cyrillic/Greek/etc.) -> Unicode font;
+	//   - pure ASCII -> keep the original Latin font.
+	var unicodeFace, unicodeFaceSm, cjkFace, cjkFaceSm font.Face
+	if fonts.Unicode != "" {
+		unicodeFace = loadFont(fonts.Unicode, 21)
+		unicodeFaceSm = loadFont(fonts.Unicode, 17)
+	}
+	if fonts.CJK != "" {
+		cjkFace = loadFont(fonts.CJK, 21)
+		cjkFaceSm = loadFont(fonts.CJK, 17)
 	}
 
-	artistFont := openSans
-	if !checkUnicode(artistName) {
-		artistFont = arial23
+	songFont := arial
+	switch {
+	case containsCJK(songName) && cjkFace != nil:
+		songFont = cjkFace
+	case checkUnicode(songName) && unicodeFace != nil:
+		songFont = unicodeFace
+	}
+
+	artistFont := arial23
+	switch {
+	case containsCJK(artistName) && cjkFaceSm != nil:
+		artistFont = cjkFaceSm
+	case checkUnicode(artistName) && unicodeFaceSm != nil:
+		artistFont = unicodeFaceSm
 	}
 
 	dc.SetColor(color.White)
