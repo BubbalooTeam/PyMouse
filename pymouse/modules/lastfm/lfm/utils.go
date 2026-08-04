@@ -1,6 +1,7 @@
 package lfm
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"image"
@@ -8,6 +9,7 @@ import (
 	"image/jpeg"
 	"net/http"
 	"os"
+	"pymouse/pymouse/assets"
 	"pymouse/pymouse/config"
 	"pymouse/pymouse/helpers/rapidhttp"
 	"pymouse/pymouse/modules/lastfm/set"
@@ -182,7 +184,7 @@ func getListeningText(trackInfo LastFMTrackInformations, l func(string) string) 
 }
 
 func loadFont(path string, size float64) font.Face {
-	b, err := os.ReadFile(path)
+	b, err := assets.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
@@ -452,9 +454,11 @@ func DrawScrobble(
 
 	// loved
 	if loved {
-		if heart, err := imaging.Open("pymouse/assets/icons/lastfm/loved.png"); err == nil {
-			heart = imaging.Resize(heart, 25, 25, imaging.Lanczos)
-			dc.DrawImage(heart, 248, 190)
+		if heartBytes, err := assets.ReadFile("icons/lastfm/loved.png"); err == nil {
+			if heart, derr := imaging.Decode(bytes.NewReader(heartBytes)); derr == nil {
+				heart = imaging.Resize(heart, 25, 25, imaging.Lanczos)
+				dc.DrawImage(heart, 248, 190)
+			}
 		}
 
 		dc.SetFontFace(arial23)

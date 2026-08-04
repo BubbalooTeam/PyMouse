@@ -1,0 +1,95 @@
+name: build
+
+# Builds a self-contained Linux/amd64 binary (assets embedded via go:embed) and
+# publishes it so the production server can pull a ready-to-run executable with
+# scripts/deploy.sh — no Go toolchain needed on the server.
+#
+#   - Pull requests:  binary published as a workflow artifact (for pre-merge
+#                     testing via `deploy.sh pr`). Expires in 30 days.
+#   - Push to PyMouse: binary published as a PERMANENT GitHub Release named
+#                     "<date>-<short-sha>" (e.g. 2026-08-04-1cc4e4d). Releases
+#                     do not expire, so you can roll back to any past version.
+#
+# `concurrency` cancels superseded runs on the same ref so only the latest
+# commit on each branch/PR produces a shippable binary.
+
+on:
+  push:
+    branches: [PyMouse]
+  pull_request:
+
+permissions:
+  contents: write   # required by softprops/action-gh-release to create releases
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.x'
+          cache: true
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Build linux/amd64
+        run: |
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+            go build -trimpath -ldflags="-s -w" -o pymouse .
+
+      - name: Verify binary
+        run: |
+          file ./pymouse
+          test -x ./pymouse
+          ./pymouse -h >/dev/null 2>&1 || true   # don't fail on the bot's own arg handling
+
+      - name: Compute release metadata
+        id: meta
+        run: |
+          echo "date=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+          echo "short=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      # ---- PR path: publish a temporary artifact --------------------------
+      - name: Upload artifact (PR builds)
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pymouse-linux-amd64
+          path: pymouse
+          if-no-files-found: error
+          retention-days: 30
+
+      # ---- Main path: publish a PERMANENT release -------------------------
+      # Tag + release name use "<YYYY-MM-DD>-<short-sha>", unique per commit,
+      # so every push to PyMouse is a distinct, rollback-able version.
+      - name: Create release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/PyMouse'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.run_id }}-${{ github.sha }}
+          name: ${{ format('{0}-{1}', env.RELEASE_DATE, env.SHORT_SHA) }}
+          body: |
+            Automated build of commit ${{ github.sha }} on PyMouse.
+
+            Commit: ${{ github.event.head_commit.message }}
+            Built: ${{ env.RELEASE_DATE }}
+            Source: ${{ github.event.head_commit.url }}
+
+            Install with: `scripts/deploy.sh ${{ format('{0}-{1}', env.RELEASE_DATE, env.SHORT_SHA) }}`
+          files: pymouse
+          make_latest: true
+        env:
+          RELEASE_DATE: ${{ steps.meta.outputs.date }}
+          SHORT_SHA: ${{ steps.meta.outputs.short }}

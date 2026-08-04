@@ -1,6 +1,7 @@
 package weather
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"image"
@@ -8,15 +9,19 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+	"pymouse/pymouse/assets"
 	"pymouse/pymouse/config"
 	"pymouse/pymouse/helpers/rapidhttp"
 	"pymouse/pymouse/helpers/utils"
 	"strings"
 	"time"
 
+	"github.com/disintegration/imaging"
 	"github.com/fogleman/gg"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/opentype"
 )
 
 type weatherLocationResponse struct {
@@ -138,9 +143,14 @@ var weatherIconCache = map[int]image.Image{}
 func init() {
 	for code, path := range weatherIconPaths {
 
-		img, err := gg.LoadImage(path)
+		iconBytes, err := assets.ReadFile(path)
 		if err != nil {
-			logrus.Error("failed loading icon:", path, err)
+			logrus.Error("failed reading icon:", path, err)
+			continue
+		}
+		img, err := imaging.Decode(bytes.NewReader(iconBytes))
+		if err != nil {
+			logrus.Error("failed decoding icon:", path, err)
 			continue
 		}
 
@@ -158,6 +168,30 @@ func init() {
 
 		weatherIconCache[code] = im.Image()
 	}
+}
+
+// loadFontFace is an embed-aware drop-in replacement for gg.Context.LoadFontFace.
+// It reads the font via the embedded assets (with on-disk fallback) and installs
+// it as the context's current face, mirroring the original error contract.
+func loadFontFace(dc *gg.Context, path string, points float64) error {
+	b, err := assets.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	ft, err := opentype.Parse(b)
+	if err != nil {
+		return err
+	}
+	face, err := opentype.NewFace(ft, &opentype.FaceOptions{
+		Size:    points,
+		DPI:     72,
+		Hinting: font.HintingFull,
+	})
+	if err != nil {
+		return err
+	}
+	dc.SetFontFace(face)
+	return nil
 }
 
 func GetIconImage(iconCode int) image.Image {
@@ -358,7 +392,7 @@ func MakeWeatherInterface(
 	im.DrawRectangle(0, 0, width, height)
 	im.Fill()
 
-	if err := im.LoadFontFace("pymouse/assets/fonts/economica-italic.ttf", 80); err != nil {
+	if err := loadFontFace(im, "pymouse/assets/fonts/economica-italic.ttf", 80); err != nil {
 		return "", err
 	}
 
@@ -367,7 +401,7 @@ func MakeWeatherInterface(
 	im.SetRGB(1, 1, 1)
 	im.DrawStringAnchored(locationText, width/2, 120, 0.5, 0.5)
 
-	if err := im.LoadFontFace("pymouse/assets/fonts/notosans-bold.ttf", 80); err != nil {
+	if err := loadFontFace(im, "pymouse/assets/fonts/notosans-bold.ttf", 80); err != nil {
 		return "", err
 	}
 	yCurrent := 400.0
@@ -385,7 +419,7 @@ func MakeWeatherInterface(
 		yCurrent+80,
 	)
 
-	if err := im.LoadFontFace("pymouse/assets/fonts/economica-italic.ttf", 80); err != nil {
+	if err := loadFontFace(im, "pymouse/assets/fonts/economica-italic.ttf", 80); err != nil {
 		return "", err
 	}
 
@@ -395,7 +429,7 @@ func MakeWeatherInterface(
 		yCurrent+180,
 	)
 
-	if err := im.LoadFontFace("pymouse/assets/fonts/arial.ttf", 65); err != nil {
+	if err := loadFontFace(im, "pymouse/assets/fonts/arial.ttf", 65); err != nil {
 		return "", err
 	}
 
@@ -448,13 +482,13 @@ func MakeWeatherInterface(
 
 		dayLabel := utils.FirstRunes(daily.Date, 3)
 
-		if err := im.LoadFontFace("pymouse/assets/fonts/notosans-bold.ttf", 60); err != nil {
+		if err := loadFontFace(im, "pymouse/assets/fonts/notosans-bold.ttf", 60); err != nil {
 			return "", err
 		}
 		im.SetRGB(1, 1, 1)
 		im.DrawString(dayLabel, xStart, yForecast+260)
 
-		if err := im.LoadFontFace("pymouse/assets/fonts/arial.ttf", 60); err != nil {
+		if err := loadFontFace(im, "pymouse/assets/fonts/arial.ttf", 60); err != nil {
 			return "", err
 		}
 
@@ -479,7 +513,7 @@ func MakeWeatherInterface(
 			shortcast = shortcast[:18] + "..."
 		}
 
-		if err := im.LoadFontFace("pymouse/assets/fonts/arial.ttf", 35); err != nil {
+		if err := loadFontFace(im, "pymouse/assets/fonts/arial.ttf", 35); err != nil {
 			return "", err
 		}
 
