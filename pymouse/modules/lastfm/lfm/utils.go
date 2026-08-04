@@ -205,6 +205,39 @@ func loadFont(path string, size float64) font.Face {
 	return face
 }
 
+// pickTextColor returns white or black, whichever contrasts best with the
+// mean luminance of the given region on the already-rendered background.
+// Used so the track/artist copy stays readable on any cover — including the
+// white Last.fm "no artwork" placeholder. Sampling is strided (every 2px);
+// the region is small (~340x210).
+func pickTextColor(img image.Image, region image.Rectangle) color.Color {
+	bounds := img.Bounds()
+	if !bounds.Intersect(region).Eq(region) {
+		return color.White // defensive default on unexpected geometry
+	}
+
+	var sum uint64
+	var n uint64
+	for y := region.Min.Y; y < region.Max.Y; y += 2 {
+		for x := region.Min.X; x < region.Max.X; x += 2 {
+			r, g, b, _ := img.At(x, y).RGBA()
+			// Rec. 601 luma, 8-bit range
+			l := (299*uint64(r>>8) + 587*uint64(g>>8) + 114*uint64(b>>8)) / 1000
+			sum += l
+			n++
+		}
+	}
+	if n == 0 {
+		return color.White
+	}
+
+	luma := float64(sum) / float64(n) // 0..255
+	if luma >= 128 {
+		return color.Black // bright background -> dark text
+	}
+	return color.White // dark background -> light text
+}
+
 func darken(img image.Image, factor float64) image.Image {
 	bounds := img.Bounds()
 	dst := image.NewRGBA(bounds)
@@ -334,6 +367,15 @@ func DrawScrobble(
 		dc.DrawImage(cover, 25, 25)
 	}
 
+	// Text sits in the right-hand half of the card. On bright covers (or the
+	// white Last.fm "no artwork" placeholder) the blurred background there can
+	// be too light for the default white text. Pick the text colour based on
+	// the mean luminance of the exact region the text will occupy: dark
+	// background -> white text, bright background -> black text.
+	// Geometry: every text element starts at x=248 and is capped at ~315px
+	// wide; vertically they span y=25 (username top) to y=225 (loved bottom).
+	textColor := pickTextColor(dc.Image(), image.Rect(238, 18, 573, 230))
+
 	// fonts
 	openSans := loadFont(fonts.OpenSans, 19)
 	poppins := loadFont(fonts.Poppins, 18)
@@ -374,7 +416,7 @@ func DrawScrobble(
 		artistFont = unicodeFaceSm
 	}
 
-	dc.SetColor(color.White)
+	dc.SetColor(textColor)
 
 	// username
 	dc.SetFontFace(poppins)
