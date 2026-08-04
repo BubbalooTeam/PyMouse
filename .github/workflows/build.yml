@@ -45,15 +45,19 @@ jobs:
         run: go vet ./...
 
       - name: Build linux/amd64
+        # Output name is "PyMouse", NOT "pymouse": the repo has a `pymouse/`
+        # package directory, and `go build -o pymouse .` would place the binary
+        # INSIDE that directory (pymouse/pymouse) instead of creating a file —
+        # which silently breaks the release upload ("no valid file").
         run: |
           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
-            go build -trimpath -ldflags="-s -w" -o pymouse .
+            go build -trimpath -ldflags="-s -w" -o PyMouse .
 
       - name: Verify binary
         run: |
-          file ./pymouse
-          test -x ./pymouse
-          ./pymouse -h >/dev/null 2>&1 || true   # don't fail on the bot's own arg handling
+          file ./PyMouse
+          test -x ./PyMouse
+          ./PyMouse -h >/dev/null 2>&1 || true   # don't fail on the bot's own arg handling
 
       - name: Compute release metadata
         id: meta
@@ -67,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pymouse-linux-amd64
-          path: pymouse
+          path: PyMouse
           if-no-files-found: error
           retention-days: 30
 
@@ -88,7 +92,7 @@ jobs:
             Source: ${{ github.event.head_commit.url }}
 
             Install with: `scripts/deploy.sh ${{ format('{0}-{1}', env.RELEASE_DATE, env.SHORT_SHA) }}`
-          files: pymouse
+          files: PyMouse
           make_latest: true
         env:
           RELEASE_DATE: ${{ steps.meta.outputs.date }}

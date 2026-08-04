@@ -23,8 +23,9 @@ set -euo pipefail
 
 REPO="BubbalooTeam/PyMouse"
 INSTALL_DIR="${PYMOUSE_INSTALL_DIR:-/root/PyMouse}"
-BIN_PATH="${INSTALL_DIR}/bin/pymouse"
+BIN_PATH="${INSTALL_DIR}/bin/PyMouse"
 ARTIFACT_NAME="pymouse-linux-amd64"
+ASSET_NAME="PyMouse"   # name of the binary inside the release/artifact
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
@@ -34,12 +35,12 @@ is_number() { [[ "$1" =~ ^[0-9]+$ ]]; }
 
 arg="${1:-}"
 
-# Resolve the requested binary into "$TMP_DIR/pymouse".
+# Resolve the requested binary into "$TMP_DIR/$ASSET_NAME".
 if [[ -z "$arg" || "$arg" == "latest" ]]; then
     # --- latest release (public, no auth) ---
     echo "==> Downloading latest release from $REPO..."
-    curl -fL --retry 3 -o "$TMP_DIR/pymouse" \
-        "https://github.com/$REPO/releases/latest/download/pymouse"
+    curl -fL --retry 3 -o "$TMP_DIR/$ASSET_NAME" \
+        "https://github.com/$REPO/releases/latest/download/$ASSET_NAME"
 
 elif [[ "$arg" == "pr" ]] || is_number "$arg"; then
     # --- workflow artifact (needs gh; GitHub gates artifacts even on public repos) ---
@@ -71,18 +72,18 @@ elif [[ "$arg" == "pr" ]] || is_number "$arg"; then
 else
     # --- specific release tag (public, no auth) ---
     echo "==> Downloading release '$arg' from $REPO..."
-    curl -fL --retry 3 -o "$TMP_DIR/pymouse" \
-        "https://github.com/$REPO/releases/download/$arg/pymouse"
+    curl -fL --retry 3 -o "$TMP_DIR/$ASSET_NAME" \
+        "https://github.com/$REPO/releases/download/$arg/$ASSET_NAME"
 fi
 
-if [[ ! -f "$TMP_DIR/pymouse" ]]; then
-    echo "ERROR: binary was not downloaded to $TMP_DIR/pymouse." >&2
+if [[ ! -f "$TMP_DIR/$ASSET_NAME" ]]; then
+    echo "ERROR: binary was not downloaded to $TMP_DIR/$ASSET_NAME." >&2
     exit 1
 fi
 
 echo "==> Installing to $BIN_PATH"
 mkdir -p "$(dirname "$BIN_PATH")"
-install -m 0755 "$TMP_DIR/pymouse" "$BIN_PATH"
+install -m 0755 "$TMP_DIR/$ASSET_NAME" "$BIN_PATH"
 
 echo "==> Restarting pymouse.service"
 systemctl restart pymouse

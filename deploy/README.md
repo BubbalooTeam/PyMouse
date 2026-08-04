@@ -38,7 +38,7 @@ After=network.target
 [Service]
 User=root
 WorkingDirectory=/root/PyMouse
-ExecStart=/root/PyMouse/bin/pymouse
+ExecStart=/root/PyMouse/bin/PyMouse
 Restart=always
 EnvironmentFile=/root/PyMouse/.env
 
