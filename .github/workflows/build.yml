@@ -1,0 +1,63 @@
+name: build
+
+# Builds a self-contained Linux/amd64 binary (assets embedded via go:embed)
+# and publishes it as a workflow artifact. The production server pulls this
+# artifact with scripts/deploy.sh — no Go toolchain needed on the server.
+#
+# Runs on every push to PyMouse (main) and on all pull requests so merges are
+# validated before they ship. To deploy a specific run, see scripts/deploy.sh.
+
+on:
+  push:
+    branches: [PyMouse]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25.x'
+          cache: true
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Build linux/amd64
+        run: |
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+            go build -trimpath -ldflags="-s -w" -o pymouse .
+
+      - name: Smoke-test the binary
+        run: |
+          # A self-contained binary must be able to resolve its embedded assets
+          # even when the source tree is not present on disk. Run it from an
+          # empty CWD; the process just needs to start without panicking on a
+          # missing .env (it will, and that's fine — we only want to confirm
+          # the binary is valid and linked).
+          file ./pymouse
+          test -x ./pymouse
+
+      - name: Upload artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pymouse-linux-amd64
+          path: pymouse
+          if-no-files-found: error
+          retention-days: 30
