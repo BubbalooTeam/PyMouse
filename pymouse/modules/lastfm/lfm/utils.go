@@ -82,6 +82,48 @@ type Fonts struct {
 	CJK string
 }
 
+// getRecentTracks fetches the user's last `limit` scrobbled tracks. Returns a
+// slice of LastFMTrackInformations (Image/Playcount/YouTubeURL may be zero —
+// this call is lighter than getTrack, which also hits track.getinfo per item).
+func getRecentTracks(httpClient *http.Client, username string, limit int) ([]LastFMTrackInformations, error) {
+	var info LastFMRecentTracksInfo
+	params := map[string]string{
+		"method":   "user.getrecenttracks",
+		"user":     username,
+		"api_key":  config.LastFMAPIKey,
+		"format":   "json",
+		"limit":    strconv.Itoa(limit),
+		"extended": "1",
+	}
+	r, err := rapidhttp.Request(httpClient, rapidhttp.HTTPStruct{
+		Method: "GET",
+		URL:    LastFMAPIURL,
+		GETParams: &rapidhttp.HTTPGetStruct{Params: params},
+	})
+	if err != nil || r.StatusCode != 200 {
+		return nil, fmt.Errorf("failed to fetch recent tracks.")
+	}
+	defer r.Body.Close()
+	if err := json.NewDecoder(r.Body).Decode(&info); err != nil {
+		return nil, fmt.Errorf("failed to decode recent tracks information.")
+	}
+	out := make([]LastFMTrackInformations, 0, len(info.RecentTracks.Track))
+	for _, t := range info.RecentTracks.Track {
+		img := ""
+		if n := len(t.Image); n > 0 {
+			img = t.Image[n-1].URL
+		}
+		out = append(out, LastFMTrackInformations{
+			Artist: t.Artist.Name,
+			Track:  t.Name,
+			Loved:  t.Loved == "1",
+			Image:  img,
+			Now:    t.Attr.NowPlaying == "true",
+		})
+	}
+	return out, nil
+}
+
 func trackPlays(httpClient *http.Client, username string, artist string, track string) (int64, error) {
 	var trackPlaysInfo trackPlaysInformations
 	trackPlaysParams := map[string]string{
@@ -497,6 +539,73 @@ func DrawScrobble(
 
 	defer os.Remove(imgPath)
 
+	return filename, nil
+}
+
+// DrawRecentScrobble renders a vertical list of recent scrobbles for the "+"
+// expand view. Layout: same dark background as the now-playing card, with each
+// entry on its own line ("1. track — artist"), the first one flagged as
+// now-playing if applicable. Height grows with the number of entries.
+func DrawRecentScrobble(
+	username string,
+	tracks []LastFMTrackInformations,
+	fonts Fonts,
+	l func(string) string,
+) (string, error) {
+	dir := fmt.Sprintf("%s/%s", config.DownloadPath, "lastfm")
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return "", err
+	}
+
+	const (
+		width      = 600
+		rowH       = 42
+		headerH    = 70
+		marginX    = 30.0
+		listMaxPx  = 520.0 // truncate width for "N. track — artist"
+	)
+	height := headerH + rowH*len(tracks) + 20
+
+	dc := gg.NewContext(width, height)
+	dc.SetRGB255(18, 18, 18)
+	dc.Clear()
+
+	// Header: username + "recent tracks" caption.
+	poppins := loadFont(fonts.Poppins, 22)
+	arial := loadFont(fonts.Arial, 18)
+
+	dc.SetColor(color.White)
+	dc.SetFontFace(poppins)
+	dc.DrawString(username, marginX, 40)
+
+	dc.SetFontFace(arial)
+	dc.SetRGB255(170, 170, 170)
+	dc.DrawString(l("lastfm.recent.header"), marginX, 62)
+	dc.SetColor(color.White)
+
+	// Rows.
+	for i, t := range tracks {
+		y := float64(headerH + i*rowH)
+		marker := "  "
+		if t.Now {
+			marker = "▶ "
+		} else if t.Loved {
+			marker = "♥ "
+		}
+		label := fmt.Sprintf("%s%d. %s — %s", marker, i+1, t.Track, t.Artist)
+		dc.SetFontFace(arial)
+		dc.DrawString(truncate(dc, label, listMaxPx), marginX, y)
+	}
+
+	filename := dir + "/" + uuid.NewString() + ".jpg"
+	out, err := os.Create(filename)
+	if err != nil {
+		return "", err
+	}
+	defer out.Close()
+	if err := jpeg.Encode(out, dc.Image(), &jpeg.Options{Quality: 95}); err != nil {
+		return "", err
+	}
 	return filename, nil
 }
 

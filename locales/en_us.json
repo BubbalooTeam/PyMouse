@@ -164,6 +164,13 @@
         },
         "inline": {
             "profile": "Last.fm profile"
+        },
+        "recent": {
+            "header": "recent tracks",
+            "profile-btn": "Profile",
+            "back-btn": "Back",
+            "share-btn": "Share",
+            "not-yours": "This isn't your card."
         }
 },
     "pm-menu": {

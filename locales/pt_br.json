@@ -167,6 +167,13 @@
         },
         "inline": {
             "profile": "Perfil Last.fm"
+        },
+        "recent": {
+            "header": "últimas faixas",
+            "profile-btn": "Perfil",
+            "back-btn": "Voltar",
+            "share-btn": "Compartilhar",
+            "not-yours": "Esse card não é seu."
         }
     },
     "pm-menu": {
