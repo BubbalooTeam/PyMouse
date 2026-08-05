@@ -114,7 +114,7 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 							URL:  "https://www.last.fm/user/" + url.PathEscape(username),
 						},
 						{
-							Text:         "+",
+							Text:         "📋 " + l("lastfm.recent.expand-btn"),
 							CallbackData: fmt.Sprintf("lfm_recent|%d", update.Message.From.ID),
 						},
 					},

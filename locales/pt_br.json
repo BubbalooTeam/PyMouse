@@ -171,6 +171,7 @@
         "recent": {
             "header": "últimas faixas",
             "profile-btn": "Perfil",
+            "expand-btn": "Últimas",
             "back-btn": "Voltar",
             "share-btn": "Compartilhar",
             "not-yours": "Esse card não é seu."

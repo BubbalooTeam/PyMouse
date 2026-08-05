@@ -168,6 +168,7 @@
         "recent": {
             "header": "recent tracks",
             "profile-btn": "Profile",
+            "expand-btn": "Recent",
             "back-btn": "Back",
             "share-btn": "Share",
             "not-yours": "This isn't your card."

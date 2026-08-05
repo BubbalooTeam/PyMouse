@@ -108,8 +108,11 @@ func getRecentTracks(httpClient *http.Client, username string, limit int) ([]Las
 	if err := json.NewDecoder(r.Body).Decode(&info); err != nil {
 		return nil, fmt.Errorf("failed to decode recent tracks information.")
 	}
-	out := make([]LastFMTrackInformations, 0, len(info.RecentTracks.Track))
+	out := make([]LastFMTrackInformations, 0, limit)
 	for _, t := range info.RecentTracks.Track {
+		if len(out) >= limit {
+			break // last.fm sometimes returns limit+1 when a track is now-playing
+		}
 		img := ""
 		if n := len(t.Image); n > 0 {
 			img = t.Image[n-1].URL
@@ -559,11 +562,11 @@ func DrawRecentScrobble(
 	}
 
 	const (
-		width      = 600
-		rowH       = 42
-		headerH    = 70
-		marginX    = 30.0
-		listMaxPx  = 520.0 // truncate width for "N. track — artist"
+		width     = 600
+		rowH      = 38
+		headerH   = 95 // leaves a gap below the header text (subtitle at y=62)
+		marginX   = 30.0
+		listMaxPx = 520.0 // truncate width for "N. track — artist"
 	)
 	height := headerH + rowH*len(tracks) + 20
 

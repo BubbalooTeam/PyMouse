@@ -90,7 +90,7 @@ func ExpandRecent(ctx *telegohandler.Context, update telego.Update) error {
 
 	profileBtn := []telego.InlineKeyboardButton{
 		{Text: "👤 " + l("lastfm.recent.profile-btn"), URL: "https://www.last.fm/user/" + username},
-		{Text: "← " + l("lastfm.recent.back-btn"), CallbackData: fmt.Sprintf("lfm_back|%d", ownerID)},
+		{Text: "↩️ " + l("lastfm.recent.back-btn"), CallbackData: fmt.Sprintf("lfm_back|%d", ownerID)},
 	}
 
 	if _, err := bot.EditMessageMedia(ctx, &telego.EditMessageMediaParams{
@@ -153,12 +153,10 @@ func BackToNowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 		os.Remove(imgPath)
 	}()
 
-	shareQuery := "lfm"
 	rows := [][]telego.InlineKeyboardButton{{
 		{Text: "▶️ YouTube", URL: trackInfo.YouTubeURL},
 		{Text: "👤 " + l("lastfm.recent.profile-btn"), URL: "https://www.last.fm/user/" + username},
-		{Text: "+", CallbackData: fmt.Sprintf("lfm_recent|%d", ownerID)},
-		{Text: "🔗 " + l("lastfm.recent.share-btn"), SwitchInlineQuery: &shareQuery},
+		{Text: "📋 " + l("lastfm.recent.expand-btn"), CallbackData: fmt.Sprintf("lfm_recent|%d", ownerID)},
 	}}
 
 	if _, err := bot.EditMessageMedia(ctx, &telego.EditMessageMediaParams{
