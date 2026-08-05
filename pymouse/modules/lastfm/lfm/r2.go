@@ -112,14 +112,17 @@ func signS3V4PUT(req *http.Request, objectKey string, payload []byte) error {
 	req.Header.Set("x-amz-content-sha256", payloadHash)
 	req.Header.Set("x-amz-storage-class", "STANDARD")
 
-	// 1. Canonical request.
+	// 1. Canonical request. Canonical headers MUST be "name:value\n" pairs,
+	// headers listed alphabetically, and the SignedHeaders list must match.
+	// We sign host + the three x-amz-* headers we send.
 	signedHeaders := "host;x-amz-content-sha256;x-amz-date;x-amz-storage-class"
 	canonicalHeaders := strings.Join([]string{
-		req.Host + "\n",
-		payloadHash + "\n",
-		amzDate + "\n",
-		"STANDARD\n",
-	}, "")
+		"host:" + req.Host,
+		"x-amz-content-sha256:" + payloadHash,
+		"x-amz-date:" + amzDate,
+		"x-amz-storage-class:STANDARD",
+		"", // trailing newline after the last header
+	}, "\n")
 	canonicalURI := "/" + config.R2Bucket + "/" + objectKey
 	canonicalRequest := strings.Join([]string{
 		"PUT",
