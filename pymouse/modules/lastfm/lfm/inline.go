@@ -91,19 +91,9 @@ func NowPlayingInline(ctx *telegohandler.Context, query telego.InlineQuery) erro
 		return answerTextFallback(bot, ctx, query.ID, trackInfo, username, l)
 	}
 
-	caption := fmt.Sprintf(
-		"🎵 <b>%s</b> — <i>%s</i>\n👤 <a href=\"%s\">%s</a>",
-		escapeHTML(trackInfo.Track),
-		escapeHTML(trackInfo.Artist),
-		"https://www.last.fm/user/"+url.PathEscape(username),
-		l("lastfm.inline.profile"),
-	)
-
-	shareQuery := "lfm"
 	rows := [][]telego.InlineKeyboardButton{{
 		{Text: "▶️ YouTube", URL: trackInfo.YouTubeURL},
 		{Text: "👤 " + l("lastfm.recent.profile-btn"), URL: "https://www.last.fm/user/" + url.PathEscape(username)},
-		{Text: "🔗 " + l("lastfm.recent.share-btn"), SwitchInlineQuery: &shareQuery},
 	}}
 
 	return bot.AnswerInlineQuery(ctx, &telego.AnswerInlineQueryParams{
@@ -112,17 +102,15 @@ func NowPlayingInline(ctx *telegohandler.Context, query telego.InlineQuery) erro
 		IsPersonal:    true,
 		Results: []telego.InlineQueryResult{
 			&telego.InlineQueryResultPhoto{
-				Type:        "photo",
-				ID:          "lfm-nowplaying",
-				PhotoURL:    photoURL,
+				Type:         "photo",
+				ID:           "lfm-nowplaying",
+				PhotoURL:     photoURL,
 				ThumbnailURL: photoURL,
-				PhotoWidth:  600,
-				PhotoHeight: 250,
-				Title:       "🎵 " + trackInfo.Track,
-				Description: trackInfo.Artist,
-				Caption:     caption,
-				ParseMode:   "HTML",
-				ReplyMarkup: &telego.InlineKeyboardMarkup{InlineKeyboard: rows},
+				PhotoWidth:   600,
+				PhotoHeight:  250,
+				Title:        "🎵 " + trackInfo.Track,
+				Description:  trackInfo.Artist,
+				ReplyMarkup:  &telego.InlineKeyboardMarkup{InlineKeyboard: rows},
 			},
 		},
 	})
