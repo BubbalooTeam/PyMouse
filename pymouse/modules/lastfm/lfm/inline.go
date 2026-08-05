@@ -83,7 +83,7 @@ func NowPlayingInline(ctx *telegohandler.Context, query telego.InlineQuery) erro
 	}
 	defer os.Remove(imgPath)
 
-	photoURL, uerr := uploadToTelegraph(imgPath)
+	photoURL, uerr := uploadToR2(imgPath)
 	if uerr != nil {
 		return answerTextFallback(bot, ctx, query.ID, trackInfo, username, l)
 	}

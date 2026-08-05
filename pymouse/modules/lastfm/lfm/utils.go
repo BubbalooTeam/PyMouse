@@ -9,7 +9,6 @@ import (
 	"image/color"
 	"image/jpeg"
 	"io"
-	"mime/multipart"
 	"net/http"
 	"net/url"
 	"os"
@@ -657,59 +656,7 @@ func resolveYouTubeURL(httpClient *http.Client, artist, track string) string {
 	return "https://www.youtube.com/results?search_query=" + q
 }
 
-// uploadToTelegraph uploads a local image file to telegra.ph and returns its
-// public URL (https://telegra.ph/file/<id>.<ext>). Telegraph's upload endpoint
-// accepts a multipart form with a single "content" field and replies with a
-// JSON array like [{"src":"/file/<id>.<ext>"}]. Used to host the now-playing
-// card image so it can be served via an inline-query photo result (Telegram
-// requires a publicly reachable PhotoURL for those).
-func uploadToTelegraph(filePath string) (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	r, err := os.Open(filePath)
-	if err != nil {
-		return "", err
-	}
-	defer r.Close()
-
-	body := &bytes.Buffer{}
-	w := multipart.NewWriter(body)
-	fw, err := w.CreateFormFile("content", "scrobble.jpg")
-	if err != nil {
-		return "", err
-	}
-	if _, err := io.Copy(fw, r); err != nil {
-		return "", err
-	}
-	w.Close()
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, "https://telegra.ph/upload", body)
-	if err != nil {
-		return "", err
-	}
-	req.Header.Set("Content-Type", w.FormDataContentType())
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("telegra.ph upload: HTTP %d", resp.StatusCode)
-	}
-
-	var parsed []struct {
-		Src string `json:"src"`
-		Err string `json:"error"`
-	}
-	if err := json.NewDecoder(resp.Body).Decode(&parsed); err != nil {
-		return "", err
-	}
-	if len(parsed) == 0 || parsed[0].Src == "" {
-		return "", fmt.Errorf("telegra.ph upload: empty response")
-	}
-	return "https://telegra.ph" + parsed[0].Src, nil
-}
+// (image hosting moved to Cloudflare R2 — see r2.go. telegra.ph's anonymous
+// upload endpoint stopped accepting requests, so it is no longer used.)
 
 

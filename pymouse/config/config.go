@@ -18,6 +18,15 @@ var (
 	Socks5Proxy    string
 	TelegramAPIURL string
 	WebhookURL     string
+
+	// Cloudflare R2 (optional). When all four are set, the last.fm inline
+	// result uploads its card image to R2 and serves it via R2PublicURL.
+	// When unset, the inline result falls back to a plain text article.
+	R2AccountID    string
+	R2Bucket       string
+	R2AccessKeyID  string
+	R2SecretKey    string
+	R2PublicURL    string
 )
 
 func init() {
@@ -56,4 +65,11 @@ func init() {
 	Socks5Proxy = os.Getenv("SOCKS5_PROXY")
 	TelegramAPIURL = os.Getenv("TELEGRAM_API_URL")
 	WebhookURL = os.Getenv("WEBHOOK_URL")
+
+	// R2 is optional — only read if present.
+	R2AccountID = os.Getenv("R2_ACCOUNT_ID")
+	R2Bucket = os.Getenv("R2_BUCKET")
+	R2AccessKeyID = os.Getenv("R2_ACCESS_KEY_ID")
+	R2SecretKey = os.Getenv("R2_SECRET_ACCESS_KEY")
+	R2PublicURL = os.Getenv("R2_PUBLIC_URL")
 }
