@@ -587,16 +587,21 @@ func DrawRecentScrobble(
 	dc.DrawString(l("lastfm.recent.header"), marginX, 62)
 	dc.SetColor(color.White)
 
-	// Rows.
+	// Rows. The now-playing entry (if any) is labeled "current" instead of a
+	// number; the remaining entries are numbered sequentially, so a 5-row list
+	// reads: current, 2, 3, 4, 5.
 	for i, t := range tracks {
 		y := float64(headerH + i*rowH)
-		marker := "  "
-		if t.Now {
-			marker = "▶ "
-		} else if t.Loved {
-			marker = "♥ "
+		var prefix string
+		switch {
+		case t.Now:
+			prefix = l("lastfm.recent.now-label") + " — "
+		case t.Loved:
+			prefix = "♥ " + strconv.Itoa(i+1) + ". "
+		default:
+			prefix = strconv.Itoa(i+1) + ". "
 		}
-		label := fmt.Sprintf("%s%d. %s — %s", marker, i+1, t.Track, t.Artist)
+		label := prefix + t.Track + " — " + t.Artist
 		dc.SetFontFace(arial)
 		dc.DrawString(truncate(dc, label, listMaxPx), marginX, y)
 	}

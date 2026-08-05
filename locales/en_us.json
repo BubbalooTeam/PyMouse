@@ -167,6 +167,7 @@
         },
         "recent": {
             "header": "recent tracks",
+            "now-label": "current",
             "profile-btn": "Profile",
             "expand-btn": "Recent",
             "back-btn": "Back",

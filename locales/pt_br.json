@@ -170,6 +170,7 @@
         },
         "recent": {
             "header": "últimas faixas",
+            "now-label": "atual",
             "profile-btn": "Perfil",
             "expand-btn": "Últimas",
             "back-btn": "Voltar",
