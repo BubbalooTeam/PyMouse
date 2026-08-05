@@ -92,7 +92,7 @@ func NowPlayingInline(ctx *telegohandler.Context, query telego.InlineQuery) erro
 	}
 
 	rows := [][]telego.InlineKeyboardButton{{
-		{Text: "▶️ YouTube", URL: trackInfo.YouTubeURL},
+		{Text: "🎵 Last.fm", URL: trackInfo.LastFMURL},
 		{Text: "👤 " + l("lastfm.recent.profile-btn"), URL: "https://www.last.fm/user/" + url.PathEscape(username)},
 	}}
 

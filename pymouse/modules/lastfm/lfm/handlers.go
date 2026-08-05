@@ -106,8 +106,8 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 				InlineKeyboard: [][]telego.InlineKeyboardButton{
 					{
 						{
-							Text: "▶️ YouTube",
-							URL:  trackInfo.YouTubeURL,
+							Text: "🎵 Last.fm",
+							URL:  trackInfo.LastFMURL,
 						},
 						{
 							Text: "👤 " + l("lastfm.recent.profile-btn"),

@@ -154,7 +154,7 @@ func BackToNowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 	}()
 
 	rows := [][]telego.InlineKeyboardButton{{
-		{Text: "▶️ YouTube", URL: trackInfo.YouTubeURL},
+		{Text: "🎵 Last.fm", URL: trackInfo.LastFMURL},
 		{Text: "👤 " + l("lastfm.recent.profile-btn"), URL: "https://www.last.fm/user/" + username},
 		{Text: "📋 " + l("lastfm.recent.expand-btn"), CallbackData: fmt.Sprintf("lfm_recent|%d", ownerID)},
 	}}
