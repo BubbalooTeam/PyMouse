@@ -162,7 +162,7 @@
             "no-scrobbles": "<b>Nenhuma música foi ouvida pelo usuário.</b>",
             "userplaycount": " pela %dª vez",
             "was-listening": "Estava ouvindo",
-            "loved": "Ele(a) curtiu essa música!",
+            "loved": "curtiu essa música",
             "error": "<b>Ocorreu um erro ao obter as informações de reprodução do usuário.</b>"
         }
     },

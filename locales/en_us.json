@@ -158,7 +158,7 @@
             "no-scrobbles": "<b>The user has not listened to any music.</b>",
             "userplaycount": " for the %dth time",
             "was-listening": "Was listening",
-            "loved": "He/She liked this song!",
+            "loved": "liked this song",
             "error": "<b>An error occurred while retrieving the user's playback information.</b>"
 
         }
