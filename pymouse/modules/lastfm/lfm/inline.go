@@ -22,7 +22,13 @@ import (
 // (/setinline) and "inline_query" in AllowedUpdates (see client/bot.go).
 func NowPlayingInline(ctx *telegohandler.Context, query telego.InlineQuery) error {
 	bot := ctx.Bot()
-	l := i18n.Locale(telego.Chat{}) // locale por defecto; inline queries não têm chat
+	// Inline queries have no chat, but the caller's language preference is
+	// stored per-user (same path PM chats use). Pass the user id as a private
+	// chat so i18n.Locale -> GetChatLanguage resolves it; falls back to en_us.
+	l := i18n.Locale(telego.Chat{
+		ID:   query.From.ID,
+		Type: telego.ChatTypePrivate,
+	})
 
 	username := repositories.GetLastFMUsername(query.From.ID)
 
