@@ -12,6 +12,7 @@ import (
 	"github.com/cavaliergopher/grab/v3"
 	"github.com/mymmrac/telego"
 	"github.com/mymmrac/telego/telegohandler"
+	"github.com/sirupsen/logrus"
 )
 
 // NowPlayingInline answers an inline query (@PyMouseBOT lfm) with the caller's
@@ -73,18 +74,20 @@ func NowPlayingInline(ctx *telegohandler.Context, query telego.InlineQuery) erro
 	listeningText := getListeningText(trackInfo, l)
 
 	// Generate the same card image the /lfm command sends, then host it on
-	// telegra.ph so it can be used as an inline photo result.
+	// R2 so it can be used as an inline photo result.
 	imgPath, derr := DrawScrobble(
 		grab.NewClient(), imageURL, trackInfo.Track, trackInfo.Artist,
 		username, listeningText, trackInfo.Loved, fontSet(), l,
 	)
 	if derr != nil {
+		logrus.Errorf("[lastfm-inline] DrawScrobble failed: %v", derr)
 		return answerTextFallback(bot, ctx, query.ID, trackInfo, username, l)
 	}
 	defer os.Remove(imgPath)
 
 	photoURL, uerr := uploadToR2(imgPath)
 	if uerr != nil {
+		logrus.Errorf("[lastfm-inline] uploadToR2 failed: %v", uerr)
 		return answerTextFallback(bot, ctx, query.ID, trackInfo, username, l)
 	}
 

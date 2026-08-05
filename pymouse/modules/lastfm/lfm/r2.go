@@ -24,6 +24,27 @@ func r2Configured() bool {
 		config.R2AccessKeyID != "" && config.R2SecretKey != "" && config.R2PublicURL != ""
 }
 
+// r2MissingEnv lists which R2_* env vars are unset, for clearer error logs.
+func r2MissingEnv() []string {
+	var missing []string
+	if config.R2AccountID == "" {
+		missing = append(missing, "R2_ACCOUNT_ID")
+	}
+	if config.R2Bucket == "" {
+		missing = append(missing, "R2_BUCKET")
+	}
+	if config.R2AccessKeyID == "" {
+		missing = append(missing, "R2_ACCESS_KEY_ID")
+	}
+	if config.R2SecretKey == "" {
+		missing = append(missing, "R2_SECRET_ACCESS_KEY")
+	}
+	if config.R2PublicURL == "" {
+		missing = append(missing, "R2_PUBLIC_URL")
+	}
+	return missing
+}
+
 // uploadToR2 uploads the JPEG at filePath to the configured Cloudflare R2
 // bucket using a presigned PUT (AWS Signature Version 4), and returns the
 // object's public URL. No AWS SDK dependency — the signature is built with
@@ -31,7 +52,7 @@ func r2Configured() bool {
 // repeated uploads never collide.
 func uploadToR2(filePath string) (string, error) {
 	if !r2Configured() {
-		return "", fmt.Errorf("R2 not configured")
+		return "", fmt.Errorf("R2 not configured (missing: %v)", r2MissingEnv())
 	}
 
 	data, err := os.ReadFile(filePath)
