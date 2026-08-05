@@ -34,12 +34,13 @@ type trackPlaysInformations struct {
 }
 
 type LastFMTrackInformations struct {
-	Artist    string
-	Track     string
-	Loved     bool
-	Playcount int64
-	Image     string
-	Now       bool
+	Artist     string
+	Track      string
+	Loved      bool
+	Playcount  int64
+	Image      string
+	Now        bool
+	LastFMURL  string // last.fm track page URL, used by the "Open on Last.fm" button
 }
 
 type LastFMRecentTracksInfo struct {
@@ -51,6 +52,7 @@ type LastFMRecentTracksInfo struct {
 
 			Name  string `json:"name,omitempty" default:"unknown"`
 			Loved string `json:"loved"`
+			URL   string `json:"url,omitempty"`
 
 			Image []struct {
 				URL string `json:"#text"`
@@ -73,6 +75,51 @@ type Fonts struct {
 	// CJK covers Chinese/Japanese/Korean (and also Latin/Cyrillic,
 	// so it is used alone when any CJK rune is present).
 	CJK string
+}
+
+// getRecentTracks fetches the user's last `limit` scrobbled tracks. Returns a
+// slice of LastFMTrackInformations (Image/Playcount/YouTubeURL may be zero —
+// this call is lighter than getTrack, which also hits track.getinfo per item).
+func getRecentTracks(httpClient *http.Client, username string, limit int) ([]LastFMTrackInformations, error) {
+	var info LastFMRecentTracksInfo
+	params := map[string]string{
+		"method":   "user.getrecenttracks",
+		"user":     username,
+		"api_key":  config.LastFMAPIKey,
+		"format":   "json",
+		"limit":    strconv.Itoa(limit),
+		"extended": "1",
+	}
+	r, err := rapidhttp.Request(httpClient, rapidhttp.HTTPStruct{
+		Method: "GET",
+		URL:    LastFMAPIURL,
+		GETParams: &rapidhttp.HTTPGetStruct{Params: params},
+	})
+	if err != nil || r.StatusCode != 200 {
+		return nil, fmt.Errorf("failed to fetch recent tracks.")
+	}
+	defer r.Body.Close()
+	if err := json.NewDecoder(r.Body).Decode(&info); err != nil {
+		return nil, fmt.Errorf("failed to decode recent tracks information.")
+	}
+	out := make([]LastFMTrackInformations, 0, limit)
+	for _, t := range info.RecentTracks.Track {
+		if len(out) >= limit {
+			break // last.fm sometimes returns limit+1 when a track is now-playing
+		}
+		img := ""
+		if n := len(t.Image); n > 0 {
+			img = t.Image[n-1].URL
+		}
+		out = append(out, LastFMTrackInformations{
+			Artist: t.Artist.Name,
+			Track:  t.Name,
+			Loved:  t.Loved == "1",
+			Image:  img,
+			Now:    t.Attr.NowPlaying == "true",
+		})
+	}
+	return out, nil
 }
 
 func trackPlays(httpClient *http.Client, username string, artist string, track string) (int64, error) {
@@ -168,6 +215,7 @@ func getTrack(httpClient *http.Client, username string) (LastFMTrackInformations
 		Playcount: userPlayCount,
 		Image:     recentTracksInfo.RecentTracks.Track[0].Image[len(recentTracksInfo.RecentTracks.Track[0].Image)-1].URL,
 		Now:       recentTracksInfo.RecentTracks.Track[0].Attr.NowPlaying == "true",
+		LastFMURL: recentTracksInfo.RecentTracks.Track[0].URL,
 	}, nil
 }
 
@@ -491,3 +539,80 @@ func DrawScrobble(
 
 	return filename, nil
 }
+
+// DrawRecentScrobble renders a vertical list of recent scrobbles for the "+"
+// expand view. Layout: same dark background as the now-playing card, with each
+// entry on its own line ("1. track — artist"), the first one flagged as
+// now-playing if applicable. Height grows with the number of entries.
+func DrawRecentScrobble(
+	username string,
+	tracks []LastFMTrackInformations,
+	fonts Fonts,
+	l func(string) string,
+) (string, error) {
+	dir := fmt.Sprintf("%s/%s", config.DownloadPath, "lastfm")
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return "", err
+	}
+
+	const (
+		width     = 600
+		rowH      = 38
+		headerH   = 95 // leaves a gap below the header text (subtitle at y=62)
+		marginX   = 30.0
+		listMaxPx = 520.0 // truncate width for "N. track — artist"
+	)
+	height := headerH + rowH*len(tracks) + 20
+
+	dc := gg.NewContext(width, height)
+	dc.SetRGB255(18, 18, 18)
+	dc.Clear()
+
+	// Header: username + "recent tracks" caption.
+	poppins := loadFont(fonts.Poppins, 22)
+	arial := loadFont(fonts.Arial, 18)
+
+	dc.SetColor(color.White)
+	dc.SetFontFace(poppins)
+	dc.DrawString(username, marginX, 40)
+
+	dc.SetFontFace(arial)
+	dc.SetRGB255(170, 170, 170)
+	dc.DrawString(l("lastfm.recent.header"), marginX, 62)
+	dc.SetColor(color.White)
+
+	// Rows. The now-playing entry (if any) is labeled "current" instead of a
+	// number; the remaining entries are numbered sequentially, so a 5-row list
+	// reads: current, 2, 3, 4, 5.
+	for i, t := range tracks {
+		y := float64(headerH + i*rowH)
+		var prefix string
+		switch {
+		case t.Now:
+			prefix = l("lastfm.recent.now-label") + " — "
+		case t.Loved:
+			prefix = "♥ " + strconv.Itoa(i+1) + ". "
+		default:
+			prefix = strconv.Itoa(i+1) + ". "
+		}
+		label := prefix + t.Track + " — " + t.Artist
+		dc.SetFontFace(arial)
+		dc.DrawString(truncate(dc, label, listMaxPx), marginX, y)
+	}
+
+	filename := dir + "/" + uuid.NewString() + ".jpg"
+	out, err := os.Create(filename)
+	if err != nil {
+		return "", err
+	}
+	defer out.Close()
+	if err := jpeg.Encode(out, dc.Image(), &jpeg.Options{Quality: 95}); err != nil {
+		return "", err
+	}
+	return filename, nil
+}
+
+// (image hosting moved to Cloudflare R2 — see r2.go. telegra.ph's anonymous
+// upload endpoint stopped accepting requests, so it is no longer used.)
+
+
