@@ -24,5 +24,9 @@ func LoadModule(bS *client.BotStruct) {
 			))
 		bS.Handler.Handle(set.SetUser, telegram.Command("set", bS.Client.Username()))
 		bS.Handler.Handle(set.UnsetUser, telegram.Command("unset", bS.Client.Username()))
+		// Inline mode: @PyMouseBOT lfm (also "lt", "lastfm") shows the caller's
+		// now-playing. Requires inline mode enabled in BotFather (/setinline).
+		bS.Handler.HandleInlineQuery(lfm.NowPlayingInline,
+			telegohandler.InlineQueryMatches(regexp.MustCompile(`(?i)\b(lfm|lt|lastfm)\b`)))
 	}
 }

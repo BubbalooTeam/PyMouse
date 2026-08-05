@@ -164,6 +164,9 @@
             "was-listening": "Estava ouvindo",
             "loved": "curtiu essa música",
             "error": "<b>Ocorreu um erro ao obter as informações de reprodução do usuário.</b>"
+        },
+        "inline": {
+            "profile": "Perfil Last.fm"
         }
     },
     "pm-menu": {

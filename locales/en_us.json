@@ -161,6 +161,9 @@
             "loved": "liked this song",
             "error": "<b>An error occurred while retrieving the user's playback information.</b>"
 
+        },
+        "inline": {
+            "profile": "Last.fm profile"
         }
 },
     "pm-menu": {
