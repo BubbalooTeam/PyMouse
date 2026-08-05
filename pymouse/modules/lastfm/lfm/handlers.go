@@ -1,7 +1,6 @@
 package lfm
 
 import (
-	"fmt"
 	"net/url"
 	"os"
 	"pymouse/pymouse/database/repositories"
@@ -111,10 +110,7 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 					{
 						{
 							Text: "▶️ YouTube",
-							URL: fmt.Sprintf(
-								"https://www.youtube.com/results?search_query=%s",
-								url.QueryEscape(trackInfo.Artist+" "+trackInfo.Track),
-							),
+							URL:  trackInfo.YouTubeURL,
 						},
 						{
 							Text: "👤 Perfil",

@@ -2,18 +2,24 @@ package lfm
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"image"
 	"image/color"
 	"image/jpeg"
+	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"pymouse/pymouse/assets"
 	"pymouse/pymouse/config"
 	"pymouse/pymouse/helpers/rapidhttp"
 	"pymouse/pymouse/modules/lastfm/set"
+	"regexp"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/cavaliergopher/grab/v3"
 	"github.com/disintegration/imaging"
@@ -34,12 +40,13 @@ type trackPlaysInformations struct {
 }
 
 type LastFMTrackInformations struct {
-	Artist    string
-	Track     string
-	Loved     bool
-	Playcount int64
-	Image     string
-	Now       bool
+	Artist     string
+	Track      string
+	Loved      bool
+	Playcount  int64
+	Image      string
+	Now        bool
+	YouTubeURL string // direct watch?v=... link when resolvable; falls back to a search URL
 }
 
 type LastFMRecentTracksInfo struct {
@@ -162,12 +169,13 @@ func getTrack(httpClient *http.Client, username string) (LastFMTrackInformations
 	defer r.Body.Close()
 
 	return LastFMTrackInformations{
-		Artist:    recentTracksInfo.RecentTracks.Track[0].Artist.Name,
-		Track:     recentTracksInfo.RecentTracks.Track[0].Name,
-		Loved:     recentTracksInfo.RecentTracks.Track[0].Loved == "1",
-		Playcount: userPlayCount,
-		Image:     recentTracksInfo.RecentTracks.Track[0].Image[len(recentTracksInfo.RecentTracks.Track[0].Image)-1].URL,
-		Now:       recentTracksInfo.RecentTracks.Track[0].Attr.NowPlaying == "true",
+		Artist:     recentTracksInfo.RecentTracks.Track[0].Artist.Name,
+		Track:      recentTracksInfo.RecentTracks.Track[0].Name,
+		Loved:      recentTracksInfo.RecentTracks.Track[0].Loved == "1",
+		Playcount:  userPlayCount,
+		Image:      recentTracksInfo.RecentTracks.Track[0].Image[len(recentTracksInfo.RecentTracks.Track[0].Image)-1].URL,
+		Now:        recentTracksInfo.RecentTracks.Track[0].Attr.NowPlaying == "true",
+		YouTubeURL: resolveYouTubeURL(httpClient, recentTracksInfo.RecentTracks.Track[0].Artist.Name, recentTracksInfo.RecentTracks.Track[0].Name),
 	}, nil
 }
 
@@ -491,3 +499,43 @@ func DrawScrobble(
 
 	return filename, nil
 }
+
+// ytWatchRe matches the first youtube.com/watch?v=XXXX or youtu.be/XXXX link
+// embedded in the Last.fm track page HTML ("Play track" button).
+var ytWatchRe = regexp.MustCompile(`(?:https?://(?:www\.)?youtube\.com/watch\?v=|https?://youtu\.be/)([A-Za-z0-9_-]{11})`)
+
+// resolveYouTubeURL tries to find a DIRECT YouTube link for a track, in order:
+//  1. Scraping the Last.fm track page (last.fm/music/<artist>/_/<track>),
+//     which exposes a curated "Play on YouTube" button for most tracks.
+//  2. (skipped) yt-dlp search — too slow (seconds + needs node) for a /lfm
+//     request; revisit only if scraping coverage proves insufficient.
+//  3. Fallback: a YouTube search URL (artist + track). Never fails.
+//
+// The whole resolution runs with a short timeout so /lfm never blocks on it.
+func resolveYouTubeURL(httpClient *http.Client, artist, track string) string {
+	ctx, cancel := context.WithTimeout(context.Background(), 2500*time.Millisecond)
+	defer cancel()
+
+	// Layer 1: scrape the Last.fm track page.
+	pageURL := fmt.Sprintf(
+		"https://www.last.fm/music/%s/_/%s",
+		url.PathEscape(artist),
+		url.PathEscape(track),
+	)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, pageURL, nil)
+	if err == nil {
+		req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; PyMouseBot/1.0)")
+		if resp, rerr := httpClient.Do(req); rerr == nil {
+			body, _ := io.ReadAll(io.LimitReader(resp.Body, 2<<20)) // 2 MiB cap
+			resp.Body.Close()
+			if m := ytWatchRe.FindStringSubmatch(string(body)); len(m) == 2 {
+				return "https://www.youtube.com/watch?v=" + m[1]
+			}
+		}
+	}
+
+	// Layer 3 (fallback): a search URL. Always works.
+	q := url.QueryEscape(strings.TrimSpace(artist + " " + track))
+	return "https://www.youtube.com/results?search_query=" + q
+}
+
