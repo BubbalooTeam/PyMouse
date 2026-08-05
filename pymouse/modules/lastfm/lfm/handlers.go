@@ -2,6 +2,7 @@ package lfm
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 	"pymouse/pymouse/database/repositories"
 	"pymouse/pymouse/helpers/i18n"
@@ -91,6 +92,10 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 		os.Remove(im)
 	}()
 
+	// shareQuery is reused as the SwitchInlineQuery payload of the "Share"
+	// button; telego expects a *string here.
+	shareQuery := "lfm"
+
 	bot.SendPhoto(
 		ctx,
 		&telego.SendPhotoParams{
@@ -105,8 +110,19 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 				InlineKeyboard: [][]telego.InlineKeyboardButton{
 					{
 						{
-							Text:         "➕",
-							CallbackData: fmt.Sprintf("lfm_exp|%d", update.Message.From.ID),
+							Text: "▶️ YouTube",
+							URL: fmt.Sprintf(
+								"https://www.youtube.com/results?search_query=%s",
+								url.QueryEscape(trackInfo.Artist+" "+trackInfo.Track),
+							),
+						},
+						{
+							Text: "👤 Perfil",
+							URL:  "https://www.last.fm/user/" + url.PathEscape(username),
+						},
+						{
+							Text: "🔗 Compartilhar",
+							SwitchInlineQuery: &shareQuery,
 						},
 					},
 				},
