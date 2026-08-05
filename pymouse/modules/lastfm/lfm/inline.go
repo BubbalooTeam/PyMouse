@@ -17,8 +17,8 @@ import (
 
 // NowPlayingInline answers an inline query (@PyMouseBOT lfm) with the caller's
 // current/last scrobbled track. The result is the same card image the /lfm
-// command sends, hosted on telegra.ph so Telegram can serve it inline, with the
-// YouTube / Profile / Share buttons attached.
+// command sends, hosted on R2 so Telegram can serve it inline, with the
+// Last.fm / Profile buttons attached.
 //
 // The query text is ignored beyond triggering: the now-playing shown is always
 // the caller's own (mirroring /lfm). Requires inline mode enabled in BotFather
