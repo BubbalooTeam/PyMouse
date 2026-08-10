@@ -8,12 +8,15 @@ import (
 	"image/color"
 	"image/jpeg"
 	"net/http"
+	"net/url"
 	"os"
 	"pymouse/pymouse/assets"
 	"pymouse/pymouse/config"
 	"pymouse/pymouse/helpers/rapidhttp"
 	"pymouse/pymouse/modules/lastfm/set"
 	"strconv"
+	"strings"
+	"unicode"
 
 	"github.com/cavaliergopher/grab/v3"
 	"github.com/disintegration/imaging"
@@ -21,6 +24,8 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
+	"golang.org/x/text/transform"
+	"golang.org/x/text/unicode/norm"
 )
 
 const (
@@ -219,7 +224,55 @@ func getTrack(httpClient *http.Client, username string) (LastFMTrackInformations
 	}, nil
 }
 
+// normalizeASCII folds a string to lowercase ASCII: it strips diacritics
+// (so "Jé" -> "je", "Bolão" -> "bolao") and lowercases the result. It is used
+// only for fuzzy matching of artist/track names against Last.fm data, never
+// for display.
+func normalizeASCII(s string) string {
+	t := transform.Chain(norm.NFD, transform.RemoveFunc(func(r rune) bool {
+		return unicode.Is(unicode.Mn, r) // true == drop this rune
+	}), norm.NFC)
+	y, _, _ := transform.String(t, s)
+	return strings.ToLower(y)
+}
+
+// isBolaOutro detects "Bola outro" by the artist Jé. The primary signal is the
+// Last.fm track page URL; the name+artist comparison is a tolerant fallback.
+func isBolaOutro(trackInfo LastFMTrackInformations) bool {
+	const wantArtist = "je" // "Jé" normalized
+	const wantTrack = "bola outro"
+
+	if u := strings.TrimSpace(trackInfo.LastFMURL); u != "" {
+		// The API hands back a percent-encoded URL ("J%C3%A9", "Bola+outro");
+		// QueryUnescape decodes both the %xx escapes and the '+' for spaces.
+		decoded, err := url.QueryUnescape(u)
+		if err != nil {
+			decoded = u
+		}
+		if strings.Contains(normalizeASCII(decoded), "last.fm/music/je/_/bola outro") {
+			return true
+		}
+	}
+
+	return strings.Contains(normalizeASCII(trackInfo.Track), wantTrack) &&
+		strings.TrimSpace(normalizeASCII(trackInfo.Artist)) == wantArtist
+}
+
 func getListeningText(trackInfo LastFMTrackInformations, l func(string) string) string {
+	// Meme: "Bola outro" do Jé vira "bolando outro" — frase fixa em PT, sem
+	// tradução; apenas a contagem ("pela Nª vez" / "for the Nth time") segue o
+	// locale do usuário.
+	if isBolaOutro(trackInfo) {
+		bolando := "Está bolando outro"
+		if !trackInfo.Now {
+			bolando = "Estava bolando outro"
+		}
+		if trackInfo.Playcount > 0 {
+			bolando += fmt.Sprintf(l("lastfm.nowplaying.userplaycount"), trackInfo.Playcount)
+		}
+		return fmt.Sprintf("%s.", bolando)
+	}
+
 	textKey := "lastfm.nowplaying.was-listening"
 	if trackInfo.Now {
 		textKey = "lastfm.nowplaying.is-listening"
