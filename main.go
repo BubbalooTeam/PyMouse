@@ -48,7 +48,7 @@ func main() {
 
 	logrus.Info("Bot Created, Starting Get Updates of Long Polling...")
 
-	ytdlp.MustInstall(ctx, &ytdlp.InstallOptions{AllowVersionMismatch: true})
+	ytdlp.MustInstall(ctx, &ytdlp.InstallOptions{})
 
 	updates, err := client.GetUpdates(ctx, botClient, config.WebhookURL)
 	if err != nil {
