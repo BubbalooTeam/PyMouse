@@ -21,6 +21,9 @@ takes seconds and has real advantages over pulling a remote binary:
 - The running binary is guaranteed to match the checked-out commit.
 - One fewer moving part (no network, no asset naming, no CI timing).
 
+The YouTube extractor also requires `yt-dlp`, Node.js, and npm on the server.
+The deploy script checks all three before replacing the running binary.
+
 The CI (`.github/workflows/build.yml`) still publishes a **permanent GitHub
 Release** on every push to `PyMouse`, so `deploy-release.sh` is available for
 rollbacks and future multi-server setups — it's just not the main path.

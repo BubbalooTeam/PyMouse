@@ -34,6 +34,15 @@ if ! command -v "$GO_BIN" >/dev/null 2>&1; then
     exit 1
 fi
 
+for command_name in node npm; do
+    if ! command -v "$command_name" >/dev/null 2>&1; then
+        echo "ERROR: '$command_name' is required by the YouTube extractor." >&2
+        exit 1
+    fi
+done
+
+echo "==> node: $(node --version); npm: $(npm --version)"
+
 echo "==> HEAD: $(git -C "$INSTALL_DIR" rev-parse --short HEAD) $(git -C "$INSTALL_DIR" log -1 --format=%s)"
 
 echo "==> Cleaning build cache (keeping module cache)..."

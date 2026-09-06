@@ -362,11 +362,14 @@ func DownloadByFormatID(videoID string, formatID int) (string, error) {
 			Output(template)
 	}
 
-	dl.JsRuntimes("node")
+	dl.JsRuntimes("node").
+		RemoteComponents("ejs:npm")
 	dl.PrintJSON()
 
-	if _, err := os.Stat("youtubeCookies.txt"); err == nil {
-		dl.Cookies("youtubeCookies.txt")
+	if cookiePath, err := filepath.Abs("youtubeCookies.txt"); err == nil {
+		if _, err := os.Stat(cookiePath); err == nil {
+			dl.Cookies(cookiePath)
+		}
 	}
 
 	run, err := dl.Run(context.TODO(), url)
