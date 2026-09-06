@@ -181,10 +181,13 @@ func ExtractVideoInfo(videoID string) (*ytdlp.ExtractedInfo, error) {
 		FormatSort("res,ext:mp4").
 		SkipDownload().
 		PrintJSON().
-		JsRuntimes("node")
+		JsRuntimes("node").
+		RemoteComponents("ejs:npm")
 
-	if _, err := os.Stat("youtubeCookies.txt"); err == nil {
-		dl = dl.Cookies("youtubeCookies.txt")
+	if cookiePath, err := filepath.Abs("youtubeCookies.txt"); err == nil {
+		if _, err := os.Stat(cookiePath); err == nil {
+			dl = dl.Cookies(cookiePath)
+		}
 	}
 
 	run, err := dl.Run(
