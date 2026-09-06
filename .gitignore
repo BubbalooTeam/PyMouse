@@ -2,3 +2,8 @@
 pymouse/downloads
 *.log
 youtubeCookies.txt
+
+# compiled binary (local builds + server deploy target)
+/bin/
+/dist/
+/PyMouse

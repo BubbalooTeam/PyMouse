@@ -1,6 +1,7 @@
 package lfm
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"image"
@@ -8,6 +9,7 @@ import (
 	"image/jpeg"
 	"net/http"
 	"os"
+	"pymouse/pymouse/assets"
 	"pymouse/pymouse/config"
 	"pymouse/pymouse/helpers/rapidhttp"
 	"pymouse/pymouse/modules/lastfm/set"
@@ -32,12 +34,13 @@ type trackPlaysInformations struct {
 }
 
 type LastFMTrackInformations struct {
-	Artist    string
-	Track     string
-	Loved     bool
-	Playcount int64
-	Image     string
-	Now       bool
+	Artist     string
+	Track      string
+	Loved      bool
+	Playcount  int64
+	Image      string
+	Now        bool
+	LastFMURL  string // last.fm track page URL, used by the "Open on Last.fm" button
 }
 
 type LastFMRecentTracksInfo struct {
@@ -49,6 +52,7 @@ type LastFMRecentTracksInfo struct {
 
 			Name  string `json:"name,omitempty" default:"unknown"`
 			Loved string `json:"loved"`
+			URL   string `json:"url,omitempty"`
 
 			Image []struct {
 				URL string `json:"#text"`
@@ -65,6 +69,57 @@ type Fonts struct {
 	OpenSans string
 	Poppins  string
 	Arial    string
+	// Unicode covers Latin/Cyrillic/Greek (used when text is non-ASCII
+	// but contains no CJK characters).
+	Unicode string
+	// CJK covers Chinese/Japanese/Korean (and also Latin/Cyrillic,
+	// so it is used alone when any CJK rune is present).
+	CJK string
+}
+
+// getRecentTracks fetches the user's last `limit` scrobbled tracks. Returns a
+// slice of LastFMTrackInformations (Image/Playcount/YouTubeURL may be zero —
+// this call is lighter than getTrack, which also hits track.getinfo per item).
+func getRecentTracks(httpClient *http.Client, username string, limit int) ([]LastFMTrackInformations, error) {
+	var info LastFMRecentTracksInfo
+	params := map[string]string{
+		"method":   "user.getrecenttracks",
+		"user":     username,
+		"api_key":  config.LastFMAPIKey,
+		"format":   "json",
+		"limit":    strconv.Itoa(limit),
+		"extended": "1",
+	}
+	r, err := rapidhttp.Request(httpClient, rapidhttp.HTTPStruct{
+		Method: "GET",
+		URL:    LastFMAPIURL,
+		GETParams: &rapidhttp.HTTPGetStruct{Params: params},
+	})
+	if err != nil || r.StatusCode != 200 {
+		return nil, fmt.Errorf("failed to fetch recent tracks.")
+	}
+	defer r.Body.Close()
+	if err := json.NewDecoder(r.Body).Decode(&info); err != nil {
+		return nil, fmt.Errorf("failed to decode recent tracks information.")
+	}
+	out := make([]LastFMTrackInformations, 0, limit)
+	for _, t := range info.RecentTracks.Track {
+		if len(out) >= limit {
+			break // last.fm sometimes returns limit+1 when a track is now-playing
+		}
+		img := ""
+		if n := len(t.Image); n > 0 {
+			img = t.Image[n-1].URL
+		}
+		out = append(out, LastFMTrackInformations{
+			Artist: t.Artist.Name,
+			Track:  t.Name,
+			Loved:  t.Loved == "1",
+			Image:  img,
+			Now:    t.Attr.NowPlaying == "true",
+		})
+	}
+	return out, nil
 }
 
 func trackPlays(httpClient *http.Client, username string, artist string, track string) (int64, error) {
@@ -160,6 +215,7 @@ func getTrack(httpClient *http.Client, username string) (LastFMTrackInformations
 		Playcount: userPlayCount,
 		Image:     recentTracksInfo.RecentTracks.Track[0].Image[len(recentTracksInfo.RecentTracks.Track[0].Image)-1].URL,
 		Now:       recentTracksInfo.RecentTracks.Track[0].Attr.NowPlaying == "true",
+		LastFMURL: recentTracksInfo.RecentTracks.Track[0].URL,
 	}, nil
 }
 
@@ -176,7 +232,7 @@ func getListeningText(trackInfo LastFMTrackInformations, l func(string) string) 
 }
 
 func loadFont(path string, size float64) font.Face {
-	b, err := os.ReadFile(path)
+	b, err := assets.ReadFile(path)
 	if err != nil {
 		panic(err)
 	}
@@ -197,6 +253,39 @@ func loadFont(path string, size float64) font.Face {
 	}
 
 	return face
+}
+
+// pickTextColor returns white or black, whichever contrasts best with the
+// mean luminance of the given region on the already-rendered background.
+// Used so the track/artist copy stays readable on any cover — including the
+// white Last.fm "no artwork" placeholder. Sampling is strided (every 2px);
+// the region is small (~340x210).
+func pickTextColor(img image.Image, region image.Rectangle) color.Color {
+	bounds := img.Bounds()
+	if !bounds.Intersect(region).Eq(region) {
+		return color.White // defensive default on unexpected geometry
+	}
+
+	var sum uint64
+	var n uint64
+	for y := region.Min.Y; y < region.Max.Y; y += 2 {
+		for x := region.Min.X; x < region.Max.X; x += 2 {
+			r, g, b, _ := img.At(x, y).RGBA()
+			// Rec. 601 luma, 8-bit range
+			l := (299*uint64(r>>8) + 587*uint64(g>>8) + 114*uint64(b>>8)) / 1000
+			sum += l
+			n++
+		}
+	}
+	if n == 0 {
+		return color.White
+	}
+
+	luma := float64(sum) / float64(n) // 0..255
+	if luma >= 128 {
+		return color.Black // bright background -> dark text
+	}
+	return color.White // dark background -> light text
 }
 
 func darken(img image.Image, factor float64) image.Image {
@@ -253,6 +342,32 @@ func checkUnicode(s string) bool {
 	return false
 }
 
+// containsCJK reports whether s contains any CJK ideograph, hiragana,
+// katakana, hangul or CJK punctuation. These blocks are only covered by a
+// dedicated CJK font (e.g. Noto Sans CJK), not by Latin/Cyrillic fonts.
+func containsCJK(s string) bool {
+	for _, r := range s {
+		switch {
+		case r >= 0x2E80 && r <= 0x9FFF: // CJK radicals + Kangxi + CJK ideographs
+			return true
+		case r >= 0xAC00 && r <= 0xD7AF: // Hangul Syllables
+			return true
+		case r >= 0xF900 && r <= 0xFAFF: // CJK Compatibility Ideographs
+			return true
+		case r >= 0xFF00 && r <= 0xFFEF: // Halfwidth/Fullwidth + Katakana
+			return true
+		case r >= 0x3000 && r <= 0x30FF: // CJK symbols + Hiragana + Katakana
+			return true
+		case r >= 0x3041 && r <= 0x309F: // Hiragana (redundant safety)
+			return true
+		case r >= 0xFF66 && r <= 0xFF9F: // Halfwidth Katakana
+			return true
+		}
+	}
+
+	return false
+}
+
 func DrawScrobble(
 	glabClient *grab.Client,
 	imgURL string,
@@ -302,23 +417,56 @@ func DrawScrobble(
 		dc.DrawImage(cover, 25, 25)
 	}
 
+	// Text sits in the right-hand half of the card. On bright covers (or the
+	// white Last.fm "no artwork" placeholder) the blurred background there can
+	// be too light for the default white text. Pick the text colour based on
+	// the mean luminance of the exact region the text will occupy: dark
+	// background -> white text, bright background -> black text.
+	// Geometry: every text element starts at x=248 and is capped at ~315px
+	// wide; vertically they span y=25 (username top) to y=225 (loved bottom).
+	textColor := pickTextColor(dc.Image(), image.Rect(238, 18, 573, 230))
+
 	// fonts
 	openSans := loadFont(fonts.OpenSans, 19)
 	poppins := loadFont(fonts.Poppins, 18)
 	arial := loadFont(fonts.Arial, 21)
 	arial23 := loadFont(fonts.Arial, 17)
 
-	songFont := poppins
-	if !checkUnicode(songName) {
-		songFont = arial
+	// Pan-Unicode fallbacks for non-Latin scripts.
+	// The Latin-only fonts (Poppins/OpenSans/Arial bundled here) do not
+	// carry Cyrillic, Greek or CJK glyphs, so those runes render as
+	// nothing. We swap in a font that actually covers the script:
+	//   - any CJK rune  -> CJK font (also covers Latin/Cyrillic, so a
+	//     mixed line like "愛 Love" still renders fully);
+	//   - other non-ASCII (Cyrillic/Greek/etc.) -> Unicode font;
+	//   - pure ASCII -> keep the original Latin font.
+	var unicodeFace, unicodeFaceSm, cjkFace, cjkFaceSm font.Face
+	if fonts.Unicode != "" {
+		unicodeFace = loadFont(fonts.Unicode, 21)
+		unicodeFaceSm = loadFont(fonts.Unicode, 17)
+	}
+	if fonts.CJK != "" {
+		cjkFace = loadFont(fonts.CJK, 21)
+		cjkFaceSm = loadFont(fonts.CJK, 17)
 	}
 
-	artistFont := openSans
-	if !checkUnicode(artistName) {
-		artistFont = arial23
+	songFont := arial
+	switch {
+	case containsCJK(songName) && cjkFace != nil:
+		songFont = cjkFace
+	case checkUnicode(songName) && unicodeFace != nil:
+		songFont = unicodeFace
 	}
 
-	dc.SetColor(color.White)
+	artistFont := arial23
+	switch {
+	case containsCJK(artistName) && cjkFaceSm != nil:
+		artistFont = cjkFaceSm
+	case checkUnicode(artistName) && unicodeFaceSm != nil:
+		artistFont = unicodeFaceSm
+	}
+
+	dc.SetColor(textColor)
 
 	// username
 	dc.SetFontFace(poppins)
@@ -354,9 +502,11 @@ func DrawScrobble(
 
 	// loved
 	if loved {
-		if heart, err := imaging.Open("pymouse/assets/icons/lastfm/loved.png"); err == nil {
-			heart = imaging.Resize(heart, 25, 25, imaging.Lanczos)
-			dc.DrawImage(heart, 248, 190)
+		if heartBytes, err := assets.ReadFile("icons/lastfm/loved.png"); err == nil {
+			if heart, derr := imaging.Decode(bytes.NewReader(heartBytes)); derr == nil {
+				heart = imaging.Resize(heart, 25, 25, imaging.Lanczos)
+				dc.DrawImage(heart, 248, 190)
+			}
 		}
 
 		dc.SetFontFace(arial23)
@@ -389,3 +539,80 @@ func DrawScrobble(
 
 	return filename, nil
 }
+
+// DrawRecentScrobble renders a vertical list of recent scrobbles for the "+"
+// expand view. Layout: same dark background as the now-playing card, with each
+// entry on its own line ("1. track — artist"), the first one flagged as
+// now-playing if applicable. Height grows with the number of entries.
+func DrawRecentScrobble(
+	username string,
+	tracks []LastFMTrackInformations,
+	fonts Fonts,
+	l func(string) string,
+) (string, error) {
+	dir := fmt.Sprintf("%s/%s", config.DownloadPath, "lastfm")
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return "", err
+	}
+
+	const (
+		width     = 600
+		rowH      = 38
+		headerH   = 95 // leaves a gap below the header text (subtitle at y=62)
+		marginX   = 30.0
+		listMaxPx = 520.0 // truncate width for "N. track — artist"
+	)
+	height := headerH + rowH*len(tracks) + 20
+
+	dc := gg.NewContext(width, height)
+	dc.SetRGB255(18, 18, 18)
+	dc.Clear()
+
+	// Header: username + "recent tracks" caption.
+	poppins := loadFont(fonts.Poppins, 22)
+	arial := loadFont(fonts.Arial, 18)
+
+	dc.SetColor(color.White)
+	dc.SetFontFace(poppins)
+	dc.DrawString(username, marginX, 40)
+
+	dc.SetFontFace(arial)
+	dc.SetRGB255(170, 170, 170)
+	dc.DrawString(l("lastfm.recent.header"), marginX, 62)
+	dc.SetColor(color.White)
+
+	// Rows. The now-playing entry (if any) is labeled "current" instead of a
+	// number; the remaining entries are numbered sequentially, so a 5-row list
+	// reads: current, 2, 3, 4, 5.
+	for i, t := range tracks {
+		y := float64(headerH + i*rowH)
+		var prefix string
+		switch {
+		case t.Now:
+			prefix = l("lastfm.recent.now-label") + " — "
+		case t.Loved:
+			prefix = "♥ " + strconv.Itoa(i+1) + ". "
+		default:
+			prefix = strconv.Itoa(i+1) + ". "
+		}
+		label := prefix + t.Track + " — " + t.Artist
+		dc.SetFontFace(arial)
+		dc.DrawString(truncate(dc, label, listMaxPx), marginX, y)
+	}
+
+	filename := dir + "/" + uuid.NewString() + ".jpg"
+	out, err := os.Create(filename)
+	if err != nil {
+		return "", err
+	}
+	defer out.Close()
+	if err := jpeg.Encode(out, dc.Image(), &jpeg.Options{Quality: 95}); err != nil {
+		return "", err
+	}
+	return filename, nil
+}
+
+// (image hosting moved to Cloudflare R2 — see r2.go. telegra.ph's anonymous
+// upload endpoint stopped accepting requests, so it is no longer used.)
+
+

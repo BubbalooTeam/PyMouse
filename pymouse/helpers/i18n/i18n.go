@@ -3,8 +3,10 @@ package i18n
 import (
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
+	"pymouse/locales"
 	"pymouse/pymouse/database/repositories"
 	"strings"
 
@@ -23,36 +25,49 @@ var defaultLanguage = "en_us"
 var StringsCache = make(map[string]map[string]interface{})
 
 func CompileLocales() error {
-	dir := "locales"
+	// Load locale files from the embedded locales.Files first; fall back to
+	// the on-disk "locales/" directory so `go run` without the embed still
+	// works during development.
+	load := func(name string, data []byte) error {
+		langCode := strings.TrimSuffix(name, filepath.Ext(name))
 
-	err := filepath.Walk(
-		dir,
-		func(path string, info os.FileInfo, err error) error {
-			if err != nil {
-				return fmt.Errorf("Failed to retrieve localization file: %v", err)
-			}
+		langMap := make(map[string]interface{})
+		if err := json.Unmarshal(data, &langMap); err != nil {
+			return fmt.Errorf("Failed to unmarshal data from localization file %q.", name)
+		}
 
-			if !info.IsDir() && filepath.Ext(path) == ".json" {
-				langCode := filepath.Base(path[:len(path)-len(filepath.Ext(path))])
+		StringsCache[langCode] = langMap
+		AvalaibleLanguages = append(AvalaibleLanguages, langCode)
+		return nil
+	}
 
-				data, err := os.ReadFile(path)
-				if err != nil {
-					return fmt.Errorf("Failed to read localization file: %v", err)
-				}
-
-				langMap := make(map[string]interface{})
-				err = json.Unmarshal(data, &langMap)
-				if err != nil {
-					return fmt.Errorf("Failed to unmarshal data from localization file.")
-				}
-
-				StringsCache[langCode] = langMap
-				AvalaibleLanguages = append(AvalaibleLanguages, langCode)
-			}
+	walkErr := fs.WalkDir(locales.Files, ".", func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return fmt.Errorf("Failed to retrieve localization file: %v", err)
+		}
+		if d.IsDir() || filepath.Ext(path) != ".json" {
 			return nil
-		},
-	)
-	return err
+		}
+		data, rerr := locales.Files.ReadFile(path)
+		if rerr != nil {
+			return fmt.Errorf("Failed to read localization file: %v", rerr)
+		}
+		return load(filepath.Base(path), data)
+	})
+	if walkErr != nil {
+		// Fallback: try the on-disk "locales/" directory (e.g. unbundled go run).
+		return filepath.Walk("locales", func(path string, info os.FileInfo, ferr error) error {
+			if ferr != nil || info.IsDir() || filepath.Ext(path) != ".json" {
+				return ferr
+			}
+			data, rerr := os.ReadFile(path)
+			if rerr != nil {
+				return fmt.Errorf("Failed to read localization file: %v", rerr)
+			}
+			return load(filepath.Base(path), data)
+		})
+	}
+	return nil
 }
 
 func GetStringFromNestedMap(langMap map[string]interface{}, key string) string {

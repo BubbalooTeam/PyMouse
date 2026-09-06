@@ -2,6 +2,7 @@ package lfm
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 	"pymouse/pymouse/database/repositories"
 	"pymouse/pymouse/helpers/i18n"
@@ -79,6 +80,8 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 			OpenSans: "pymouse/assets/fonts/opensans.ttf",
 			Poppins:  "pymouse/assets/fonts/poppins-semibolditalic.ttf",
 			Arial:    "pymouse/assets/fonts/arial.ttf",
+			Unicode:  "pymouse/assets/fonts/notosans-unicode.ttf",
+			CJK:      "pymouse/assets/fonts/notosanscjk-sc.otf",
 		},
 		l,
 	)
@@ -103,8 +106,16 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 				InlineKeyboard: [][]telego.InlineKeyboardButton{
 					{
 						{
-							Text:         "➕",
-							CallbackData: fmt.Sprintf("lfm_exp|%d", update.Message.From.ID),
+							Text: "🎵 Last.fm",
+							URL:  trackInfo.LastFMURL,
+						},
+						{
+							Text: "👤 " + l("lastfm.recent.profile-btn"),
+							URL:  "https://www.last.fm/user/" + url.PathEscape(username),
+						},
+						{
+							Text:         "📋 " + l("lastfm.recent.expand-btn"),
+							CallbackData: fmt.Sprintf("lfm_recent|%d", update.Message.From.ID),
 						},
 					},
 				},

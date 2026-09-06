@@ -22,6 +22,17 @@ func GetUpdates(ctx context.Context, bot *telego.Bot, webhookURL string) (<-chan
 	var updates <-chan telego.Update
 	var err error
 
+	// Explicitly opt into the update types we handle. Long polling defaults
+	// to the previously-sent set after the first call, which can drop
+	// inline_query/callback_query — so we list everything we need here.
+	allowedUpdates := []string{
+		"message",
+		"edited_message",
+		"inline_query",
+		"chosen_inline_result",
+		"callback_query",
+	}
+
 	bot.DeleteWebhook(
 		ctx,
 		&telego.DeleteWebhookParams{
@@ -30,7 +41,8 @@ func GetUpdates(ctx context.Context, bot *telego.Bot, webhookURL string) (<-chan
 	)
 	if webhookURL == "" {
 		updates, err = bot.UpdatesViaLongPolling(ctx, &telego.GetUpdatesParams{
-			Timeout: 4,
+			Timeout:        4,
+			AllowedUpdates: allowedUpdates,
 		}, telego.WithLongPollingUpdateInterval(0))
 		if err != nil {
 			return nil, err
@@ -39,7 +51,8 @@ func GetUpdates(ctx context.Context, bot *telego.Bot, webhookURL string) (<-chan
 		err := bot.SetWebhook(
 			ctx,
 			&telego.SetWebhookParams{
-				URL: webhookURL + bot.Token(),
+				URL:            webhookURL + bot.Token(),
+				AllowedUpdates: allowedUpdates,
 			},
 		)
 		if err != nil {
