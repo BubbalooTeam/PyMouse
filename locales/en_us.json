@@ -52,6 +52,36 @@
         "afk-back": "<b><i>%s</i> is back!</b>"
     },
     "android": {
+        "lineageos": {
+            "info": "<b>LineageOS for <code>%s</code></b>\n\n<b>File:</b> <code>%s</code>\n<b>Type:</b> <code>%s</code>\n<b>Size:</b> <code>%s</code>\n<b>Version:</b> <code>%s</code>\n<b>Released:</b> <code>%s</code>",
+            "download": "Download",
+            "checkers": {
+                "device-not-provided": "<b>The device codename was not provided to me.</b>\n\n<b>Usage:</b> <code>/los whyred</code>",
+                "device-not-found": "<b>No LineageOS build was found for this device.</b>",
+                "not-for-you": "This button is not for you."
+            }
+        },
+        "magisk": {
+            "info": "<b>Magisk %s</b>\n\n<b>Version:</b> <code>%s%s</code>\n<b>Version code:</b> <code>%s</code>",
+            "download": "Download",
+            "stable": "<b>Stable</b>",
+            "beta": "<b>Beta</b>",
+            "canary": "<b>Canary</b>",
+            "changelog": "Changelog",
+            "checkers": {
+                "github-error": "<b>Failed to fetch Magisk releases from GitHub.</b>",
+                "not-for-you": "This button is not for you."
+            }
+        },
+        "twrp": {
+			"info": "<b>TWRP for <code>%s</code></b>\n\n<b>Updated:</b> <code>%s</code>\n<b>File:</b> <code>%s</code>\n<b>Size:</b> <code>%s</code>",
+			"download": "Download",
+            "checkers": {
+                "device-not-provided":"<b>The device codename was not provided to me.</b>\n\n<b>Usage:</b> <code>/twrp whyred</code>",
+                "device-not-found": "<b>No TWRP recovery was found for this device.</b>",
+                "not-for-you": "This button is not for you."
+            }
+        },
         "whatis": {
             "device-info": "<code>%s</code> is <b>%s %s%s.</b>",
             "device-variants": "<b>Here are all the variants of the codename <code>%s</code>:\n\n%s</b>",
@@ -100,7 +130,11 @@
                 "afk": "With the AFK module, you can set your status to 'Away' to inform others that you are not available at the moment. When someone mentions you or sends a direct message, the bot will automatically respond with your customized AFK message. You can also set a reason for your absence, and the bot will inform when you are back.\n\n<b>Main commands:</b>\n- /afk [reason]: Sets your status to AFK with an optional reason."
             },
             "android": {
-                "android": "The Android module provides detailed information about Android devices. You can obtain data such as manufacturer, model, and codename of a specific device using its dedicated command. Simply provide the device model, and the bot will return the relevant information to you.\n\n<b>Main commands:</b>\n- /whatis [codename or model]: Gets information about the specified Android device, including manufacturer, model, and codename.\n- /variants [codename]: Gets a list of all variants of the specified Android device, including their respective models."
+                "android": "The Android module provides tools for Android devices, including device information, custom ROMs, recoveries, and Magisk releases.",
+                "lineageos": "The LineageOS module allows you to find available LineageOS builds for an Android device.\n\n<b>Main commands:</b>\n- /los [codename]: Lists the available LineageOS builds for the specified device.\n- /lineageos [codename]: Lists the available LineageOS builds for the specified device.",
+                "magisk": "The Magisk module allows you to check and download the latest Stable, Beta, and Canary releases of Magisk.\n\n<b>Main commands:</b>\n- /magisk: Shows the latest Magisk releases.",
+                "twrp": "The TWRP module allows you to find available TWRP recoveries for an Android device.\n\n<b>Main commands:</b>\n- /twrp [codename]: Lists the available TWRP recoveries for the specified device.",
+                "variants": "The Variants module allows you to find the manufacturer, model, and codename variants of an Android device.\n\n<b>Main commands:</b>\n- /variants: Lists Android device variants."
             },
             "lastfm": {
                 "lastfm": "The LastFM module allows you to connect your Last.fm account to the bot and share your music listening activity with others. You can set your Last.fm username, and the bot will be able to retrieve information about the songs you're currently listening to, as well as your listening history. This way, you can share your musical tastes and discoveries with your friends in the chat.\n\n<b>Main commands:</b>\n- /set [username]: Sets your Last.fm username to connect your account with the bot.\n- /lfm | /lt | /lastfm | lt: Retrieves information about the song you're currently listening to on Last.fm."
@@ -123,7 +157,11 @@
                 "afk": "AFK"
             },
             "android": {
-                "android": "Android"
+                "android": "Android",
+                "lineageos": "LineageOS",
+                "magisk": "Magisk",
+                "twrp": "TWRP",
+                "variants": "Variants"
             },
             "lastfm": {
                 "lastfm": "LastFM"
