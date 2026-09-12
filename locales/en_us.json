@@ -131,7 +131,7 @@
             },
             "android": {
                 "android": "The Android module provides tools for Android devices, including device information, custom ROMs, recoveries, and Magisk releases.",
-                "lineageos": "The LineageOS module allows you to find available LineageOS builds for an Android device.\n\n<b>Main commands:</b>\n- /los [codename]: Lists the available LineageOS builds for the specified device.\n- /lineageos [codename]: Lists the available LineageOS builds for the specified device.",
+                "lineageos": "The LineageOS module allows you to find available LineageOS builds for an Android device.\n\n<b>Main commands:</b>\n- /los | /lineageos [codename]: Lists the available LineageOS builds for the specified device.",
                 "magisk": "The Magisk module allows you to check and download the latest Stable, Beta, and Canary releases of Magisk.\n\n<b>Main commands:</b>\n- /magisk: Shows the latest Magisk releases.",
                 "twrp": "The TWRP module allows you to find available TWRP recoveries for an Android device.\n\n<b>Main commands:</b>\n- /twrp [codename]: Lists the available TWRP recoveries for the specified device.",
                 "variants": "The Variants module allows you to find the manufacturer, model, and codename variants of an Android device.\n\n<b>Main commands:</b>\n- /variants: Lists Android device variants."

@@ -131,7 +131,7 @@
             },
             "android": {
                 "android": "O módulo Android oferece ferramentas para dispositivos Android, incluindo informações de dispositivos, ROMs personalizadas, recoveries e versões do Magisk.",
-                "lineageos": "O módulo LineageOS permite encontrar versões disponíveis do LineageOS para um dispositivo Android.\n\n<b>Comandos principais:</b>\n- /los [codinome]: Lista as versões disponíveis do LineageOS para o dispositivo especificado.\n- /lineageos [codinome]: Lista as versões disponíveis do LineageOS para o dispositivo especificado.",
+                "lineageos": "O módulo LineageOS permite encontrar versões disponíveis do LineageOS para um dispositivo Android.\n\n<b>Comandos principais:</b>\n- /los | /lineageos [codinome]: Lista as versões disponíveis do LineageOS para o dispositivo especificado.",
                 "magisk": "O módulo Magisk permite consultar e baixar as versões mais recentes Stable, Beta e Canary do Magisk.\n\n<b>Comandos principais:</b>\n- /magisk: Mostra as versões mais recentes do Magisk.",
                 "twrp": "O módulo TWRP permite encontrar recoveries TWRP disponíveis para um dispositivo Android.\n\n<b>Comandos principais:</b>\n- /twrp [codinome]: Lista as recoveries TWRP disponíveis para o dispositivo especificado.",
                 "variants": "O módulo Variantes permite encontrar o fabricante, o modelo e as variantes de codinome de um dispositivo Android.\n\n<b>Comandos principais:</b>\n- /variants: Lista as variantes de dispositivos Android."

@@ -20,8 +20,11 @@ func LoadModule(bS *client.BotStruct) {
 	bS.Handler.Handle(devices.Variants, telegram.Command("variants", bS.Client.Username()))
 	bS.Handler.Handle(devices.WhatIs, telegram.Command("whatis", bS.Client.Username()))
 	bS.Handler.Handle(magisk.MagiskHandler, telegram.Command("magisk", bS.Client.Username()))
-	bS.Handler.Handle(lineageos.LineageOSHandler, telegram.Command("los", bS.Client.Username()))
-	bS.Handler.Handle(lineageos.LineageOSHandler, telegram.Command("lineageos", bS.Client.Username()))
+	bS.Handler.Handle(lineageos.LineageOSHandler,
+		telegohandler.Or(
+			telegram.Command("los", bS.Client.Username()),
+			telegram.Command("lineageos", bS.Client.Username()),
+		))
 	bS.Handler.Handle(
 		magisk.MagiskVariantCallbackHandler,
 		telegohandler.CallbackDataMatches(regexp.MustCompile(`^magisk_variant\|.*$`)),
