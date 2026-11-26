@@ -297,6 +297,13 @@
                 "weeks": "Last 4 weeks",
                 "months": "Last 6 months",
                 "life": "Lifetime"
+            },
+            "range-short": {
+                "today": "today",
+                "days": "7d",
+                "weeks": "4w",
+                "months": "6m",
+                "life": "lifetime"
             }
         }
 },

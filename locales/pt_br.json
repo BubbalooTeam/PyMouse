@@ -300,6 +300,13 @@
                 "weeks": "Últimas 4 semanas",
                 "months": "Últimos 6 meses",
                 "life": "Sempre"
+            },
+            "range-short": {
+                "today": "hoje",
+                "days": "7d",
+                "weeks": "4sem",
+                "months": "6m",
+                "life": "sempre"
             }
         }
     },
