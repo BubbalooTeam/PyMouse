@@ -13,6 +13,11 @@ import (
 )
 
 func LoadModule(bS *client.BotStruct) {
+	// Deprecation note (2025-12-01): Last.fm is requiring a paid Pro plan for
+	// API keys (https://support.last.fm/t/api-keys-will-require-pro-from-1st-december/121030).
+	// To disable this module once the key stops working, just blank/remove
+	// LASTFM_API_KEY in .env — nothing else to change. See listenbrainz/ for
+	// the keyless replacement.
 	if config.LastFMAPIKey != "" {
 		middlewares.Help.RegisterHelp("LastFM")
 		bS.Handler.Handle(lfm.NowPlaying,

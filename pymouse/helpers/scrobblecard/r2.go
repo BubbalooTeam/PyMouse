@@ -1,4 +1,4 @@
-package lfm
+package scrobblecard
 
 import (
 	"bytes"
@@ -10,16 +10,17 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"pymouse/pymouse/config"
 	"strings"
 	"time"
+
+	"pymouse/pymouse/config"
 
 	"github.com/google/uuid"
 )
 
-// r2Configured reports whether all required R2 env vars are set. When false,
+// R2Configured reports whether all required R2 env vars are set. When false,
 // callers should fall back to a non-image inline result.
-func r2Configured() bool {
+func R2Configured() bool {
 	return config.R2AccountID != "" && config.R2Bucket != "" &&
 		config.R2AccessKeyID != "" && config.R2SecretKey != "" && config.R2PublicURL != ""
 }
@@ -45,13 +46,14 @@ func r2MissingEnv() []string {
 	return missing
 }
 
-// uploadToR2 uploads the JPEG at filePath to the configured Cloudflare R2
+// UploadToR2 uploads the JPEG at filePath to the configured Cloudflare R2
 // bucket using a presigned PUT (AWS Signature Version 4), and returns the
 // object's public URL. No AWS SDK dependency — the signature is built with
-// the standard library. The object key is a random UUID so concurrent /
-// repeated uploads never collide.
-func uploadToR2(filePath string) (string, error) {
-	if !r2Configured() {
+// the standard library. The object key is keyPrefix + a random UUID, so
+// concurrent / repeated uploads from any caller never collide; keyPrefix lets
+// each service namespace its own uploads (e.g. "lfm-inline/", "lb-inline/").
+func UploadToR2(filePath string, keyPrefix string) (string, error) {
+	if !R2Configured() {
 		return "", fmt.Errorf("R2 not configured (missing: %v)", r2MissingEnv())
 	}
 
@@ -60,7 +62,7 @@ func uploadToR2(filePath string) (string, error) {
 		return "", err
 	}
 
-	key := "lfm-inline/" + uuid.NewString() + ".jpg"
+	key := keyPrefix + uuid.NewString() + ".jpg"
 	host := fmt.Sprintf("%s.r2.cloudflarestorage.com", config.R2AccountID)
 	endpoint := fmt.Sprintf("https://%s/%s/%s", host, config.R2Bucket, key)
 	publicURL := strings.TrimRight(config.R2PublicURL, "/") + "/" + key

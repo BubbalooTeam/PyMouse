@@ -7,6 +7,7 @@ import (
 	"pymouse/pymouse/database/repositories"
 	"pymouse/pymouse/helpers/i18n"
 	"pymouse/pymouse/helpers/rapidhttp"
+	"pymouse/pymouse/helpers/scrobblecard"
 	"strconv"
 	"strings"
 
@@ -21,8 +22,8 @@ const recentLimit = 5
 
 // fontSet is the same Fonts literal used by NowPlaying; kept here so the
 // callback handlers can regenerate cards without duplicating the paths.
-func fontSet() Fonts {
-	return Fonts{
+func fontSet() scrobblecard.Fonts {
+	return scrobblecard.Fonts{
 		OpenSans: "pymouse/assets/fonts/opensans.ttf",
 		Poppins:  "pymouse/assets/fonts/poppins-semibolditalic.ttf",
 		Arial:    "pymouse/assets/fonts/arial.ttf",
@@ -75,7 +76,20 @@ func ExpandRecent(ctx *telegohandler.Context, update telego.Update) error {
 		return denyOthers(bot, ctx, callback.ID, l("lastfm.nowplaying.error"))
 	}
 
-	imgPath, err := DrawRecentScrobble(username, tracks, fontSet(), l)
+	entries := make([]scrobblecard.RecentEntry, 0, len(tracks))
+	for _, t := range tracks {
+		entries = append(entries, scrobblecard.RecentEntry{
+			Track:  t.Track,
+			Artist: t.Artist,
+			Now:    t.Now,
+			Loved:  t.Loved,
+		})
+	}
+
+	imgPath, err := scrobblecard.DrawRecentScrobble(
+		scrobblecard.ScrobbleDir("lastfm"), username, entries, fontSet(),
+		l("lastfm.recent.header"), l("lastfm.recent.now-label"),
+	)
 	if err != nil {
 		return denyOthers(bot, ctx, callback.ID, l("lastfm.nowplaying.error"))
 	}
@@ -137,9 +151,9 @@ func BackToNowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 	}
 	listeningText := getListeningText(trackInfo, l)
 
-	imgPath, err := DrawScrobble(
-		glabClient, imageURL, trackInfo.Track, trackInfo.Artist,
-		username, listeningText, trackInfo.Loved, fontSet(), l,
+	imgPath, err := scrobblecard.DrawScrobble(
+		glabClient, scrobblecard.ScrobbleDir("lastfm"), imageURL, trackInfo.Track, trackInfo.Artist,
+		username, listeningText, trackInfo.Loved, "icons/lastfm/loved.png", l("lastfm.nowplaying.loved"), fontSet(),
 	)
 	if err != nil {
 		return denyOthers(bot, ctx, callback.ID, l("lastfm.nowplaying.error"))

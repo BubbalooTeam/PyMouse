@@ -7,6 +7,7 @@ import (
 	"pymouse/pymouse/database/repositories"
 	"pymouse/pymouse/helpers/i18n"
 	"pymouse/pymouse/helpers/rapidhttp"
+	"pymouse/pymouse/helpers/scrobblecard"
 
 	"github.com/cavaliergopher/grab/v3"
 	"github.com/mymmrac/telego"
@@ -68,22 +69,18 @@ func NowPlaying(ctx *telegohandler.Context, update telego.Update) error {
 		imageURL = "https://telegra.ph/file/bdcf492162713ea5633a1.jpg"
 	}
 
-	im, _ := DrawScrobble(
+	im, _ := scrobblecard.DrawScrobble(
 		glabClient,
+		scrobblecard.ScrobbleDir("lastfm"),
 		imageURL,
 		trackInfo.Track,
 		trackInfo.Artist,
 		username,
 		listeningText,
 		trackInfo.Loved,
-		Fonts{
-			OpenSans: "pymouse/assets/fonts/opensans.ttf",
-			Poppins:  "pymouse/assets/fonts/poppins-semibolditalic.ttf",
-			Arial:    "pymouse/assets/fonts/arial.ttf",
-			Unicode:  "pymouse/assets/fonts/notosans-unicode.ttf",
-			CJK:      "pymouse/assets/fonts/notosanscjk-sc.otf",
-		},
-		l,
+		"icons/lastfm/loved.png",
+		l("lastfm.nowplaying.loved"),
+		fontSet(),
 	)
 
 	imF, _ := os.Open(im)

@@ -27,6 +27,7 @@
         "change-language": "🌐 Change your language",
         "channel-news": "📬️ PyMouse News",
         "create-lastfm": "🎧 Create Last.fm account",
+        "create-listenbrainz": "🎧 Create ListenBrainz account",
         "donate": "💵 Donate",
         "go-to-pm": "Go to Private",
         "help": "👮 Help",
@@ -139,6 +140,9 @@
             "lastfm": {
                 "lastfm": "The LastFM module allows you to connect your Last.fm account to the bot and share your music listening activity with others. You can set your Last.fm username, and the bot will be able to retrieve information about the songs you're currently listening to, as well as your listening history. This way, you can share your musical tastes and discoveries with your friends in the chat.\n\n<b>Main commands:</b>\n- /set [username]: Sets your Last.fm username to connect your account with the bot.\n- /lfm | /lt | /lastfm | lt: Retrieves information about the song you're currently listening to on Last.fm."
             },
+            "listenbrainz": {
+                "listenbrainz": "The ListenBrainz module allows you to connect your ListenBrainz account to the bot and share your music listening activity with others. You can set your ListenBrainz username, and the bot will be able to retrieve information about the songs you're currently listening to, as well as your listening history.\n\n<b>Main commands:</b>\n- /lbset [username]: Sets your ListenBrainz username to connect your account with the bot.\n- /lb | /listenbrainz: Retrieves information about the song you're currently listening to on ListenBrainz."
+            },
             "medias": {
                 "medias": "The Medias module allows you to download videos and music from various popular platforms such as YouTube and TikTok. Easily, you can request the download of multimedia content directly in the chat. The bot will take care of the download process and send the file to you as soon as it's ready.",
                 "youtube": "The YouTube module allows you to download videos and music directly from YouTube. With a simple command, you can request the download of any video or music available on the platform.\n\n<b>Main commands:</b>\n- /ytdl [video URL or title]: Downloads the YouTube video or music based on the provided URL or title, and in the chosen quality.",
@@ -165,6 +169,9 @@
             },
             "lastfm": {
                 "lastfm": "LastFM"
+            },
+            "listenbrainz": {
+                "listenbrainz": "ListenBrainz"
             },
             "medias": {
                 "medias": "Medias",
@@ -210,6 +217,33 @@
             "expand-btn": "Recent",
             "back-btn": "Back",
             "share-btn": "Share",
+            "not-yours": "This isn't your card."
+        }
+},
+    "listenbrainz": {
+        "invalid-username": "<b>The ListenBrainz username provided is invalid.</b>",
+        "set": {
+            "no-username-provided": "<b>The ListenBrainz username was not provided.</b>\n\n<b>Usage:</b> <code>/lbset [username]</code>",
+            "username-set": "<b>Your ListenBrainz username has been set to:</b> <code>%s</code>",
+            "username-unset": "<b>Your ListenBrainz username has been removed.</b>",
+            "no-username-set": "<b>You have not set a ListenBrainz username.</b>"
+        },
+        "nowplaying": {
+            "is-listening": "Is listening",
+            "no-username-set": "<b>You haven't set a ListenBrainz username.</b>\n\n<b>Usage:</b> <code>/lbset [username]</code>",
+            "no-scrobbles": "<b>The user has not listened to any music.</b>",
+            "was-listening": "Was listening",
+            "error": "<b>An error occurred while retrieving the user's playback information.</b>"
+        },
+        "inline": {
+            "profile": "ListenBrainz profile"
+        },
+        "recent": {
+            "header": "recent tracks",
+            "now-label": "current",
+            "profile-btn": "Profile",
+            "expand-btn": "Recent",
+            "back-btn": "Back",
             "not-yours": "This isn't your card."
         }
 },

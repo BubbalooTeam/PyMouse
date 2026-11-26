@@ -8,6 +8,7 @@ import (
 	"pymouse/pymouse/database/repositories"
 	"pymouse/pymouse/helpers/i18n"
 	"pymouse/pymouse/helpers/rapidhttp"
+	"pymouse/pymouse/helpers/scrobblecard"
 
 	"github.com/cavaliergopher/grab/v3"
 	"github.com/mymmrac/telego"
@@ -75,9 +76,9 @@ func NowPlayingInline(ctx *telegohandler.Context, query telego.InlineQuery) erro
 
 	// Generate the same card image the /lfm command sends, then host it on
 	// R2 so it can be used as an inline photo result.
-	imgPath, derr := DrawScrobble(
-		grab.NewClient(), imageURL, trackInfo.Track, trackInfo.Artist,
-		username, listeningText, trackInfo.Loved, fontSet(), l,
+	imgPath, derr := scrobblecard.DrawScrobble(
+		grab.NewClient(), scrobblecard.ScrobbleDir("lastfm"), imageURL, trackInfo.Track, trackInfo.Artist,
+		username, listeningText, trackInfo.Loved, "icons/lastfm/loved.png", l("lastfm.nowplaying.loved"), fontSet(),
 	)
 	if derr != nil {
 		logrus.Errorf("[lastfm-inline] DrawScrobble failed: %v", derr)
@@ -85,7 +86,7 @@ func NowPlayingInline(ctx *telegohandler.Context, query telego.InlineQuery) erro
 	}
 	defer os.Remove(imgPath)
 
-	photoURL, uerr := uploadToR2(imgPath)
+	photoURL, uerr := scrobblecard.UploadToR2(imgPath, "lfm-inline/")
 	if uerr != nil {
 		logrus.Errorf("[lastfm-inline] uploadToR2 failed: %v", uerr)
 		return answerTextFallback(bot, ctx, query.ID, trackInfo, username, l)

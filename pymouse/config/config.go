@@ -9,9 +9,15 @@ import (
 )
 
 var (
-	BotToken       string
-	DatabaseURI    string
-	DownloadPath   string
+	BotToken     string
+	DatabaseURI  string
+	DownloadPath string
+	// LastFMAPIKey gates the whole lastfm module (pymouse/modules/lastfm):
+	// loaders.go only registers its handlers when this is non-empty. Last.fm
+	// is moving API keys behind a paid Pro plan from 2025-12-01
+	// (https://support.last.fm/t/api-keys-will-require-pro-from-1st-december/121030),
+	// so once that takes effect for this key, disable the module by simply
+	// blanking/removing LASTFM_API_KEY from .env — no code change needed.
 	LastFMAPIKey   string
 	LogChannelID   int64
 	OwnerID        int64
@@ -22,11 +28,11 @@ var (
 	// Cloudflare R2 (optional). When all four are set, the last.fm inline
 	// result uploads its card image to R2 and serves it via R2PublicURL.
 	// When unset, the inline result falls back to a plain text article.
-	R2AccountID    string
-	R2Bucket       string
-	R2AccessKeyID  string
-	R2SecretKey    string
-	R2PublicURL    string
+	R2AccountID   string
+	R2Bucket      string
+	R2AccessKeyID string
+	R2SecretKey   string
+	R2PublicURL   string
 )
 
 func init() {
