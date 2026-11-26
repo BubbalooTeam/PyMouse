@@ -72,9 +72,9 @@ func parseRange(s string) (topRange, bool) {
 	return "", false
 }
 
-// categoryEmoji/rangeEmoji are UI sugar for the keyboard buttons only — the
-// card header uses the plain localized label (loadFont's bundled fonts don't
-// carry emoji glyphs).
+// categoryEmoji is UI sugar for the keyboard buttons only — the card header
+// uses the plain localized label (loadFont's bundled fonts don't carry emoji
+// glyphs).
 func categoryEmoji(c topCategory) string {
 	switch c {
 	case categoryTracks:
@@ -117,6 +117,26 @@ func rangeLabelKey(r topRange) string {
 		return "statsfm.top.range.life"
 	}
 	return ""
+}
+
+// rangeButtonLabel is the short, English, locale-independent label shown on
+// the range buttons themselves — the full localized phrase (used in the card
+// header instead, via rangeLabelKey) is too long for the button width and
+// renders truncated by Telegram's client ("Último...", "Últimas...").
+func rangeButtonLabel(r topRange) string {
+	switch r {
+	case rangeToday:
+		return "1d"
+	case rangeDays:
+		return "7d"
+	case rangeWeeks:
+		return "4w"
+	case rangeMonths:
+		return "6m"
+	case rangeLife:
+		return "all"
+	}
+	return string(r)
 }
 
 func joinArtistNames(artists []sfmArtist) string {
@@ -270,7 +290,7 @@ func getTopEntries(httpClient *http.Client, username string, cat topCategory, rn
 
 // topKeyboard builds the category row + range row, prefixing the active
 // choice in each with "• " so the current view is visible on the card itself.
-func topKeyboard(ownerID int64, cat topCategory, rng topRange, l func(string) string) [][]telego.InlineKeyboardButton {
+func topKeyboard(ownerID int64, cat topCategory, rng topRange) [][]telego.InlineKeyboardButton {
 	catRow := make([]telego.InlineKeyboardButton, 0, len(topCategoryOrder))
 	for _, c := range topCategoryOrder {
 		text := categoryEmoji(c)
@@ -285,7 +305,7 @@ func topKeyboard(ownerID int64, cat topCategory, rng topRange, l func(string) st
 
 	rngRow := make([]telego.InlineKeyboardButton, 0, len(topRangeOrder))
 	for _, r := range topRangeOrder {
-		text := l(rangeLabelKey(r))
+		text := rangeButtonLabel(r)
 		if r == rng {
 			text = "• " + text
 		}
@@ -324,7 +344,7 @@ func renderTop(
 		return nil, nil, err
 	}
 
-	rows := topKeyboard(ownerID, cat, rng, l)
+	rows := topKeyboard(ownerID, cat, rng)
 
 	return imF, rows, nil
 }
