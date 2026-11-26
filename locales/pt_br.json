@@ -145,7 +145,7 @@
                 "listenbrainz": "O módulo ListenBrainz permite que você integre sua conta do ListenBrainz para compartilhar suas atividades musicais com seus amigos. Você pode definir seu nome de usuário do ListenBrainz e, em seguida, usar comandos para mostrar o que está ouvindo atualmente ou o que ouviu recentemente.\n\n<b>Comandos principais:</b>\n- /lbset [usuário]: Define seu nome de usuário do ListenBrainz para integração com o bot.\n- /lb | /listenbrainz: Mostra a música que você está ouvindo atualmente, juntamente com informações relevantes."
             },
             "statsfm": {
-                "statsfm": "O módulo stats.fm permite que você integre sua conta do stats.fm (rastreamento de Spotify) para compartilhar suas atividades musicais com seus amigos. Você pode definir seu ID personalizado do stats.fm e, em seguida, usar comandos para mostrar o que está ouvindo atualmente, o que ouviu recentemente e quantas vezes já ouviu cada faixa.\n\n<b>Comandos principais:</b>\n- /sfset [usuário]: Define seu ID do stats.fm para integração com o bot.\n- /sf | /statsfm: Mostra a música que você está ouvindo atualmente, juntamente com informações relevantes."
+                "statsfm": "O módulo stats.fm permite que você integre sua conta do stats.fm (rastreamento de Spotify) para compartilhar suas atividades musicais com seus amigos. Você pode definir seu ID personalizado do stats.fm e, em seguida, usar comandos para mostrar o que está ouvindo atualmente, o que ouviu recentemente, quantas vezes já ouviu cada faixa e seu ranking de mais ouvidas.\n\n<b>Comandos principais:</b>\n- /sfset [usuário]: Define seu ID do stats.fm para integração com o bot.\n- /sf | /statsfm: Mostra a música que você está ouvindo atualmente, juntamente com informações relevantes.\n- /sftop: Mostra suas músicas, artistas, álbuns ou gêneros mais ouvidos, com botões para trocar o período (hoje, 7 dias, 4 semanas, 6 meses, sempre)."
             },
             "medias": {
                 "medias": "O módulo de Mídias permite que você baixe vídeos e músicas de várias plataformas populares, como YouTube e TikTok. Facilmente, você pode solicitar o download de conteúdo multimídia diretamente no chat. O bot cuidará do processo de download e enviará o arquivo para você assim que estiver pronto.",
@@ -283,6 +283,24 @@
             "expand-btn": "Últimas",
             "back-btn": "Voltar",
             "not-yours": "Esse card não é seu."
+        },
+        "top": {
+            "no-username-set": "<b>Você não definiu um nome de usuário do stats.fm.</b>\n\n<b>Uso:</b> <code>/sftop</code> (defina um primeiro com <code>/sfset [usuário]</code>)",
+            "no-data": "<b>Nenhuma música foi ouvida nesse período.</b>",
+            "error": "<b>Ocorreu um erro ao obter seu ranking.</b>",
+            "category": {
+                "tracks": "Músicas",
+                "artists": "Artistas",
+                "albums": "Álbuns",
+                "genres": "Gêneros"
+            },
+            "range": {
+                "today": "Hoje",
+                "days": "Últimos 7 dias",
+                "weeks": "Últimas 4 semanas",
+                "months": "Últimos 6 meses",
+                "life": "Sempre"
+            }
         }
     },
     "pm-menu": {

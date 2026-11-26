@@ -25,6 +25,10 @@ func LoadModule(bS *client.BotStruct) {
 		))
 	bS.Handler.Handle(set.SetUser, telegram.Command("sfset", bS.Client.Username()))
 	bS.Handler.Handle(set.UnsetUser, telegram.Command("sfunset", bS.Client.Username()))
+	// /sftop: ranked top tracks/artists/albums/genres, with buttons to switch
+	// category and time range (today / 7 days / 4 weeks / 6 months / lifetime).
+	bS.Handler.Handle(sf.Top, telegram.Command("sftop", bS.Client.Username()))
+	bS.Handler.Handle(sf.TopSwitch, telegohandler.CallbackDataMatches(regexp.MustCompile(`^sftop\|(\d+)\|(\w+)\|(\w+)$`)))
 	// "+" expands the now-playing card into the last 5 streams; "back"
 	// restores it. Both are owner-only (validated inside the handlers).
 	bS.Handler.Handle(sf.ExpandRecent, telegohandler.CallbackDataMatches(regexp.MustCompile(`^sf_recent\|(\d+)$`)))

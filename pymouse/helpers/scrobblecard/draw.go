@@ -439,6 +439,83 @@ func DrawRecentScrobble(
 	return filename, nil
 }
 
+// TopEntry is one ranked row of a DrawTopList leaderboard.
+type TopEntry struct {
+	Label     string // track/artist/album/genre name
+	Secondary string // artist, for tracks/albums; "" for an artist/genre-only list
+	Streams   int64
+}
+
+// DrawTopList renders a ranked "top N" leaderboard (top tracks/artists/
+// albums/genres for some time range): same dark card as DrawRecentScrobble,
+// each row "N. Label — Secondary" on the left and its stream count
+// right-aligned.
+func DrawTopList(
+	downloadDir string,
+	username string,
+	entries []TopEntry,
+	fonts Fonts,
+	header string,
+) (string, error) {
+	if err := os.MkdirAll(downloadDir, 0755); err != nil {
+		return "", err
+	}
+
+	const (
+		width      = 600
+		rowH       = 38
+		headerH    = 95 // leaves a gap below the header text (subtitle at y=62)
+		marginX    = 30.0
+		countX     = 570.0 // right edge the stream count is anchored to
+		labelMaxPx = 440.0 // truncate width for "N. label — secondary", leaves room for the count
+	)
+	height := headerH + rowH*len(entries) + 20
+
+	dc := gg.NewContext(width, height)
+	dc.SetRGB255(18, 18, 18)
+	dc.Clear()
+
+	poppins := loadFont(fonts.Poppins, 22)
+	arial := loadFont(fonts.Arial, 18)
+
+	dc.SetColor(color.White)
+	dc.SetFontFace(poppins)
+	dc.DrawString(username, marginX, 40)
+
+	dc.SetFontFace(arial)
+	dc.SetRGB255(170, 170, 170)
+	dc.DrawString(header, marginX, 62)
+	dc.SetColor(color.White)
+
+	for i, e := range entries {
+		y := float64(headerH + i*rowH)
+
+		label := fmt.Sprintf("%d. %s", i+1, e.Label)
+		if e.Secondary != "" {
+			label += " — " + e.Secondary
+		}
+
+		dc.SetFontFace(arial)
+		dc.DrawString(truncate(dc, label, labelMaxPx), marginX, y)
+		dc.DrawStringAnchored(formatStreams(e.Streams), countX, y-6, 1, 0)
+	}
+
+	filename := downloadDir + "/" + uuid.NewString() + ".jpg"
+	out, err := os.Create(filename)
+	if err != nil {
+		return "", err
+	}
+	defer out.Close()
+	if err := jpeg.Encode(out, dc.Image(), &jpeg.Options{Quality: 95}); err != nil {
+		return "", err
+	}
+	return filename, nil
+}
+
+func formatStreams(n int64) string {
+	return fmt.Sprintf("%d", n)
+}
+
 // ScrobbleDir returns the config.DownloadPath subdirectory a service should
 // download its cover art into.
 func ScrobbleDir(service string) string {

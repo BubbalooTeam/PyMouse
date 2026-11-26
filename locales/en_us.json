@@ -145,7 +145,7 @@
                 "listenbrainz": "The ListenBrainz module allows you to connect your ListenBrainz account to the bot and share your music listening activity with others. You can set your ListenBrainz username, and the bot will be able to retrieve information about the songs you're currently listening to, as well as your listening history.\n\n<b>Main commands:</b>\n- /lbset [username]: Sets your ListenBrainz username to connect your account with the bot.\n- /lb | /listenbrainz: Retrieves information about the song you're currently listening to on ListenBrainz."
             },
             "statsfm": {
-                "statsfm": "The stats.fm module allows you to connect your stats.fm (Spotify tracking) account to the bot and share your music listening activity with others. You can set your stats.fm custom ID, and the bot will be able to retrieve information about the songs you're currently listening to, as well as your listening history and lifetime playcount.\n\n<b>Main commands:</b>\n- /sfset [username]: Sets your stats.fm custom ID to connect your account with the bot.\n- /sf | /statsfm: Retrieves information about the song you're currently listening to on stats.fm."
+                "statsfm": "The stats.fm module allows you to connect your stats.fm (Spotify tracking) account to the bot and share your music listening activity with others. You can set your stats.fm custom ID, and the bot will be able to retrieve information about the songs you're currently listening to, as well as your listening history, lifetime playcount, and top charts.\n\n<b>Main commands:</b>\n- /sfset [username]: Sets your stats.fm custom ID to connect your account with the bot.\n- /sf | /statsfm: Retrieves information about the song you're currently listening to on stats.fm.\n- /sftop: Shows your top tracks, artists, albums or genres, with buttons to switch the time range (today, 7 days, 4 weeks, 6 months, lifetime)."
             },
             "medias": {
                 "medias": "The Medias module allows you to download videos and music from various popular platforms such as YouTube and TikTok. Easily, you can request the download of multimedia content directly in the chat. The bot will take care of the download process and send the file to you as soon as it's ready.",
@@ -280,6 +280,24 @@
             "expand-btn": "Recent",
             "back-btn": "Back",
             "not-yours": "This isn't your card."
+        },
+        "top": {
+            "no-username-set": "<b>You haven't set a stats.fm username.</b>\n\n<b>Usage:</b> <code>/sftop</code> (set one first with <code>/sfset [username]</code>)",
+            "no-data": "<b>No listens found for this period.</b>",
+            "error": "<b>An error occurred while retrieving your top charts.</b>",
+            "category": {
+                "tracks": "Tracks",
+                "artists": "Artists",
+                "albums": "Albums",
+                "genres": "Genres"
+            },
+            "range": {
+                "today": "Today",
+                "days": "Last 7 days",
+                "weeks": "Last 4 weeks",
+                "months": "Last 6 months",
+                "life": "Lifetime"
+            }
         }
 },
     "pm-menu": {
