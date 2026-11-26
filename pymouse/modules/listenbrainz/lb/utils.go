@@ -8,6 +8,7 @@ import (
 	"pymouse/pymouse/helpers/rapidhttp"
 	"pymouse/pymouse/modules/listenbrainz/set"
 	"regexp"
+	"strings"
 )
 
 // ListenBrainzTrackInformations mirrors just the fields the now-playing card
@@ -47,6 +48,65 @@ type listensResponse struct {
 	} `json:"payload"`
 }
 
+// coverArtURL builds a Cover Art Archive URL from a resolved mbid_mapping, or
+// "" when ListenBrainz couldn't resolve this listen against MusicBrainz (very
+// common for listens imported from streaming services without MBIDs). This is
+// the cheapest option — the data already came back on the listen itself, no
+// extra request — so it's tried first.
+func coverArtURL(m *mbidMapping) string {
+	if m == nil || m.CAAID == 0 || m.CAAReleaseMBID == "" {
+		return ""
+	}
+	return fmt.Sprintf("https://coverartarchive.org/release/%s/%d-250.jpg", m.CAAReleaseMBID, m.CAAID)
+}
+
+// deezerSearchResponse is the (trimmed) shape of https://api.deezer.com/search.
+type deezerSearchResponse struct {
+	Data []struct {
+		Album struct {
+			CoverBig string `json:"cover_big"` // 500x500 square cover, no letterboxing
+		} `json:"album"`
+	} `json:"data"`
+}
+
+// deezerCoverURL looks up artist+track on Deezer's public, keyless search API
+// and returns the matched release's square cover art, or "" on no match/error.
+// This is the fallback for listens MusicBrainz has no mapping for — in
+// practice most of the Brazilian funk/trap catalog YTM scrobbles, which
+// Deezer's catalog covers far better than MusicBrainz does.
+func deezerCoverURL(httpClient *http.Client, artist, track string) string {
+	if artist == "" || track == "" {
+		return ""
+	}
+	// Quoted artist:/track: filters do an exact(-ish) match instead of a loose
+	// keyword search, which is what keeps this from returning a cover for the
+	// wrong song entirely.
+	q := fmt.Sprintf(`artist:"%s" track:"%s"`, deezerEscape(artist), deezerEscape(track))
+	r, err := rapidhttp.Request(httpClient, rapidhttp.HTTPStruct{
+		Method: "GET",
+		URL:    "https://api.deezer.com/search",
+		GETParams: &rapidhttp.HTTPGetStruct{
+			Params: map[string]string{"q": q, "limit": "1"},
+		},
+	})
+	if err != nil || r.StatusCode != 200 {
+		return ""
+	}
+	defer r.Body.Close()
+
+	var out deezerSearchResponse
+	if err := json.NewDecoder(r.Body).Decode(&out); err != nil || len(out.Data) == 0 {
+		return ""
+	}
+	return out.Data[0].Album.CoverBig
+}
+
+// deezerEscape drops double quotes from a search term so it can't break out
+// of the artist:"..."/track:"..." filter it's embedded in.
+func deezerEscape(s string) string {
+	return strings.ReplaceAll(s, `"`, "'")
+}
+
 // youtubeVideoIDRe matches an 11-char YouTube video ID out of any watch URL
 // shape ListenBrainz's YTM/YouTube scrobblers submit as origin_url:
 // https://music.youtube.com/watch?v=ID, https://www.youtube.com/watch?v=ID,
@@ -54,7 +114,9 @@ type listensResponse struct {
 var youtubeVideoIDRe = regexp.MustCompile(`(?:[?&]v=|youtu\.be/)([\w-]{11})`)
 
 // youtubeThumbnail returns the video's thumbnail URL when originURL looks
-// like a YouTube/YouTube Music watch link, "" otherwise.
+// like a YouTube/YouTube Music watch link, "" otherwise. Last-resort fallback
+// only: YTM thumbnails are 16:9 with ugly letterboxing on the 600x250 card,
+// so this only runs when neither MusicBrainz nor Deezer have the release.
 func youtubeThumbnail(originURL string) string {
 	m := youtubeVideoIDRe.FindStringSubmatch(originURL)
 	if len(m) < 2 {
@@ -63,28 +125,23 @@ func youtubeThumbnail(originURL string) string {
 	return "https://img.youtube.com/vi/" + m[1] + "/hqdefault.jpg"
 }
 
-// coverArtURL builds a Cover Art Archive URL from a resolved mbid_mapping, or
-// "" when ListenBrainz couldn't resolve this listen against MusicBrainz (very
-// common for listens imported from streaming services without MBIDs).
-func coverArtURL(m *mbidMapping) string {
-	if m == nil || m.CAAID == 0 || m.CAAReleaseMBID == "" {
-		return ""
+// resolveImage tries, in order of cost: the mbid_mapping ListenBrainz already
+// resolved, a Deezer search, and finally the source YouTube video's thumbnail.
+func resolveImage(httpClient *http.Client, t trackMetadata) string {
+	if img := coverArtURL(t.MBIDMapping); img != "" {
+		return img
 	}
-	return fmt.Sprintf("https://coverartarchive.org/release/%s/%d-250.jpg", m.CAAReleaseMBID, m.CAAID)
+	if img := deezerCoverURL(httpClient, t.ArtistName, t.TrackName); img != "" {
+		return img
+	}
+	return youtubeThumbnail(t.AdditionalInfo.OriginURL)
 }
 
-func toTrackInfo(l listen, now bool) ListenBrainzTrackInformations {
-	image := coverArtURL(l.TrackMetadata.MBIDMapping)
-	if image == "" {
-		// No MusicBrainz match (very common for YTM/unofficial-release
-		// scrobbles, e.g. Brazilian funk mixtapes that aren't catalogued)
-		// — fall back to the source video's thumbnail when there is one.
-		image = youtubeThumbnail(l.TrackMetadata.AdditionalInfo.OriginURL)
-	}
+func toTrackInfo(httpClient *http.Client, l listen, now bool) ListenBrainzTrackInformations {
 	return ListenBrainzTrackInformations{
 		Artist: l.TrackMetadata.ArtistName,
 		Track:  l.TrackMetadata.TrackName,
-		Image:  image,
+		Image:  resolveImage(httpClient, l.TrackMetadata),
 		Now:    now,
 	}
 }
@@ -131,7 +188,7 @@ func getRecentEntries(httpClient *http.Client, username string, limit int) ([]Li
 
 	out := make([]ListenBrainzTrackInformations, 0, limit)
 	if status == 200 && len(nowResp.Payload.Listens) > 0 {
-		out = append(out, toTrackInfo(nowResp.Payload.Listens[0], true))
+		out = append(out, toTrackInfo(httpClient, nowResp.Payload.Listens[0], true))
 	}
 
 	if remaining := limit - len(out); remaining > 0 {
@@ -143,7 +200,7 @@ func getRecentEntries(httpClient *http.Client, username string, limit int) ([]Li
 			return nil, fmt.Errorf("invalid username.")
 		}
 		for _, l := range recentResp.Payload.Listens {
-			out = append(out, toTrackInfo(l, false))
+			out = append(out, toTrackInfo(httpClient, l, false))
 		}
 	}
 
