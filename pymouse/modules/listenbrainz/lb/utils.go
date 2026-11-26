@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"pymouse/pymouse/helpers/rapidhttp"
 	"pymouse/pymouse/modules/listenbrainz/set"
+	"regexp"
 )
 
 // ListenBrainzTrackInformations mirrors just the fields the now-playing card
@@ -25,10 +26,15 @@ type mbidMapping struct {
 	CAAReleaseMBID string `json:"caa_release_mbid"`
 }
 
+type additionalInfo struct {
+	OriginURL string `json:"origin_url"`
+}
+
 type trackMetadata struct {
-	ArtistName  string       `json:"artist_name"`
-	TrackName   string       `json:"track_name"`
-	MBIDMapping *mbidMapping `json:"mbid_mapping"`
+	ArtistName     string         `json:"artist_name"`
+	TrackName      string         `json:"track_name"`
+	MBIDMapping    *mbidMapping   `json:"mbid_mapping"`
+	AdditionalInfo additionalInfo `json:"additional_info"`
 }
 
 type listen struct {
@@ -39,6 +45,22 @@ type listensResponse struct {
 	Payload struct {
 		Listens []listen `json:"listens"`
 	} `json:"payload"`
+}
+
+// youtubeVideoIDRe matches an 11-char YouTube video ID out of any watch URL
+// shape ListenBrainz's YTM/YouTube scrobblers submit as origin_url:
+// https://music.youtube.com/watch?v=ID, https://www.youtube.com/watch?v=ID,
+// https://youtu.be/ID.
+var youtubeVideoIDRe = regexp.MustCompile(`(?:[?&]v=|youtu\.be/)([\w-]{11})`)
+
+// youtubeThumbnail returns the video's thumbnail URL when originURL looks
+// like a YouTube/YouTube Music watch link, "" otherwise.
+func youtubeThumbnail(originURL string) string {
+	m := youtubeVideoIDRe.FindStringSubmatch(originURL)
+	if len(m) < 2 {
+		return ""
+	}
+	return "https://img.youtube.com/vi/" + m[1] + "/hqdefault.jpg"
 }
 
 // coverArtURL builds a Cover Art Archive URL from a resolved mbid_mapping, or
@@ -52,10 +74,17 @@ func coverArtURL(m *mbidMapping) string {
 }
 
 func toTrackInfo(l listen, now bool) ListenBrainzTrackInformations {
+	image := coverArtURL(l.TrackMetadata.MBIDMapping)
+	if image == "" {
+		// No MusicBrainz match (very common for YTM/unofficial-release
+		// scrobbles, e.g. Brazilian funk mixtapes that aren't catalogued)
+		// — fall back to the source video's thumbnail when there is one.
+		image = youtubeThumbnail(l.TrackMetadata.AdditionalInfo.OriginURL)
+	}
 	return ListenBrainzTrackInformations{
 		Artist: l.TrackMetadata.ArtistName,
 		Track:  l.TrackMetadata.TrackName,
-		Image:  coverArtURL(l.TrackMetadata.MBIDMapping),
+		Image:  image,
 		Now:    now,
 	}
 }
