@@ -10,6 +10,7 @@ import (
 	"pymouse/pymouse/modules/medias"
 	"pymouse/pymouse/modules/miscellaneous"
 	"pymouse/pymouse/modules/pm_menu"
+	"pymouse/pymouse/modules/statsfm"
 	"pymouse/pymouse/modules/sudoers"
 	"sort"
 	"strings"
@@ -30,6 +31,7 @@ var (
 		"medias":        medias.LoadModule,
 		"miscellaneous": miscellaneous.LoadModule,
 		"pm_menu":       pm_menu.LoadModule,
+		"statsfm":       statsfm.LoadModule,
 		"sudoers":       sudoers.LoadModules,
 	}
 )

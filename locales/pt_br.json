@@ -28,6 +28,7 @@
         "channel-news": "📬️ Notícias do PyMouse",
         "create-lastfm": "🎧 Criar conta do Last.fm",
         "create-listenbrainz": "🎧 Criar conta do ListenBrainz",
+        "create-statsfm": "🎧 Criar conta do stats.fm",
         "donate": "💵 Contribua",
         "go-to-pm": "Ir para o privado",
         "help": "👮 Ajuda",
@@ -143,6 +144,9 @@
             "listenbrainz": {
                 "listenbrainz": "O módulo ListenBrainz permite que você integre sua conta do ListenBrainz para compartilhar suas atividades musicais com seus amigos. Você pode definir seu nome de usuário do ListenBrainz e, em seguida, usar comandos para mostrar o que está ouvindo atualmente ou o que ouviu recentemente.\n\n<b>Comandos principais:</b>\n- /lbset [usuário]: Define seu nome de usuário do ListenBrainz para integração com o bot.\n- /lb | /listenbrainz: Mostra a música que você está ouvindo atualmente, juntamente com informações relevantes."
             },
+            "statsfm": {
+                "statsfm": "O módulo stats.fm permite que você integre sua conta do stats.fm (rastreamento de Spotify) para compartilhar suas atividades musicais com seus amigos. Você pode definir seu ID personalizado do stats.fm e, em seguida, usar comandos para mostrar o que está ouvindo atualmente, o que ouviu recentemente e quantas vezes já ouviu cada faixa.\n\n<b>Comandos principais:</b>\n- /sfset [usuário]: Define seu ID do stats.fm para integração com o bot.\n- /sf | /statsfm: Mostra a música que você está ouvindo atualmente, juntamente com informações relevantes."
+            },
             "medias": {
                 "medias": "O módulo de Mídias permite que você baixe vídeos e músicas de várias plataformas populares, como YouTube e TikTok. Facilmente, você pode solicitar o download de conteúdo multimídia diretamente no chat. O bot cuidará do processo de download e enviará o arquivo para você assim que estiver pronto.",
                 "youtube": "O módulo YouTube permite que você baixe vídeos e músicas diretamente do YouTube. Com um simples comando, você pode solicitar o download de qualquer vídeo ou música disponível na plataforma.\n\n<b>Comandos principais:</b>\n- /ytdl [URL ou título do vídeo]: Baixa o vídeo ou música do YouTube com base na URL ou título fornecido, e na qualidade escolhida.",
@@ -175,6 +179,9 @@
             },
             "listenbrainz": {
                 "listenbrainz": "ListenBrainz"
+            },
+            "statsfm": {
+                "statsfm": "stats.fm"
             },
             "medias": {
                 "medias": "Mídias",
@@ -240,6 +247,34 @@
         },
         "inline": {
             "profile": "Perfil ListenBrainz"
+        },
+        "recent": {
+            "header": "últimas faixas",
+            "now-label": "atual",
+            "profile-btn": "Perfil",
+            "expand-btn": "Últimas",
+            "back-btn": "Voltar",
+            "not-yours": "Esse card não é seu."
+        }
+    },
+    "statsfm": {
+        "invalid-username": "<b>O nome de usuário do stats.fm fornecido é inválido.</b>",
+        "set": {
+            "no-username-provided": "<b>O nome de usuário do stats.fm não foi fornecido.</b>\n\n<b>Uso:</b> <code>/sfset [usuário]</code>",
+            "username-set": "<b>Seu nome de usuário do stats.fm foi definido como:</b> <code>%s</code>",
+            "username-unset": "<b>Seu nome de usuário do stats.fm foi removido.</b>",
+            "no-username-set": "<b>Você não definiu um nome de usuário do stats.fm.</b>"
+        },
+        "nowplaying": {
+            "is-listening": "Está ouvindo",
+            "no-username-set": "<b>Você não definiu um nome de usuário do stats.fm.</b>\n\n<b>Uso:</b> <code>/sfset [usuário]</code>",
+            "no-scrobbles": "<b>Nenhuma música foi ouvida pelo usuário.</b>",
+            "userplaycount": " pela %dª vez",
+            "was-listening": "Estava ouvindo",
+            "error": "<b>Ocorreu um erro ao obter as informações de reprodução do usuário.</b>"
+        },
+        "inline": {
+            "profile": "Perfil stats.fm"
         },
         "recent": {
             "header": "últimas faixas",

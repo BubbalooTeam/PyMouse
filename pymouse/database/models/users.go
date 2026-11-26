@@ -8,4 +8,5 @@ type UsersInformations struct {
 	Away         AwayInformations         `bson:"away,omitempty" json:"away,omitempty"`
 	ListenBrainz ListenBrainzInformations `bson:"listenbrainz,omitempty" json:"listenbrainz,omitempty"`
 	LastFM       LastFMInformations       `bson:"lastfm,omitempty" json:"lastfm,omitempty"`
+	StatsFM      StatsFMInformations      `bson:"statsfm,omitempty" json:"statsfm,omitempty"`
 }
